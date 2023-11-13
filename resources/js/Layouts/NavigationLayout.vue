@@ -7,7 +7,8 @@ import SideBard from '../Components/flowbite/SideBard.vue';
 
 defineProps({ 
     Navbar, 
-    SideBard
+    SideBard, 
+    title: { type:String, default: 'Go Credit' }
 }) 
 
 onMounted(() => {
@@ -26,7 +27,7 @@ onMounted(() => {
             
             <main class="p-4 md:ml-64 h-auto pt-20">
                 <slot />
-            </main>
+            </main> 
         </div>
     </div>
 </template>

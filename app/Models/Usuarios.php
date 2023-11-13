@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
-class Usuarios extends Authenticatable
-{
-    use Notifiable, HasApiTokens;
+class Usuarios extends Authenticatable {   
+    
+    use Notifiable, HasApiTokens, HasFactory,HasProfilePhoto;
     protected $table = 'usuarios';
     protected $primaryKey = 'USUA_LOGIN';
     public $incrementing = false;

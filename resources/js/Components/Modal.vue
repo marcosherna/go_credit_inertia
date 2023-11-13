@@ -69,7 +69,7 @@ const maxWidthClass = computed(() => {
                     leave-to-class="opacity-0"
                 >
                     <div v-show="show" class="fixed inset-0 transform transition-all" @click="close">
-                        <div class="absolute inset-0 bg-gray-500 opacity-75" />
+                        <div class="absolute inset-0 bg-slate-900 opacity-20" />
                     </div>
                 </transition>
 
@@ -79,9 +79,8 @@ const maxWidthClass = computed(() => {
                     enter-to-class="opacity-100 translate-y-0 sm:scale-100"
                     leave-active-class="ease-in duration-200"
                     leave-from-class="opacity-100 translate-y-0 sm:scale-100"
-                    leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                >
-                    <div v-show="show" class="mb-6 bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto" :class="maxWidthClass">
+                    leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                    <div v-show="show" class="overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto" :class="maxWidthClass">
                         <slot v-if="show" />
                     </div>
                 </transition>

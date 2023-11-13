@@ -19,6 +19,8 @@
         "vue": "^3.2.36"
     },
     "dependencies": {
+        "@left4code/tw-starter": "^3.2.9",
+        "element-plus": "^2.4.2",
         "flowbite": "^2.1.1"
     }
 }
