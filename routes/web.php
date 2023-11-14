@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Banco\ChequeraController;
 use App\Http\Controllers\BancoController;
 use App\Http\Controllers\CuentaBanco\CuentaBancoController;
 use Illuminate\Foundation\Application;
@@ -20,6 +21,12 @@ Route::controller(BancoController::class)->group( function () {
 
 Route::controller(CuentaBancoController::class)->group( function () {
     Route::get('cuenta-banco', 'index')->name('cuenta-banco-layout');
+    Route::post('cuenta-banco-create', 'store')->name('cuenta-banco.store');
+    Route::put('cuenta-banco-update', 'update')->name('cuenta-banco.update');
+});
+
+Route::controller(ChequeraController::class)->group( function () {
+    Route::get('chequera-page', 'index')->name('chequera-layout');
 });
  
  

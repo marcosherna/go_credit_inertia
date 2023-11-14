@@ -16,13 +16,13 @@ defineProps({
                     </div>
                 </div>
                 <div class="p-5 border-t border-slate-200/60 dark:border-darkmode-400">
-                    <Link class="flex items-center text-primary font-medium">
+                    <Link :href="route('banco-layout')" class="flex items-center text-primary font-medium">
                         <i class="w-4 h-4 mr-2"></i> Bancos
                     </Link>
                     <Link :href="route('cuenta-banco-layout')" class="flex items-center mt-5">
                         <i class="w-4 h-4 mr-2"></i> Cuentas Banco
                     </Link>
-                    <Link class="flex items-center mt-5">
+                    <Link :href="route('chequera-layout')" class="flex items-center mt-5">
                         <i class="w-4 h-4 mr-2"></i> Chequera
                     </Link>
                 <Link class="flex items-center mt-5">

@@ -3,6 +3,12 @@ import Table from './Table.vue';
 import  ButtomToggleModal from './ButtomToggleModal.vue';
 import PlusIcon from './PlusIcon.vue';
 import Modal from './Modal.vue';
+import FwInput from './FwInput.vue';
+import FwSelect from './FwSelect.vue';
+import FwCheckbox from './FwCheckbox.vue';
+import FwButton from './FwButton.vue';
+import FwTextArea from './FwTextArea.vue';
+import FwTooltip from './Fwtooltip.vue';
 
 export {
     SearchBar,
@@ -10,4 +16,10 @@ export {
     ButtomToggleModal,
     PlusIcon,
     Modal,
+    FwInput,
+    FwSelect,
+    FwCheckbox,
+    FwButton,
+    FwTextArea,
+    FwTooltip
 }
