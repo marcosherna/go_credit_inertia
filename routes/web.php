@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Banco\ChequeraController;
 use App\Http\Controllers\BancoController;
+use App\Http\Controllers\Contable\CatalogoCuentasController;
+use App\Http\Controllers\Contable\PartidaContableController;
 use App\Http\Controllers\CuentaBanco\CuentaBancoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -10,9 +12,7 @@ use Inertia\Inertia;
 
 Route::controller(LoginController::class)->group( function () {
     Route::get('/', 'index')->name('welcome'); 
-});
-
-
+}); 
 Route::controller(BancoController::class)->group( function () {
     Route::get('/banco', 'index')->name('banco-layout');
     Route::post('banco-create', 'store')->name('banco.store');
@@ -28,9 +28,15 @@ Route::controller(CuentaBancoController::class)->group( function () {
 Route::controller(ChequeraController::class)->group( function () {
     Route::get('chequera-page', 'index')->name('chequera-layout');
 });
- 
- 
- 
+
+Route::controller(PartidaContableController::class)->group( function () {
+    Route::get('modulo-contable-page', 'index')->name('partida-contable-layout');
+});
+
+Route::controller(CatalogoCuentasController::class)->group( function () {
+    Route::get('catalogo-cuentas-page', 'index')->name('catalogo-cuentas-layout');
+});
+
 /*Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),

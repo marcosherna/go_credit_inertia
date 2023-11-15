@@ -25,6 +25,7 @@ class CuentaBancoController extends Controller {
         $cuentasSucursales = CuentaSucursal::select('CUEN_ID','CUEN_NOMBRE','SUCU_ID')
             ->with('sucursal:SUCU_ID,SUCU_NOMBRE')
             ->where('CUEN_ESTADO', 1)->get();
+            
         $bancos = Banco::select('BANC_ID','BANC_NOMBRE')
             ->where('BANC_ESTADO',1)->get();
 

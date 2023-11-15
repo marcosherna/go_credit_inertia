@@ -45,16 +45,17 @@ defineProps({
                                     <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                                 </svg>
-                                <span class="ml-3">Dashboard</span>
+                                <span class="ml-3">Panel de Control</span>
                             </a>
                         </li>
                         <li>
-                            <DropdownNav title="Banco" dropdownId="dropdown-item-crap">
+                            <DropdownNav title="Contabilidad" dropdownId="dropdown-item-crap">
                                 <template #icon>
                                     <path d="M1 13a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H1v7Zm5.293-3.707a1 1 0 0 1 1.414 0L8 9.586V8a1 1 0 0 1 2 0v1.586l.293-.293a1 1 0 0 1 1.414 1.414l-2 2a1 1 0 0 1-1.416 0l-2-2a1 1 0 0 1 .002-1.414ZM17 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1Z"/>
                                 </template> 
                                 <template #items> 
                                     <DropdownNavItem :href="route('banco-layout')" title="banco" /> 
+                                    <DropdownNavItem :href="route('partida-contable-layout')" title="Contabilidad" /> 
                                 </template>
                              </DropdownNav>
                         </li> 
