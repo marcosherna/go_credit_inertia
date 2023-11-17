@@ -1,5 +1,5 @@
 <script setup>
-import { Link, Head, useForm } from '@inertiajs/vue3';
+import { Link, Head, useForm, router } from '@inertiajs/vue3';
 import NavigationLayout from '../../Layouts/NavigationLayout.vue';
 import MenuModuloBanco from './Partials/MenuModuloBanco.vue';
 import { defineProps, ref,defineEmits } from 'vue';
@@ -7,7 +7,8 @@ import MyModal from '../../Components/Modal.vue';
 
 import {
     SearchBar, Table,
-    ButtomToggleModal, PlusIcon
+    ButtomToggleModal, PlusIcon, 
+    FwSkeleton, FwSearchBar
 } from '../../Components/flowbite/index.js';
 
 const props =  defineProps({
@@ -25,6 +26,9 @@ const props =  defineProps({
 })
 
 const isShowModal = ref(false);
+const loading = ref(false);  
+const lstBancos = ref(props.bancos);
+lstBancos.value = props.bancos;
 
 
 
@@ -69,11 +73,30 @@ const submit = (e) => {
     }
 }
 
-const onSearch = (event) => {  
-    const searchTerm = event.toLowerCase(); 
-    const filteredBancos = props.bancos.filter((banco) => { 
-        return banco.BANC_NOMBRE.toLowerCase().includes(searchTerm);
-    }); 
+const onSearch = (text) => {   
+     lstBancos.value = props.bancos.filter((item) => {
+        return item.BANC_ID.includes(text) || 
+                item.BANC_NOMBRE.toUpperCase().includes(text.toUpperCase()) || 
+                item.sucursal.SUCU_NOMBRE.toUpperCase().includes(text.toUpperCase());
+    });
+    
+    if(text == ''){
+        lstBancos.value = props.bancos;
+    }
+}
+
+const changedStatus = (id)=>{
+    loading.value = true;
+    const responce = router.visit('/banco-status/'+id , {
+        method: 'patch',
+        preserveScroll: true,
+        onFinish: () =>{
+            loading.value = false;
+        },
+        onSuccess: () => { 
+            loading.value =false;
+        },
+    }) 
 }
 
  
@@ -84,8 +107,11 @@ const openModal = () => {
 
 </script> 
 
-<template lang="">
+<template lang="">  
     <NavigationLayout title="Modulo Banco"> 
+
+ 
+
         <div class="intro-y flex items-center mt-6">
             <h2 class="text-lg font-medium mr-auto">Catalogos</h2> 
         </div> 
@@ -93,8 +119,7 @@ const openModal = () => {
         <div class="grid grid-cols-12 gap-6">
         <!-- BEGIN: Menu --> 
         <MenuModuloBanco/>
-        <!-- END: Menu-->  
-
+        <!-- END: Menu--> 
         <!-- BEGIN: Contenido--> 
         <div class="col-span-12 lg:col-span-8 2xl:col-span-9">  
             <div class="relative overflow-x-auto">
@@ -106,14 +131,16 @@ const openModal = () => {
                         </ButtomToggleModal>
                     </div> 
                     <div class="relative">  
-                        <SearchBar 
+                        <fw-search-bar 
                             @search="onSearch"
                             placeholder="Buscar banco..."/>
                     </div>
                 </div> 
-
+  
                 <!--TABLE BANCO-->
-                    <Table>
+                <fw-skeleton :show="loading" />
+                    <Table v-if="!loading">
+
                         <template #head> 
                                 <th scope="col" class="p-4">ID</th> 
                                 <th scope="col" class="px-6 py-3">Banco</th>
@@ -122,7 +149,7 @@ const openModal = () => {
                         </template>
 
                         <template #body>  
-                            <tr v-for="(banco, index) in bancos" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <tr v-for="(banco, index) in lstBancos" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <td class="w-4 p-4 text-center">{{ banco.BANC_ID }}</td>
                                 <th scope="row">
                                     <div class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -135,7 +162,7 @@ const openModal = () => {
                                 </th>
                                 <td class="px-6 py-4">
                                     <label class="relative inline-flex items-center mb-5 cursor-pointer">
-                                        <input type="checkbox"  :checked="banco.BANC_ESTADO" value="" class="sr-only peer">
+                                        <input type="checkbox" v-on:click="changedStatus(banco.BANC_ID)"  :checked="banco.BANC_ESTADO" value="" class="sr-only peer">
                                         <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
                                     </label>
                                 </td> 
@@ -155,6 +182,7 @@ const openModal = () => {
 
         <!-- Main modal -->  
         <MyModal :show="isShowModal" 
+            @close="isShowModal = false"
             maxWidth="sm">
             <div class="overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"> 
                 <div class="relative w-full max-w-md max-h-full"> 
@@ -244,11 +272,7 @@ const openModal = () => {
                         </path>
                     </svg>
                     Agregar
-                </button>
-
-                <progress v-if="banco.progress" :value="banco.progress.percentage" max="100">
-                    {{ banco.progress.percentage }}%
-                </progress>
+                </button> 
             </div>
         </form>
         </div>

@@ -15,18 +15,18 @@ defineProps({
                     </div>
                 </div>
                 <div class="p-5 border-t border-slate-200/60 dark:border-darkmode-400">
-                    <Link  class="flex items-center text-primary font-medium">
+                    <a  class="flex items-center text-primary font-medium">
                         <i class="w-4 h-4 mr-2"></i> Partida Contable
-                    </Link>
-                    <Link class="flex items-center mt-5">
+                    </a>
+                    <a class="flex items-center mt-5">
                         <i class="w-4 h-4 mr-2"></i> Cierre Contable
-                    </Link>
+                    </a>
                     <Link :href="route('catalogo-cuentas-layout')" class="flex items-center mt-5">
                         <i class="w-4 h-4 mr-2"></i> Catalogos de Cuentas
                     </Link>
-                <Link class="flex items-center mt-5">
+                <a class="flex items-center mt-5">
                     <i class="w-4 h-4 mr-2"></i> Crear Partida
-                </Link>
+                </a>
             </div>
         </div>
     </div>

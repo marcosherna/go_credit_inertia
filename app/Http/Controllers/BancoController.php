@@ -57,5 +57,20 @@ class BancoController extends Controller {
             return response()->json(['error' => 'Error al actualizar el banco', 'message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         } 
     }
+
+    public function changedStatus($BANC_ID){
+        try {
+            $banco = Banco::findOrFail($BANC_ID);
+            if(!$banco){
+                throw new \Exception('El banco no existe');
+            }
+            
+            $banco->BANC_ESTADO = !$banco->BANC_ESTADO;
+            $banco->save();
+
+        } catch (\Exception $th) {
+            throw $th;
+        }
+    }
 }
 

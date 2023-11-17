@@ -19,11 +19,17 @@ const form = useForm({
 });
 
 const submit = () => {
+
+    console.log(form);
+
     form.transform(data => ({
         ...data,
         remember: form.remember ? 'on' : '',
     })).post(route('login'), {
-        onFinish: () => form.reset('password'),
+        onFinish: () => form.reset('USUA_PASS'),
+        onError:(err) => {
+            console.log(err);
+        },
     });
 };
 
@@ -45,8 +51,8 @@ const submit = () => {
                 <InputLabel for="email" value="Usuario" />
                 <TextInput
                     id="email"
-                    v-model="form.email"
-                    type="email"
+                    v-model="form.USUA_LOGIN"
+                    type="text"
                     class="mt-1 block w-full"
                     required
                     autofocus
@@ -59,21 +65,14 @@ const submit = () => {
                 <InputLabel for="password" value="Contraseña" />
                 <TextInput
                     id="password"
-                    v-model="form.password"
+                    v-model="form.USUA_PASS"
                     type="password"
                     class="mt-1 block w-full"
                     required
                     autocomplete="current-password"
                 />
                 <InputError class="mt-2" :message="form.errors.USUA_PASS" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox v-model:checked="form.remember" name="remember" />
-                    <span class="ml-2 text-sm text-gray-600">Recordar me</span>
-                </label>
-            </div>
+            </div> 
 
             <div class="flex items-center justify-end mt-4">
                 <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

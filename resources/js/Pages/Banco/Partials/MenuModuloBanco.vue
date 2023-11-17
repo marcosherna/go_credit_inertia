@@ -1,9 +1,6 @@
 <script setup> 
 import { Link } from '@inertiajs/vue3';  
-defineProps({
-    Link,
-})
-
+ 
 </script> 
 
 <template lang="">
@@ -25,9 +22,9 @@ defineProps({
                     <Link :href="route('chequera-layout')" class="flex items-center mt-5">
                         <i class="w-4 h-4 mr-2"></i> Chequera
                     </Link>
-                <Link class="flex items-center mt-5">
-                    <i class="w-4 h-4 mr-2"></i> Control Chequera
-                </Link>
+                    <a class="flex items-center mt-5">
+                        <i class="w-4 h-4 mr-2"></i> Control Chequera
+                    </a>
             </div>
         </div>
     </div>

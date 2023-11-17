@@ -12,6 +12,8 @@ import FwTooltip from './Fwtooltip.vue';
 import FwTable from './FwTable.vue'
 import FwModal from './FwModal.vue'
 import FwRadioCheckbox from './FwRadioCheckbox.vue'
+import FwSkeleton from './FwSkeleton.vue'
+import FwSearchBar from './FwSearchBar.vue'
 
 export {
     SearchBar,
@@ -27,5 +29,7 @@ export {
     FwTooltip,
     FwTable,
     FwModal,
-    FwRadioCheckbox
+    FwRadioCheckbox,
+    FwSkeleton,
+    FwSearchBar
 }

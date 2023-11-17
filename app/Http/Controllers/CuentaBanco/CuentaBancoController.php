@@ -68,4 +68,17 @@ class CuentaBancoController extends Controller {
             
         }
     }
+
+    public function changedStatus($CUEN_ID){
+        try {
+            $cuenta = CuentaBanco::findOrFail($CUEN_ID);
+            if(!$cuenta){
+                throw new \Exception('La cuenta no existe');
+            }
+            $cuenta->CUEB_ESTADO = !$cuenta->CUEB_ESTADO;
+            $cuenta->save();
+        } catch (\Exception $th) {
+            throw $th;
+        }
+    }
 }

@@ -2,12 +2,12 @@
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { PlusIcon, Table, ButtomToggleModal, FwInput, 
-    FwSelect, FwCheckbox, FwButton, FwTextArea, FwTooltip, FwModal} from '../../Components/flowbite/index';
-import NavigationLayout from '../../Layouts/NavigationLayout.vue';
-import SearchBar from '../../Components/flowbite/SearchBar.vue';
+    FwSelect, FwCheckbox, FwButton, FwTextArea, FwTooltip, FwModal, FwSearchBar} from '../../Components/flowbite/index';
+import NavigationLayout from '../../Layouts/NavigationLayout.vue';   
 import MenuModuloBanco from './Partials/MenuModuloBanco.vue'; 
+import { fromPairs } from 'lodash';
 
-defineProps({
+const props = defineProps({
     chequeras: Array,
     cuentasBanco: Array,
 }) 
@@ -29,12 +29,14 @@ const form = useForm({
     CHEQ_REFERENCIA:null,
     CHEQ_FECHA:null,
     CHEQ_GENERACION:0,
-    CHEQ_VERIFICADOR:null,
-    CHEQ_ESTADO:null,
+    CHEQ_VERIFICADOR:0,
+    CHEQ_ESTADO:0,
 });
 
 const isShowModal = ref(false) 
 const isShowModalDetalle = ref(false)
+let lstChequeras = ref([])
+lstChequeras.value = props.chequeras
 
 const openModal = ()=>{
     form.reset()
@@ -42,33 +44,44 @@ const openModal = ()=>{
 }
 
 const onSearch = (text) =>{
-    console.log(text);
+    lstChequeras.value = props.chequeras.filter((item) => {
+        return item.cuenta_banco.banco.BANC_NOMBRE.toUpperCase().includes(text.toUpperCase()) ||
+            item.CHEQ_ID.includes(text) ||
+            item.cuenta_banco.CUEB_NUMERO.toUpperCase().includes(text.toUpperCase())
+    });
+    
+    if(text == ''){
+        lstChequeras.value = props.chequeras;
+    }
+
 }
 
 const submit = () => {
-    if(updateOrCreate.value){
-        console.log('actualizar');
-        form.transform(data => ({
-            ...data,
-            CUEB_ESTADO: data.CUEB_ESTADO ? 1 : 0,
-        })).put('cuenta-banco-update', {
-            onSuccess: () => {
-                form.reset()
-                isShowModal.value = false
-                updateOrCreate.value = false
-            },
-        })
-    }else{
-        console.log('crear');
-        form.transform(data => ({
-            ...data,
-            CUEB_ESTADO: data.CUEB_ESTADO ? 1 : 0,
-        })).post(route('cuenta-banco.store'), {
-            onSuccess: () => {
-                form.reset()
-                isShowModal.value = false
-            },
-        });
+    
+    if(form.CHEQ_ID){
+         
+    }else{ 
+        if(form.CHEQ_GENERACION != 0){ 
+            form.errors.CHEQ_GENERACION = null
+
+            if(form.CUEB_NUMERO != 0){
+                form.transform(data => ({
+                    ...data,
+                    CHEQ_PENDIENTES: data.CHEQ_CANTIDAD, 
+                    CHEQ_GENERACION : data.CHEQ_GENERACION == 1 ? 0 : 1
+                }))
+
+                form.CHEQ_PENDIENTES = form.CHEQ_CANTIDAD
+                form.CHEQ_GENERACION = form.CHEQ_GENERACION == 1 ? 0 : 1
+
+                console.log(form);
+            } else { 
+                form.errors.CUEB_NUMERO = 'Seleccione una opcion'
+            }
+            
+        }else {  
+            form.errors.CHEQ_GENERACION = 'Seleccione una opcion'
+        }
     } 
 }
 const selectedItem = (item) =>{
@@ -80,6 +93,11 @@ const selectedItem = (item) =>{
 const onSelected = (item) => {
     console.log(item);
     isShowModalDetalle.value = true
+}
+
+const onchange = (e) => { 
+    let cantida = (e - form.CHEQ_DESDE)+1 
+    form.CHEQ_CANTIDAD = cantida.toString()
 }
 
 </script>  
@@ -107,7 +125,7 @@ const onSelected = (item) => {
                         
                     </div> 
                     <div class="relative">  
-                        <SearchBar 
+                        <fw-search-bar 
                             @search="onSearch"
                             placeholder="Buscar cuenta de banco..."/>
                     </div>
@@ -125,7 +143,7 @@ const onSelected = (item) => {
                         </template>
 
                         <template #body>  
-                            <tr v-for="(chequera, index) in chequeras" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <tr v-for="(chequera, index) in lstChequeras" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <td class="w-4 p-4 text-center">
                                     {{ chequera.CHEQ_ID }}
                                     <span class="text-slate-600"> {{ 'Cantida: '+ chequera.CHEQ_CANTIDAD }}</span>
@@ -202,41 +220,55 @@ const onSelected = (item) => {
                         <div class="grid gap-4 mb-4 grid-cols-2">
                             <div class="col-span-2 sm:col-span-1">
                                 <fw-input label="Desde" 
-                                    v-model:value="form.CHEQ_DESDE"
+                                    v-model:value="form.CHEQ_DESDE"     
                                     type="number"
+                                    :min="0"
                                     placeholder="Desde"/>
+                                <div v-show="form.errors.CHEQ_DESDE" class="text-red-500 text-sm">
+                                    {{  form.errors.CHEQ_DESDE }}
+                                </div>
                             </div>
                             <div class="col-span-2 sm:col-span-1"> 
                                 <fw-input label="Hasta"
                                     v-model:value="form.CHEQ_HASTA"
+                                    :onUpdate:value="onchange"
+                                    :min="parseInt(form.CHEQ_DESDE)"
                                     placeholder="Hasta"
                                     type="number"/>
+                                <div v-show="form.errors.CHEQ_HASTA" class="text-red-500 text-sm">
+                                    {{  form.errors.CHEQ_HASTA }}
+                                </div>
 
                             </div>
                             <div class="col-span-2">
                                 <fw-select label="Cuenta de Bancos"
                                     v-model:selected="form.CUEB_NUMERO"
-                                    defaultItem="Seleccione una cuenta"
-                                    placeholder="Cuenta Banco"> 
+                                    defaultItem="Seleccione una cuenta"> 
                                     <option v-for="(cuenta, index) in cuentasBanco" 
                                         :value="cuenta.CUEB_NUMERO"> {{ cuenta.banco.BANC_NOMBRE }}</option>
                                 </fw-select>
+                                <div v-show="form.errors.CUEB_NUMERO" class="text-red-500 text-sm">
+                                    {{  form.errors.CUEB_NUMERO }}
+                                </div>
                             </div>
                             <div class="col-span-2 sm:col-span-1">
                                 <fw-input label="Disponibles"
                                     v-model:value="form.CHEQ_CANTIDAD" 
-                                    disabled="true"
+                                    :disabled="true"
                                     placeholder="....."/>
                             </div>
                             <div class="col-span-2 sm:col-span-1"> 
                                 <fw-select label="Generacion"
                                     v-model:selected="form.CHEQ_GENERACION"
-                                    defaultItem="Seleccione una opcion"
-                                    placeholder="Cuenta Banco"> 
+                                    defaultItem="Seleccione una opcion"> 
 
                                     <option value="1">Manual</option>
                                     <option value="2">Auto</option>
                                 </fw-select> 
+
+                                <div v-show="form.errors.CHEQ_GENERACION" class="text-red-500 text-sm">
+                                    {{  form.errors.CHEQ_GENERACION }}
+                                </div>
                             </div>  
 
                             <div class="col-span-2">
@@ -244,6 +276,9 @@ const onSelected = (item) => {
                                     v-model:value="form.CHEQ_REFERENCIA" 
                                     placeholder="Referencias..."> 
                                 </fw-text-area>
+                                <div v-show="form.errors.CHEQ_REFERENCIA" class="text-red-500 text-sm">
+                                    {{  form.errors.CHEQ_REFERENCIA }}
+                                </div>
                             </div>
                         </div> 
                         

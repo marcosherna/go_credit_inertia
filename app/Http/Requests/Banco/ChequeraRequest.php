@@ -15,14 +15,11 @@ class ChequeraRequest extends FormRequest {
         return [
             'CUEB_NUMERO' => 'required|string|max:20',
             'CHEQ_DESDE' => 'required|numeric',
-            'CHEQ_HASTA' => 'required|numeric',
-            'CHEQ_CANTIDAD' =>  'required|numeric',
+            'CHEQ_HASTA' => 'required|numeric|min:CHEQ_DESDE',
+            'CHEQ_CANTIDAD' =>  'required|numeric|min:1',
             'CHEQ_PENDIENTES' => 'required|numeric',
-            'CHEQ_REFERENCIA' => 'nullable|string|max:100',
-            'CHEQ_FECHA' => 'required|date',
-            'CHEQ_GENERACION' => 'required|string|max:20',
-            'CHEQ_VERIFICADOR' => 'required|string|max:20',
-            'CHEQ_ESTADO' => 'required|numeric',
+            'CHEQ_REFERENCIA' => 'nullable|string|max:100', 
+            'CHEQ_GENERACION' => 'required|numeric|max:1|min:0',  
         ];
     }
 
@@ -34,19 +31,16 @@ class ChequeraRequest extends FormRequest {
             'CHEQ_HASTA.required' => 'El campo hasta es requerido',
             'CHEQ_CANTIDAD.required' => 'El campo cantidad es requerido',
             'CHEQ_PENDIENTES.required' => 'El campo pendientes es requerido',
-            'CHEQ_REFERENCIA.required' => 'El campo referencia es requerido',
-            'CHEQ_FECHA.required' => 'El campo fecha es requerido',
-            'CHEQ_GENERACION.required' => 'El campo generación es requerido',
-            'CHEQ_VERIFICADOR.required' => 'El campo verificador es requerido',
-            'CHEQ_ESTADO.required' => 'El campo estado es requerido',
+            'CHEQ_REFERENCIA.required' => 'El campo referencia es requerido', 
+            'CHEQ_GENERACION.required' => 'El campo generación es requerido',  
             'CHEQ_DESDE.numeric' => 'El campo desde debe ser numérico',
             'CHEQ_HASTA.numeric' => 'El campo hasta debe ser numérico',
             'CHEQ_CANTIDAD.numeric' => 'El campo cantidad debe ser numérico',
-            'CHEQ_PENDIENTES.numeric' => 'El campo pendientes debe ser numérico',
-            'CHEQ_ESTADO.numeric' => 'El campo estado debe ser numérico',
+            'CHEQ_PENDIENTES.numeric' => 'El campo pendientes debe ser numérico', 
             'CHEQ_REFERENCIA.max' => 'El campo referencia debe tener máximo 100 caracteres',
-            'CHEQ_GENERACION.max' => 'El campo generación debe tener máximo 20 caracteres',
-            'CHEQ_VERIFICADOR.max' => 'El campo verificador debe tener máximo 20 caracteres',
+            'CHEQ_GENERACION.max' => 'El campo generación debe tener máximo 20 caracteres', 
+            'CHEQ_HASTA.min' => 'El campo hasta debe ser mayor o igual al campo desde',
+            'CHEQ_CANTIDAD.min' => 'El campo cantidad debe ser mayor a 0',
         ];
     }
 }

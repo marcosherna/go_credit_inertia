@@ -1,20 +1,19 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { router, useForm } from '@inertiajs/vue3';
+import { ref, onMounted } from 'vue';
 import { PlusIcon, Table, ButtomToggleModal, FwInput, 
-    FwSelect, FwCheckbox, FwButton, FwTextArea} from '../../Components/flowbite/index';
+    FwSelect, FwCheckbox, FwButton, FwTextArea, FwSkeleton, FwSearchBar} from '../../Components/flowbite/index';
 import NavigationLayout from '../../Layouts/NavigationLayout.vue';
 import SearchBar from '../../Components/flowbite/SearchBar.vue';
 import MenuModuloBanco from './Partials/MenuModuloBanco.vue';
 import FwModal from '../../Components/Modal.vue';
 
-defineProps({
+const props = defineProps({
     cuentaBancos:Array,
     bancos:Array,
     cuentasSucursales:Array,
     tiposCuenta:Array,
 })
-
 
 const form = useForm({
     CUEB_NUMERO : null, 
@@ -27,14 +26,27 @@ const form = useForm({
 
 const isShowModal = ref(false)
 const updateOrCreate = ref(false)
+const loading = ref(false)
+let reatListCuentasBancos = ref([])
+reatListCuentasBancos.value = props.cuentaBancos;
+
+const onSearch = (text) =>{
+    reatListCuentasBancos.value = props.cuentaBancos.filter((item) => {
+        return item.CUEB_NUMERO.includes(text) || 
+                item.cuenta_sucursal.CUEN_NOMBRE.toUpperCase().includes(text.toUpperCase()) || 
+                item.BANC_ID.includes(text);
+    });
+    
+    if(text == ''){
+        reatListCuentasBancos.value = props.cuentaBancos;
+    }
+}
+ 
+
 
 const openModal = ()=>{
     form.reset()
     isShowModal.value = true
-}
-
-const onSearch = (text) =>{
-    console.log(text);
 }
 
 const submit = () => {
@@ -71,6 +83,22 @@ const selectedItem = (item) =>{
     updateOrCreate.value = true
 }
 
+const changedStatus = (id)=>{
+    loading.value = true
+    router.visit('/cuenta-banco-status/'+id, {
+        method: 'patch', 
+        onSuccess: () => {
+            // menssajes
+        }, 
+        onfinish: () => {
+            // menssajes
+            loading.value = false
+        }
+        
+    })
+}
+
+ 
 </script>  
 <template>
     <NavigationLayout title="Modulo Banco"> 
@@ -94,14 +122,15 @@ const selectedItem = (item) =>{
                         </ButtomToggleModal>
                     </div> 
                     <div class="relative">  
-                        <SearchBar 
+                        <fw-search-bar   
                             @search="onSearch"
                             placeholder="Buscar cuenta de banco..."/>
                     </div>
                 </div> 
 
                 <!--TABLE BANCO-->
-                    <Table>
+                <fw-skeleton :show="loading" />
+                    <Table v-if="!loading">
                         <template #head> 
                                 <th scope="col" class="p-4">ID</th> 
                                 <th scope="col" class="px-6 py-3">Banco</th>
@@ -110,7 +139,7 @@ const selectedItem = (item) =>{
                         </template>
 
                         <template #body>  
-                            <tr v-for="(cuentaBanco, index) in cuentaBancos" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <tr v-for="(cuentaBanco, index) in reatListCuentasBancos" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <td class="w-4 p-4 text-center">{{ cuentaBanco.CUEB_NUMERO }}</td>
                                 <th scope="row">
                                     <div class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -123,7 +152,9 @@ const selectedItem = (item) =>{
                                 </th>
                                 <td class="px-6 py-4">
                                     <label class="relative inline-flex items-center mb-5 cursor-pointer">
-                                        <input type="checkbox"  :checked="cuentaBanco.CUEB_ESTADO" value="" class="sr-only peer">
+                                        <input type="checkbox" 
+                                            v-on:click="changedStatus(cuentaBanco.CUEB_NUMERO)"
+                                            :checked="cuentaBanco.CUEB_ESTADO" value="" class="sr-only peer">
                                         <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
                                     </label>
                                 </td> 
@@ -132,7 +163,7 @@ const selectedItem = (item) =>{
                                         href="#" 
                                         @click="selectedItem(cuentaBanco)"
                                         class="font-medium text-green-600 dark:text-green-500 hover:underline">Editar</button>
-                                    <a href="#" class="px-3 font-medium text-green-600 dark:text-green-500 hover:underline">Ver</a>
+                                    <!--<a href="#" class="px-3 font-medium text-green-600 dark:text-green-500 hover:underline">Ver</a>-->
                                 </td>
                             </tr> 
                         </template> 
@@ -143,6 +174,7 @@ const selectedItem = (item) =>{
 
         <!-- Main modal -->   
         <fw-modal :show="isShowModal" 
+            @close="isShowModal = false"
             maxWidth="sm">
             <div class="overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"> 
                 <div class="relative w-full max-w-md max-h-full"> 
