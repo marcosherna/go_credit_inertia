@@ -1,11 +1,12 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { PlusIcon, Table, ButtomToggleModal, FwInput, 
-    FwSelect, FwCheckbox, FwButton, FwTextArea, FwTooltip, FwModal, FwSearchBar} from '../../Components/flowbite/index';
+    FwSelect, FwCheckbox, FwButton, FwTextArea, FwTooltip, FwModal, 
+    FwSearchBar, FwSkeleton, FwTable, FwBadge} from '../../Components/flowbite/index';
 import NavigationLayout from '../../Layouts/NavigationLayout.vue';   
 import MenuModuloBanco from './Partials/MenuModuloBanco.vue'; 
-import { fromPairs } from 'lodash';
+import controller from './controllers/chequeController.js'; 
 
 const props = defineProps({
     chequeras: Array,
@@ -20,21 +21,13 @@ const chequeraEstado = [
 ];
 
 const form = useForm({
-    CHEQ_ID:null,
-    CUEB_NUMERO:0,
-    CHEQ_DESDE:null,
-    CHEQ_HASTA:null,
-    CHEQ_CANTIDAD:null,
-    CHEQ_PENDIENTES:null,
-    CHEQ_REFERENCIA:null,
-    CHEQ_FECHA:null,
-    CHEQ_GENERACION:0,
-    CHEQ_VERIFICADOR:0,
-    CHEQ_ESTADO:0,
+    ...controller.model
 });
 
 const isShowModal = ref(false) 
 const isShowModalDetalle = ref(false)
+const cheques = ref(null)
+
 let lstChequeras = ref([])
 lstChequeras.value = props.chequeras
 
@@ -52,8 +45,7 @@ const onSearch = (text) =>{
     
     if(text == ''){
         lstChequeras.value = props.chequeras;
-    }
-
+    }  
 }
 
 const submit = () => {
@@ -84,9 +76,14 @@ const submit = () => {
         }
     } 
 }
-const selectedItem = (item) =>{
-    Object.assign(form, item) 
+const selectedItem = (item) =>{  
+     
+    form.CUEB_NUMERO = item.cuenta_banco.CUEB_NUMERO
+    form.CHEQ_DESDE = item.CHEQ_DESDE.toString();
+    form.CHEQ_HASTA = item.CHEQ_HASTA.toString();
+    form.CHEQ_CANTIDAD = item.CHEQ_CANTIDAD.toString()
     form.CHEQ_GENERACION = item.CHEQ_GENERACION == 0 ? 1 : 2
+    form.CHEQ_REFERENCIA = item.CHEQ_REFERENCIA
     isShowModal.value = true 
 }
 
@@ -98,6 +95,20 @@ const onSelected = (item) => {
 const onchange = (e) => { 
     let cantida = (e - form.CHEQ_DESDE)+1 
     form.CHEQ_CANTIDAD = cantida.toString()
+}
+
+const detelleCheque = async (id) => { 
+    //router.push({name:'cheque', params:{id:id}}) navega hacia otra  
+    cheques.value = null
+    isShowModalDetalle.value = true
+    try {
+        const response = await controller.ObtenerCheques(id);
+        cheques.value = response;
+        
+    } catch (error) {
+        console.error(error);
+        cheques.value = []
+    }
 }
 
 </script>  
@@ -194,9 +205,9 @@ const onchange = (e) => {
                                 <td class="px-6 py-4">
                                     <button 
                                         href="#" 
-                                        @click="selectedItem(chequera)"
+                                    @click="selectedItem(chequera)"
                                         class="font-medium text-green-600 dark:text-green-500 hover:underline">Editar</button>
-                                    <a href="#" class="px-3 font-medium text-green-600 dark:text-green-500 hover:underline">Ver</a>
+                                    <button v-on:click="detelleCheque(chequera.CHEQ_ID)" class="px-3 font-medium text-green-600 dark:text-green-500 hover:underline">Ver</button>
                                 </td>
                             </tr> 
                         </template> 
@@ -255,6 +266,7 @@ const onchange = (e) => {
                                 <fw-input label="Disponibles"
                                     v-model:value="form.CHEQ_CANTIDAD" 
                                     :disabled="true"
+                                    type="number"
                                     placeholder="....."/>
                             </div>
                             <div class="col-span-2 sm:col-span-1"> 
@@ -287,6 +299,81 @@ const onchange = (e) => {
                         </div> 
                     </form>
                 </div>
+            </template> 
+        </fw-modal> 
+
+        <fw-modal :show="isShowModalDetalle" 
+            maxWidth="3xl"
+            @close="isShowModalDetalle = false">
+            <template #header>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    chequera
+                </h3> 
+            </template>
+            <template #body>
+                <fw-skeleton :show="cheques == null" />
+                <fw-table  v-if="cheques != null">
+                    <template #header>
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                ID CHEQUE
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                DETALLE
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                ACCIONES
+                            </th>
+                        </tr>
+                    </template>
+                    <template #body>
+                        <tr v-for="(cheque, index ) in cheques" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <p class="text-gray-900 font-bold pr-5" >{{ cheque.CHEM_ID }}</p>
+                                <fw-badge>
+                                    {{ `Cantidad: ${cheque.CHEM_MONTO}`  }}
+                                </fw-badge> 
+                            </th>
+                            <td class="px-6 py-4">
+                                <div class="flex pb-2">
+                                        <p class="text-gray-900 font-bold pr-5" >{{ cheque.CHEM_NOMBRE }}</p>
+                                        <fw-badge>
+                                            {{ controller.estadoCheque.find( x => x.value = cheque.CHEM_ESTADO).text }}
+                                        </fw-badge>
+                                    </div>
+                                    <div class="text-gray-500 text-xs">
+                                        <p class="text-gray-800 pb-1">Saldo: {{ cheque.CHEM_MONTO }}</p>
+                                        <p>{{ (new Date(cheque.CHEM_FECHA)).toDateString()  +' ' + cheque.CHEM_LUGAR }}</p>
+                                    </div> 
+                            </td>
+                            <td class="px-6 py-4">
+                                <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
+<svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
+<path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
+</svg>
+</button>
+
+<!-- Dropdown menu -->
+<div id="dropdownDots" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
+      <li>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+      </li>
+      <li>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+      </li>
+      <li>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+      </li>
+    </ul>
+    <div class="py-2">
+      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Separated link</a>
+    </div>
+</div>
+                            </td>
+                        </tr>
+                    </template>
+                </fw-table>
             </template> 
         </fw-modal> 
     </NavigationLayout>   

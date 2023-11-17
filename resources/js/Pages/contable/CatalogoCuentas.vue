@@ -54,6 +54,10 @@ const openModal = () => {
 }
 
 const filterCuentasContables = (selected)=>{ 
+    const acreedores = [1,4,6];
+    const deudor = [2,3,5];
+
+    console.log(selected);
     sucursales = props.cuentasSucursales; 
     if(selected != 0){   
         sucursales = props.cuentasSucursales.filter(
@@ -61,6 +65,12 @@ const filterCuentasContables = (selected)=>{
         ); 
         form.SUCU_ID = 0
     } 
+    if(acreedores.includes(selected)){
+        form.CUEN_CLASIF = 'Acreedor';
+    }
+    if(deudor.includes(selected)){
+        form.CUEN_CLASIF = 'Deudor';
+    }
 }
 
 const assingNumeroContable = (item)=>{ 
@@ -219,7 +229,7 @@ const submit = ()=>{
                     </div>
 
                     <div class="col-span-2">
-                        <fw-input label="Nombre de la Cuenta"
+                        <fw-input label="Nombre de la Cuenta contable"
                             v-model:value="form.numero_cuenta"
                             placeholder="Cuenta..."/>
                     </div>
@@ -277,12 +287,10 @@ const submit = ()=>{
                         </ul>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
-                        <fw-select label="Clasificacion"
-                            v-model:selected="form.CUEN_CLASIF"
-                            defaultItem="Seleccione una opcion"> 
-                            <option value="1">Deudor</option>
-                            <option value="1">Acreedor</option> 
-                        </fw-select>
+                        <fw-input label="Clasificacion"
+                            :disabled="true"    
+                            v-model:value="form.CUEN_CLASIF" 
+                            placeholder="..."/>
                     </div> 
                 </div> 
                 <div class="flex flex-row w-full justify-between">

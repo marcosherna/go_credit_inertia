@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     
     Route::controller(ChequeraController::class)->group( function () {
         Route::get('chequera-page', 'index')->name('chequera-layout');
+        Route::get('chequera-get-cheques/{CHEQ_ID}', 'getCheques')->name('chequera.get-cheques');
     });
     
     Route::controller(PartidaContableController::class)->group( function () {

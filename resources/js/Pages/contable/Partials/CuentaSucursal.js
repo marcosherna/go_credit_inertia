@@ -1,3 +1,5 @@
+import { ref } from 'vue';
+
 export default {
 
     model: {
@@ -6,13 +8,21 @@ export default {
         CUEN_NOMBRE: 0,
         CUEN_SALDO: '0.00',
         CUEN_TIPO: 0,
-        CUEN_CLASIF: 0,
+        CUEN_CLASIF: ref(null),
         CUEN_CUENTA: 0,
         CUEN_MODO: 0,
         CUEN_PADRE: null,
         SUCU_ID: 0,
         CUEN_ESTADO: true, 
     },
+    modoCuenta:{
+        0: 'Resumen',
+        1: 'Detalle'
+    },
+    clasificacion: [
+        { value: 1, text: 'Deudor' },
+        { value: 2, text: 'Acreedor' },
+    ],
     tipos: [
         { value: 1, text: 'Activo' },
         { value: 2, text: 'Pasivo' },

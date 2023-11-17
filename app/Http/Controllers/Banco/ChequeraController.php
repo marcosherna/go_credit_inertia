@@ -43,4 +43,9 @@ class ChequeraController extends Controller {
         return redirect()->back()
             ->with('message', 'Chequera agregada.');
     }
+
+    public function getCheques($CHEQ_ID) {
+        $chequera = Chequera::find($CHEQ_ID); 
+        return response()->json($chequera->obtenerCheques());
+    }
 }
