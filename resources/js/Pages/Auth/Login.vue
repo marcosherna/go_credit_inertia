@@ -19,16 +19,12 @@ const form = useForm({
 });
 
 const submit = () => {
-
-    console.log(form);
-
     form.transform(data => ({
         ...data,
         remember: form.remember ? 'on' : '',
     })).post(route('login'), {
         onFinish: () => form.reset('USUA_PASS'),
-        onError:(err) => {
-            console.log(err);
+        onError:(err) => { 
         },
     });
 };

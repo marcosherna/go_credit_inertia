@@ -24,9 +24,9 @@ defineProps({
                     <Link :href="route('catalogo-cuentas-layout')" class="flex items-center mt-5">
                         <i class="w-4 h-4 mr-2"></i> Catalogos de Cuentas
                     </Link>
-                <a class="flex items-center mt-5">
-                    <i class="w-4 h-4 mr-2"></i> Crear Partida
-                </a>
+                    <a class="flex items-center mt-5">
+                        <i class="w-4 h-4 mr-2"></i> Crear Partida
+                    </a>
             </div>
         </div>
     </div>

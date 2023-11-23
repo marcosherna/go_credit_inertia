@@ -30,4 +30,11 @@ class Municipio extends Model {
     public function pais() {
         return $this->belongsTo(Pais::class, 'PAIS_ID', 'PAIS_ID');
     }
+
+    public static function getMunicipiosDepartamento($idDepartamento) {
+        $municipios = Municipio::select('MUNI_ID','MUNI_NOMBRE','DEPA_ID','PAIS_ID','MUNI_ESTADO')
+        ->where('DEPA_ID', $idDepartamento)->where('MUNI_ESTADO', 1)->get(); 
+        
+        return $municipios;
+    }
 }

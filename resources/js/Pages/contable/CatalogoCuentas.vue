@@ -79,8 +79,7 @@ const assingNumeroContable = (item)=>{
 
 const submit = ()=>{  
     form.CUEN_NOMBRE = sucursales.find(x => x.CUEN_ID == form.SUCU_ID).CUEN_NOMBRE;
-    form.CUEN_CONTA = numeros_contables.find(x => x.CUEN_ID == form.CUEN_CONTA).CUEN_CONTA;
-    console.log(form);
+    form.CUEN_CONTA = numeros_contables.find(x => x.CUEN_ID == form.CUEN_CONTA).CUEN_CONTA; 
 }
 
 </script>

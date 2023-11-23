@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Administracion\ClientesController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Banco\ChequeraController;
 use App\Http\Controllers\BancoController;
+use App\Http\Controllers\Catalogos\EstadoCivilController;
+use App\Http\Controllers\Catalogos\PaisController;
 use App\Http\Controllers\Contable\CatalogoCuentasController;
 use App\Http\Controllers\Contable\PartidaContableController;
 use App\Http\Controllers\CuentaBanco\CuentaBancoController;
@@ -58,6 +61,23 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     
     Route::controller(CatalogoCuentasController::class)->group( function () {
         Route::get('catalogo-cuentas-page', 'index')->name('catalogo-cuentas-layout');
+    });
+
+    Route::controller(ClientesController::class)->group( function () {
+        Route::get('modulo-clientes-page', 'index')->name('clientes-layout');
+        Route::get('cliente-create', 'store')->name('cliente.store');
+        Route::get('cliente-helper', 'helper')->name('cliente.helper');
+        Route::post('cliente-create', 'create')->name('cliente.create');    
+    });
+
+    Route::controller(PaisController::class)->prefix('Pais')->group( function () {
+        Route::get('pais-all-resource', 'getAll')->name('pais.all-resource');
+        Route::get('departamentos-pais/{pais_id}', 'departamentosPais')->name('pais.departamentos-pais-resource');
+        Route::get('municipios-departamento/{depa_id}', 'municipiosDepartamento')->name('pais.municipios-departamento-resource');
+    });
+
+    Route::controller(EstadoCivilController::class)->prefix('EstadoCivil')->group( function () {
+        Route::get('estado-civil-all-resource', 'findAll')->name('estado-civil.all-resource');
     });
 
 });

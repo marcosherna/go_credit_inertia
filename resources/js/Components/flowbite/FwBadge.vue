@@ -1,7 +1,16 @@
 <script setup>
+
+defineProps({
+    color:{
+        type:String,
+        default:'green'
+    }
+})
+
 </script>
 <template lang="">
-    <span class="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+    <span :class="`bg-${color}-100 text-${color}-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-${color}-400
+     border border-${color}-400`">
         <slot></slot>
     </span>
 </template>
