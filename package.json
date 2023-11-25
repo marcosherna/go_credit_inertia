@@ -21,6 +21,7 @@
     "dependencies": {
         "@left4code/tw-starter": "^3.2.9",
         "element-plus": "^2.4.2",
-        "flowbite": "^2.1.1"
+        "flowbite": "^2.1.1",
+        "vue3-html2pdf": "^1.1.2"
     }
 }

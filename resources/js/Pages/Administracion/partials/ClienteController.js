@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios" 
 
 const model = {
     CLIE_ID: null,
@@ -140,6 +140,78 @@ const getEstadosCivil = async () => {
     }
 }
 
+const getAllSolicitudes = async (idCliente) => {
+    try {
+        const response = await axios.get(route('cliente.solicitudes-resource', idCliente))  
+        return response.data
+    } catch (error) { 
+        throw error
+    }
+}
+
+const getSolicitudById = async (idSolicitud) => {
+    try { 
+        const response = await axios.get(route('solicitud.detalle-resource', idSolicitud))   
+        return response.data
+    } catch (error) { 
+        throw error
+    }
+}
+
+const getCuotasById = async (idSolicitud) => {
+    try { 
+        const response = await axios.get(route('solicitud.cuotas-resource', idSolicitud))   
+        return response.data
+    } catch (error) { 
+        throw error
+    }
+}
+
+const cantidaCuotas = (plazo_total, plazo_cuota) => {
+    let cuota = 0;
+    cuota = plazo_total / plazo_cuota;
+
+    const decimal = cuota - Math.floor(cuota);    
+    const precision = 0.5;
+
+    if (decimal >= precision) {
+        cuota = Math.floor(cuota) + 1;
+    }
+    return parseInt(cuota);
+}
+
+const calcularCuota = (monto, interes, cantida_cuotas) => {
+    let cuota = 0;
+
+    const interes_decimal = interes / 100;
+    monto = monto + (monto * interes_decimal);
+    cuota = monto / cantida_cuotas;
+
+    return cuota.toFixed(2);
+}
+
+//Estado Solicitud. 0-Creada 1-Aprobada 2-Rechazada 3-Cancelada 4-CreditoAbierto 5-Finalizada 6-Desembolsada
+const estadoSolicitud = [
+    { value: 0, text: 'Creada', color : 'blue' },
+    { value: 1, text: 'Aprobada', color : 'green' },
+    { value: 2, text: 'Rechazada', color : 'red' },
+    { value: 3, text: 'Cancelada', color : 'red' },
+    { value: 4, text: 'Credito Abierto', color : 'blue' },
+    { value: 5, text: 'Finalizada', color : 'blue' },
+    { value: 6, text: 'Desembolsada', color : 'blue'}
+]
+
+
+const takeCreditos = async (CLIEN_ID, TAKE) => {
+    try {
+        const response = await axios.get(route('solicitud.take-cliente-creditos-resource', { id: CLIEN_ID, take: TAKE}))  
+        return response.data
+    } catch (error) { 
+        throw error
+    }
+}
+
+
 export default {
     model,
     tipoCasa,
@@ -151,5 +223,12 @@ export default {
     estadoCliente, 
     genero, 
     categorias, 
-    ingresoPromedio
+    ingresoPromedio, 
+    getAllSolicitudes, 
+    estadoSolicitud, 
+    getSolicitudById, 
+    getCuotasById, 
+    cantidaCuotas, 
+    calcularCuota, 
+    takeCreditos
 }

@@ -10,7 +10,9 @@ class Solicitud extends Model
     use HasFactory;
     protected $table = 'solicitud';
     protected $primaryKey = 'SOLI_ID';
-    public $timestamps = false; // Si no necesitas campos created_at y updated_at
+    public $timestamps = false; // Si no necesitas campos created_at y updated_at 
+    public $incrementing = false; // Para indicar que no es autoincremental
+    protected $keyType = 'string';
 
     protected $fillable = [
         'SOLI_ID',

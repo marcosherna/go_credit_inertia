@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Administracion\ClientesController;
+use App\Http\Controllers\Administracion\SolicitudController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Banco\ChequeraController;
 use App\Http\Controllers\BancoController;
@@ -68,6 +69,15 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('cliente-create', 'store')->name('cliente.store');
         Route::get('cliente-helper', 'helper')->name('cliente.helper');
         Route::post('cliente-create', 'create')->name('cliente.create');    
+        Route::get('cliente-detalle-page/{id}', 'show')->name('cliente.detalle-layout'); 
+        Route::get('cliente-solucitudes/{id}', 'solicitudes')->name('cliente.solicitudes-resource');   
+        Route::get('cliente-editar/{id}', 'edit')->name('cliente.editar-layout'); 
+    });
+
+    Route::controller(SolicitudController::class)->prefix('solicitud')->group( function () {
+        Route::get('solicitud-detalle/{id}', 'findById')->name('solicitud.detalle-resource');
+        Route::get('solicitud-cuotas/{id}', 'findCuotas')->name('solicitud.cuotas-resource');
+        Route::get('solicitud-take-cliente/{id}/{take}', 'findByIdClient')->name('solicitud.take-cliente-creditos-resource');
     });
 
     Route::controller(PaisController::class)->prefix('Pais')->group( function () {
@@ -79,5 +89,6 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::controller(EstadoCivilController::class)->prefix('EstadoCivil')->group( function () {
         Route::get('estado-civil-all-resource', 'findAll')->name('estado-civil.all-resource');
     });
+
 
 });

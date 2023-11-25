@@ -53,7 +53,11 @@ const onSearch = (text) => {
 
 
 const onShowClient = (CLIE_ID) => { 
-    router.visit(route('cliente.show', CLIE_ID));
+    router.visit(route('cliente.detalle-layout', CLIE_ID));
+}
+
+const editClient = (CLIE_ID) => {
+    router.visit(route('cliente.editar-layout', CLIE_ID));
 }
 
 const newCliente = () => {
@@ -156,6 +160,7 @@ const newCliente = () => {
                             </td>
                             <td class="px-6 py-4">
                                 <button href="#" v-on:click="onShowClient(c.CLIE_ID)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Detalle</button>
+                                <button href="#" v-on:click="editClient(c.CLIE_ID)" class="font-medium text-blue-60   dark:text-blue-500 hover:underline">Editar</button>
                             </td>
                         </tr>
                          

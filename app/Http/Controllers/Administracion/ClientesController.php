@@ -10,6 +10,7 @@ use App\Models\Empresa;
 use App\Models\EstadoCivil;
 use App\Models\Municipio;
 use App\Models\Pais;
+use App\Models\Solicitud;
 use App\Models\Sucursal;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -109,17 +110,7 @@ class ClientesController extends Controller {
         $cliente->EMPR_ID = $request->EMPR_ID; // empresa del usuario en sesion
         $cliente->USUA_LOGIN = Auth::user()->USUA_LOGIN;
         $cliente->FECHA_CAMBIO = date('Y-m-d H:i:s'); // fecha actual
-
-        try { 
-            $cliente = Cliente::create($request->validated());   
-            if (!$cliente) {
-                throw new \Exception('Error al crear el cliente.');
-            } 
-            return redirect()->route('cliente-create')->with('success', 'Cliente creado.');
-
-        } catch (\Exception $th) {
-            return redirect()->route('cliente-create')->with('error', $th->getMessage());
-        }
+        $cliente->insert();
     }
 
 
@@ -143,13 +134,47 @@ class ClientesController extends Controller {
 
 
     public function show($CLIE_ID){
-        $cliente = Cliente::    where('CLIE_ID', $CLIE_ID)
+        $cliente = Cliente::where('CLIE_ID', $CLIE_ID)
             ->with('paisNacimiento:PAIS_ID,PAIS_NOMBRE')
                 ->first();
+ 
                 
-        return Inertia::render('Administracion/partials/CrearCliente', 
-            ['cliente' => $cliente]
-        );
+        return Inertia::render('Administracion/partials/DetalleCliente', [
+            'cliente' => $cliente,
+            'solicitudes' => $cliente->solicitudeCreditos()
+        ]);
+    }
+
+    public function edit($CLIE_ID){
+        $cliente = Cliente::where('CLIE_ID', $CLIE_ID)->first();
+
+        $estadosCiviles = EstadoCivil::select('ESTA_ID','ESTA_NOMBRE','ESTA_ESTADO')->get();
+        $paises = Pais::select('PAIS_ID','PAIS_NOMBRE','PAIS_ESTADO')->where('PAIS_ESTADO', 1)->get();
+        $municipios = Municipio::select('MUNI_ID','MUNI_NOMBRE')->where('MUNI_ESTADO',1)->get();
+        $departamentos = Departamento::select('DEPA_ID','DEPA_NOMBRE')->where('DEPA_ESTADO',1)->get();
+        $empresas = Empresa::select('EMPR_ID','EMPR_NOMBRE','EMPR_ESTADO')->where('EMPR_ESTADO', 1)->get();
+        $sucursales = Sucursal::select('SUCU_ID','SUCU_NOMBRE','SUCU_ESTADO')->where('SUCU_ESTADO', 1)->get();
+
+        return Inertia::render('Administracion/partials/EditarCliente', [
+            'cliente' => $cliente,
+            'estadosCiviles' => $estadosCiviles,
+            'paises' => $paises, 
+            'municipios' => $municipios, 
+            'departamentos' => $departamentos, 
+            'empresas' => $empresas,
+            'sucursales' => $sucursales
+        ]);
+    }
+
+
+    public function solicitudes($CLIE_ID){
+
+        $solicitudes = Solicitud::select('SOLI_ID','SOLI_CATEGORIA','SOLI_FECHAAPROB','SOLI_FECHAVENCIMIENTO','SOLI_MONTO','SOLI_ESTADO')
+            ->where('CLIE_ID', $CLIE_ID)  
+            ->where('SOLI_ESTADO','!=',99)
+            ->get(); 
+
+        return response()->json($solicitudes);
     }
 
 

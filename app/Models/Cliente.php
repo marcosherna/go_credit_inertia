@@ -86,4 +86,15 @@ class Cliente extends Model {
     public function insert(){
         DB::table($this->table)->insert($this->toArray());
     }
+
+    public function solicitudeCreditos() { 
+        $solicitudes = Solicitud::select('SOLI_ID','SOLI_CATEGORIA', 'SOLI_FECHAAPROB', 'SOLI_FECHAVENCIMIENTO','SOLI_ESTADO', 'SOLI_MONTO')
+            ->where('CLIE_ID', $this->CLIE_ID)
+            ->where('SOLI_ESTADO', 4)
+            ->orderBy('SOLI_FECHAAPROB', 'desc')
+            ->take(3)   
+            ->get();
+
+        return $solicitudes;
+    }
 }
