@@ -34,5 +34,5 @@ class Cuotas extends Model {
 
     public function solicitud() {
         return $this->belongsTo(Solicitud::class, 'SOLI_ID', 'SOLI_ID');
-    }
+    } 
 }

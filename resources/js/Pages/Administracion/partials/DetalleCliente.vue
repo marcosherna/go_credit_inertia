@@ -214,15 +214,7 @@ const detalleCredito = async (idSolicitud) => {
                                     <div class="flex flex-col  mr-2">
                                         <div class="text-gray-400 text-xs uppercase font-semibold tracking-wide">Solicitudes</div>
                                         <div class="text-lg font-bold">1.2k</div>
-                                    </div>
-                                    <div class="flex flex-col  mr-2">
-                                        <div class="text-gray-400 text-xs uppercase font-semibold tracking-wide">Seguidores</div>
-                                        <div class="text-lg font-bold">5.8k</div>
-                                    </div>
-                                    <div class="flex flex-col  mr-2">
-                                        <div class="text-gray-400 text-xs uppercase font-semibold tracking-wide">Seguidos</div>
-                                        <div class="text-lg font-bold">2.5k</div>
-                                    </div>
+                                    </div> 
                                 </div>
                                 <div class="flex-1 inline-flex   items-center ml-2 space-x-2">
                                 <a hre="https://www.behance.net/ajeeshmon" target="_blank"><svg class=" cursor-pointer w-5 h-5 p-1  rounded-2xl hover:bg-blue-500 hover:text-white transition ease-in duration-300" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 172 172" style=" fill:#4a90e2;">
@@ -258,15 +250,15 @@ const detalleCredito = async (idSolicitud) => {
                                     <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z">
                                     </path>
                                 </svg>
-                                <p class="">1.2k Followers</p>
+                                <p class="">Es mala paga</p>
                                 </div>
                                 <div class="flex-1 inline-flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path>
                                 </svg>
-                                <p class="">14 Components</p>
+                                <p class=""></p>
                                 </div>
-                                <a href="https://www.behance.net/ajeeshmon" target="_blank" class="flex-no-shrink bg-green-400 hover:bg-green-500 px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-green-300 hover:border-green-500 text-white rounded-full transition ease-in duration-300">FOLLOW</a>
+                                <a href="#" class="flex-no-shrink bg-green-400 hover:bg-green-500 px-5 ml-4 py-2 text-xs  hover:shadow-lg font-medium  border-2 border-green-300 hover:border-green-500 text-white rounded-full transition ease-in duration-300">Detalle</a>
                             </div>
                             </div>
                         </div>
@@ -298,15 +290,15 @@ const detalleCredito = async (idSolicitud) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(c, index) in creditos" :key="index" class="text-gray-700 dark:text-gray-100">
-                                        <th class="border-t-0 pl-4 align-middle border-l-0 border-r-0 text-xs  p-4 text-left">
+                                    <tr v-for="(c, index) in creditos" :key="index" v-on:click="detalleCredito(c.SOLI_ID)" class="text-gray-700 hover:bg-green-200 dark:text-gray-100">
+                                        <th class="border-t-0  pl-4 align-middle border-l-0 border-r-0 text-xs  p-4 text-left">
                                             
                                             {{  c.SOLI_FECHAAPROB }} <br> {{  c.SOLI_FECHAVENCIMIENTO }}
                                         </th>
                                         <td class="border-t-0 pl-4 align-middle border-l-0 border-r-0 text-xs   p-4"> <fw-badge :color="controller.estadoSolicitud[c.SOLI_ESTADO].color ">
                                                 {{ controller.estadoSolicitud[c.SOLI_ESTADO].text }}
                                             </fw-badge> 
-                                            </td>
+                                        </td>
                                         <td class="border-t-0 pl-4 align-middle border-l-0 border-r-0 text-xs  p-4">
                                             <div class="flex items-center">
                                             <span class="mr-2">${{ c.SOLI_MONTO}}</span>
@@ -316,8 +308,7 @@ const detalleCredito = async (idSolicitud) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-
+                                        </td> 
                                     </tr> 
                                 </tbody>
                             </table>
@@ -428,249 +419,303 @@ const detalleCredito = async (idSolicitud) => {
             <!-- component --> 
             
             <div class="flex items-center justify-center  bg-gray-100">
-                <section class="w-full p-6 rounded-lg max-w-2xl shadow-lg shadow-gray-300 bg-white">
-                
-                <section class="grid grid-cols-2 gap-x-6">
-                    <div class="flex items-center py-3">
-                    <span class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center">
-                        <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="w-5 h-5 text-green-500"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M13 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                        <path d="M7 21l3 -4"></path>
-                        <path d="M16 21l-2 -4l-3 -3l1 -6"></path>
-                        <path d="M6 12l2 -3l4 -1l3 3l3 1"></path>
-                        </svg>
-                    </span>
-                    <div class="space-y-3 flex-1">
-                        <div class="flex items-center">
-                        <h4 class="font-medium text-sm mr-auto text-gray-700 flex items-center">
-                            Aprobado 
-                        </h4>
-                        <span class="px-2 py-1 rounded-lg bg-red-50 text-red-500 text-xs">
-                            {{ solicitud.SOLI_FECHAAPROB }}
-                        </span>
-                        </div> 
-                    </div>
-                    </div>
-                    <div class="flex items-center py-3">
-                    <span class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="w-5 h-5 text-green-500"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            fill="none"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M13 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                        <path d="M7 21l3 -4"></path>
-                        <path d="M16 21l-2 -4l-3 -3l1 -6"></path>
-                        <path d="M6 12l2 -3l4 -1l3 3l3 1"></path>
-                        </svg>
-                    </span>
-                    <div class="space-y-3 flex-1">
-                        <div class="flex items-center">
-                        <h4
-                            class="font-medium text-sm mr-auto text-gray-700 flex items-center"
-                        >
-                            Fecha Vencimiento
-                        </h4>
-                        <span class="px-2 py-1 rounded-lg bg-red-50 text-red-500 text-xs">
-                            {{ solicitud.SOLI_FECHAVENCIMIENTO }}
-                        </span>
-                        </div> 
-                    </div>
-                    </div>
-                    <div class="flex items-center py-3 border-t border-gray-100">
-                    <span
-                        class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="w-5 h-5 text-green-500"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            fill="none"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M3 21h18"></path>
-                        <path d="M19 21v-4"></path>
-                        <path
-                            d="M19 17a2 2 0 0 0 2 -2v-2a2 2 0 1 0 -4 0v2a2 2 0 0 0 2 2z"
-                        ></path>
-                        <path d="M14 21v-14a3 3 0 0 0 -3 -3h-4a3 3 0 0 0 -3 3v14"></path>
-                        <path d="M9 17v4"></path>
-                        <path d="M8 13h2"></path>
-                        <path d="M8 9h2"></path>
-                        </svg>
-                    </span>
-                    <div class="space-y-3 flex-1">
-                        <div class="flex items-center">
-                        <h4
-                            class="font-medium text-sm mr-auto text-gray-700 flex items-center"
-                        >
-                            Monto Aprobado 
-                        </h4>
-                        <span class="px-2 py-1 rounded-lg bg-green-50 text-green-700 text-xs">
-                            ${{ solicitud.SOLI_MONTO }}
-                        </span>
-                        </div> 
-                    </div>
-                    </div>
-                    <div class="flex items-center py-3 border-t border-gray-100">
-                    <span
-                        class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="w-5 h-5 text-green-500"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            fill="none"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path
-                            d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z"
-                        ></path>
-                        <path d="M9 11v-5a3 3 0 0 1 6 0v5"></path>
-                        </svg>
-                    </span>
-                    <div class="space-y-3 flex-1">
-                        <div class="flex items-center">
-                        <h4 class="font-medium text-sm mr-auto text-gray-700 flex items-center">
-                            Valor por Cuotas 
-                        </h4>
-                        <span class="px-2 py-1 rounded-lg bg-red-50 text-red-500 text-xs">
-                            ${{ cuota }}
-                        </span>
-                        </div> 
-                    </div>
-                    </div>
-                    <div class="flex items-center py-3 border-t border-gray-100">
-                    <span
-                        class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h5- w-5 text-green-500"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            fill="none"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M12 13l-2 -2"></path>
-                        <path d="M12 12l2 -2"></path>
-                        <path d="M12 21v-13"></path>
-                        <path
-                            d="M9.824 16a3 3 0 0 1 -2.743 -3.69a3 3 0 0 1 .304 -4.833a3 3 0 0 1 4.615 -3.707a3 3 0 0 1 4.614 3.707a3 3 0 0 1 .305 4.833a3 3 0 0 1 -2.919 3.695h-4z"
-                        ></path>
-                        </svg>
-                    </span>
-                    <div class="space-y-3 flex-1">
-                        <div class="flex items-center">
-                        <h4 class="font-medium text-sm mr-auto text-gray-700 flex items-center">
-                            Plazo
-                        </h4>
-                        <span class="px-2 py-1 rounded-lg bg-green-50 text-green-700 text-xs">
-                            {{ solicitud.plazo ? solicitud.plazo.PLAZ_NOMBRE : 0 }}
-                        </span>
+                <section class="w-full p-6 max-w-2xl shadow-gray-300 bg-white">
+                    <section class="grid grid-cols-2 gap-x-6">
+                        <div class="flex items-center py-3">
+                            <span class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-green-500"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    >
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M13 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M7 21l3 -4"></path>
+                                    <path d="M16 21l-2 -4l-3 -3l1 -6"></path>
+                                    <path d="M6 12l2 -3l4 -1l3 3l3 1"></path>
+                                </svg>
+                            </span>
+                            <div class="space-y-3 flex-1">
+                                <div class="flex items-center">
+                                    <h4 class="font-medium text-sm mr-auto text-gray-700 flex items-center">
+                                        Aprobado 
+                                    </h4>
+                                    <span class="px-2 py-1 rounded-lg bg-red-50 text-red-500 text-xs">
+                                        {{ solicitud.SOLI_FECHAAPROB }}
+                                    </span>
+                                </div> 
+                            </div>
                         </div>
-                        <div class="overflow-hidden bg-green-50 h-1.5 rounded-full w-full">
-                        <span
-                            class="h-full bg-green-500 w-full block rounded-full"
-                            style="width: 80%"
-                        ></span>
+                        <div class="flex items-center py-3">
+                            <span class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-green-500"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    >
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M13 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                <path d="M7 21l3 -4"></path>
+                                <path d="M16 21l-2 -4l-3 -3l1 -6"></path>
+                                <path d="M6 12l2 -3l4 -1l3 3l3 1"></path>
+                                </svg>
+                            </span>
+                            <div class="space-y-3 flex-1">
+                                <div class="flex items-center">
+                                <h4
+                                    class="font-medium text-sm mr-auto text-gray-700 flex items-center"
+                                >
+                                    Fecha Vencimiento
+                                </h4>
+                                <span class="px-2 py-1 rounded-lg bg-red-50 text-red-500 text-xs">
+                                    {{ solicitud.SOLI_FECHAVENCIMIENTO }}
+                                </span>
+                                </div> 
+                            </div>
                         </div>
-                    </div>
-                    </div>
-                    <div class="flex items-center py-3 border-t border-gray-100">
-                    <span
-                        class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center"
-                    >
-                        <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="w-5 h-5 text-green-500"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M6 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                        <path d="M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                        <path
-                            d="M4 17h-2v-11a1 1 0 0 1 1 -1h14a5 7 0 0 1 5 7v5h-2m-4 0h-8"
-                        ></path>
-                        <path d="M16 5l1.5 7l4.5 0"></path>
-                        <path d="M2 10l15 0"></path>
-                        <path d="M7 5l0 5"></path>
-                        <path d="M12 5l0 5"></path>
-                        </svg>
-                    </span>
-                    <div class="space-y-3 flex-1">
-                        <div class="flex items-center">
-                        <h4 class="font-medium text-sm mr-auto text-gray-700 flex items-center">
-                            Cuotas Pendientes 
-                        </h4>
-                        <span class="px-2 py-1 rounded-lg bg-green-50 text-green-700 text-xs">
-                            {{ cuotasPendientes }}
-                        </span>
-                        </div>
-                        <div class="overflow-hidden bg-green-50 h-1.5 rounded-full w-full">
+                        <div class="flex items-center py-3 border-t border-gray-100">
                             <span
-                                class="h-full bg-green-500 w-full block rounded-full"
-                                style="width: 80%"
-                            ></span>
+                                class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-green-500"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M3 21h18"></path>
+                                    <path d="M19 21v-4"></path>
+                                    <path
+                                        d="M19 17a2 2 0 0 0 2 -2v-2a2 2 0 1 0 -4 0v2a2 2 0 0 0 2 2z"
+                                    ></path>
+                                    <path d="M14 21v-14a3 3 0 0 0 -3 -3h-4a3 3 0 0 0 -3 3v14"></path>
+                                    <path d="M9 17v4"></path>
+                                    <path d="M8 13h2"></path>
+                                    <path d="M8 9h2"></path>
+                                </svg>
+                            </span>
+                            <div class="space-y-3 flex-1">
+                                <div class="flex items-center">
+                                    <h4 class="font-medium text-sm mr-auto text-gray-700 flex items-center">
+                                        Monto Aprobado 
+                                    </h4>
+                                    <span class="px-2 py-1 rounded-lg bg-green-50 text-green-700 text-xs">
+                                        ${{ solicitud.SOLI_MONTO }}
+                                    </span>
+                                </div> 
+                            </div>
                         </div>
-                    </div>
-                    </div>
-                </section>
-                
+                        <div class="flex items-center py-3 border-t border-gray-100">
+                            <span
+                                class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-green-500"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path
+                                        d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z"
+                                    ></path>
+                                    <path d="M9 11v-5a3 3 0 0 1 6 0v5"></path>
+                                </svg>
+                            </span>
+                            <div class="space-y-3 flex-1">
+                                <div class="flex items-center">
+                                    <h4 class="font-medium text-sm mr-auto text-gray-700 flex items-center">
+                                        Valor por Cuotas 
+                                    </h4>
+                                    <span class="px-2 py-1 rounded-lg bg-red-50 text-red-500 text-xs">
+                                        ${{ cuota }}
+                                    </span>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="flex items-center py-3 border-t border-gray-100">
+                            <span class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h5- w-5 text-green-500"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    >
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 13l-2 -2"></path>
+                                    <path d="M12 12l2 -2"></path>
+                                    <path d="M12 21v-13"></path>
+                                    <path
+                                        d="M9.824 16a3 3 0 0 1 -2.743 -3.69a3 3 0 0 1 .304 -4.833a3 3 0 0 1 4.615 -3.707a3 3 0 0 1 4.614 3.707a3 3 0 0 1 .305 4.833a3 3 0 0 1 -2.919 3.695h-4z"
+                                    ></path>
+                                </svg>
+                            </span>
+                            <div class="space-y-3 flex-1">
+                                <div class="flex items-center">
+                                    <h4 class="font-medium text-sm mr-auto text-gray-700 flex items-center">
+                                        Plazo
+                                    </h4>
+                                    <span class="px-2 py-1 rounded-lg bg-green-50 text-green-700 text-xs">
+                                        {{ solicitud.plazo ? solicitud.plazo.PLAZ_NOMBRE : 0 }}
+                                    </span>
+                                </div>
+                                <div class="overflow-hidden bg-green-50 h-1.5 rounded-full w-full">
+                                    <span
+                                        class="h-full bg-green-500 w-full block rounded-full"
+                                        style="width: 80%"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center py-3 border-t border-gray-100">
+                            <span class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-green-500"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M6 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                    <path d="M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                    <path
+                                        d="M4 17h-2v-11a1 1 0 0 1 1 -1h14a5 7 0 0 1 5 7v5h-2m-4 0h-8"
+                                    ></path>
+                                    <path d="M16 5l1.5 7l4.5 0"></path>
+                                    <path d="M2 10l15 0"></path>
+                                    <path d="M7 5l0 5"></path>
+                                    <path d="M12 5l0 5"></path>
+                                </svg>
+                            </span>
+                            <div class="space-y-3 flex-1">
+                                <div class="flex items-center">
+                                <h4 class="font-medium text-sm mr-auto text-gray-700 flex items-center">
+                                    Cuotas Pendientes 
+                                </h4>
+                                <span class="px-2 py-1 rounded-lg bg-green-50 text-green-700 text-xs">
+                                    {{ cuotasPendientes }}
+                                </span>
+                                </div>
+                                <div class="overflow-hidden bg-green-50 h-1.5 rounded-full w-full">
+                                    <span
+                                        class="h-full bg-green-500 w-full block rounded-full"
+                                        style="width: 80%"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center py-3 border-t border-gray-100">
+                            <span
+                                class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-green-500"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path
+                                        d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z"
+                                    ></path>
+                                    <path d="M9 11v-5a3 3 0 0 1 6 0v5"></path>
+                                </svg>
+                            </span>
+                            <div class="space-y-3 flex-1">
+                                <div class="flex items-center">
+                                <h4 class="font-medium text-sm mr-auto text-gray-700 flex items-center">
+                                    Taza de Interes 
+                                </h4>
+                                <span class="px-2 py-1 rounded-lg bg-green-50 text-green-700 text-xs">
+                                    {{ solicitud.tasa_interes ? solicitud.tasa_interes.TASA_VALOR : 0 }}%
+                                </span>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="flex items-center py-3 border-t border-gray-100">
+                            <span
+                                class="w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-green-500"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M3 21h18"></path>
+                                    <path d="M19 21v-4"></path>
+                                    <path
+                                        d="M19 17a2 2 0 0 0 2 -2v-2a2 2 0 1 0 -4 0v2a2 2 0 0 0 2 2z"
+                                    ></path>
+                                    <path d="M14 21v-14a3 3 0 0 0 -3 -3h-4a3 3 0 0 0 -3 3v14"></path>
+                                    <path d="M9 17v4"></path>
+                                    <path d="M8 13h2"></path>
+                                    <path d="M8 9h2"></path>
+                                </svg>
+                            </span>
+                            <div class="space-y-3 flex-1">
+                                <div class="flex items-center">
+                                <h4 class="font-medium text-sm mr-auto text-gray-700 flex items-center">
+                                    Monto Total 
+                                </h4>
+                                <span class="px-2 py-1 rounded-lg bg-green-50 text-green-700 text-xs">
+                                    $ {{ solicitud.SOLI_MONTO+ (solicitud.SOLI_MONTO * ( parseInt(solicitud.tasa_interes ? solicitud.tasa_interes.TASA_VALOR : 0) / 100 )) }}
+                                </span>
+                                </div> 
+                            </div>
+                        </div>
+                    </section>
                 </section>
             </div>
 
-            <fw-skeleton :show="cuotas ==null"></fw-skeleton>
+            <fw-skeleton :show="cuotas == null"></fw-skeleton>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">  
                 <table v-if="cuotas != null" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">
-                                Fecha Pago
+                                Fecha a Pagar
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Mora - Dias
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 No. Cuota
@@ -689,8 +734,11 @@ const detalleCredito = async (idSolicitud) => {
                                 {{ c.CUOT_FECHAPAGO }}
                             </th>
                             <td class="px-6 py-4">
-                                {{ c.CUOT_NUMERO }}  
+                                {{ c.DIAS_MORA == 0 ? '---' : c.DIAS_MORA + ' dias' }}  
                             </td>
+                            <td class="px-6 py-4">
+                                {{ c.CUOT_NUMERO }}  
+                            </td> 
                             <td class="px-6 py-4">
                                 <fw-badge :color="cuotaService.estadoCuota[c.CUOT_ESTADO].color">
                                     {{ cuotaService.estadoCuota[c.CUOT_ESTADO].text }}
@@ -742,7 +790,7 @@ const detalleCredito = async (idSolicitud) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(s,index) in allSolicitudes" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <tr v-for="(s,index) in allSolicitudes" class="bg-white hover:bg-green-200 border-b dark:bg-gray-800 dark:border-gray-700">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{ s.SOLI_FECHAAPROB }}
                             </th>
