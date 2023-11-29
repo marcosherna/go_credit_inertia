@@ -3,11 +3,11 @@ import NavigationLayout from '@/Layouts/NavigationLayout.vue';
 import { FwTable, FwBadge, FwButton, FwModal, 
     FwInput, FwTextArea, FwSelect, FwRadioCheckbox, FwSearchBar} from '../../Components/flowbite/index';
 import controller from './partials/ClienteController.js';
-import { useForm, router } from '@inertiajs/vue3';
-import { defineProps, ref } from 'vue'; 
+import { useForm, router, Link } from '@inertiajs/vue3';
+import { defineProps, ref, onMounted } from 'vue'; 
 
 const props = defineProps({
-    clientes:Array, 
+    clientes:Object, 
     
 });
 const form = useForm({ 
@@ -16,12 +16,14 @@ const form = useForm({
     tipoCliente: false, 
     ingresosAdicionales: false,
 })
+ 
+
 const modalAdd = ref(false);
 const paises = ref([]);
 const departamentos = ref([]);
 const municipios = ref([]);
 const estadosCiviles = ref([]);
-const lstClientes = ref(props.clientes);
+const lstClientes = ref(props.clientes.data);
 
 const openModalAdd = async () => {
     modalAdd.value = true;
@@ -39,7 +41,7 @@ const filtrarMunicipios = async (id_departamento) => {
 }
 
 const onSearch = (text) => {   
-    lstClientes.value = props.clientes.filter((item) => { 
+    lstClientes.value = props.clientes.data.filter((item) => { 
         return  item.CLIE_NOMBRE.toUpperCase().includes(text.toUpperCase()) ||  
                 item.CLIE_APELLIDO.toUpperCase().includes(text.toUpperCase()) ||   
                 item.departamento_nacimiento.DEPA_NOMBRE.toUpperCase().includes(text.toUpperCase()) ||
@@ -47,7 +49,7 @@ const onSearch = (text) => {
     });
     
     if(text == ''){
-        lstClientes.value = props.clientes;
+        lstClientes.value = props.clientes.data;
     }
 }
 
@@ -62,7 +64,9 @@ const editClient = (CLIE_ID) => {
 
 const newCliente = () => {
     router.visit(route('cliente.store'));
-}
+} 
+
+console.log(props.clientes);
 
 </script> 
 
@@ -97,10 +101,7 @@ const newCliente = () => {
                     </div>
                     </li>
                 </ol>
-            </div> 
-
-            
-
+            </div>  
             <div class="relative overflow-x-auto  mt-6">
                 <div class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4  dark:bg-gray-900">
                     <div>
@@ -109,9 +110,13 @@ const newCliente = () => {
                             Nuevo Cliente
                         </fw-button>
                     </div>
-                    <fw-search-bar   
+
+                    <div class="relative">  
+                        <fw-search-bar   
                             @search="onSearch"
                             placeholder="Buscar..."/>
+                    </div>
+                    
                 </div>
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -145,7 +150,7 @@ const newCliente = () => {
                                         <span class="text-blue-700"> {{ `No. Tel ${c.CLIE_TEL == null || c.CLIE_TEL == ' ' ? c.CLIE_TEL2: c.CLIE_TEL}` }}</span>
                                     </div>
                                     <div class="font-normal text-gray-500 text-sm">
-                                        {{ c.pais_nacimiento.PAIS_NOMBRE + ', ' + c.departamento_nacimiento.DEPA_NOMBRE + ' ' + c.CLIE_DIRECCION }}
+                                        {{ c.pais_nacimiento ? c.pais_nacimiento.PAIS_NOMBRE: '' + ', ' + c.departamento_nacimiento? c.departamento_nacimiento : '' + ' ' + c.CLIE_DIRECCION }}
                                     </div>
                                 </div>  
                             </th>
@@ -165,10 +170,21 @@ const newCliente = () => {
                         </tr>
                          
                     </tbody>
-                </table>
-            </div>
+                </table> 
+            </div>  
 
+             <!-- PAGINACION -->
+             <ul class="flex items-center -space-x-px h-10 text-base py-8">
+                    <li v-for="(link, index) in clientes.links" :key="index"> 
+                        <Link  :href="link.url || '#'" :disabled="!(clientes.current_page ===  clientes.first_page_url || clientes.current_page  === clientes.last_page_url)"  
+                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                            :class="{ 'rounded-s-lg': index === 0, 'rounded-e-lg': index === clientes.links.length - 1 }">
 
+                            <span v-if="link.label === '&laquo; Previous' || link.label === 'Next &raquo;'" class="sr-only">{{ link.label }}</span>
+                            <span v-else v-html="link.label"></span>
+                        </Link>
+                    </li>
+                </ul> 
         </navigation-layout>
 
         <fw-modal :show="modalAdd" @close="modalAdd = false">

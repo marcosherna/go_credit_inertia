@@ -36,7 +36,7 @@ const banco = useForm({
     BANC_ID: null,
     BANC_NOMBRE: null,
     BANC_DETALLE: null,
-    SUCU_ID: null,
+    SUCU_ID: 0,
     BANC_ESTADO: true,
 });
 
@@ -50,7 +50,7 @@ const submit = (e) => {
     if (banco.BANC_ID) {
         banco.transform((data) => ({
             ...data,
-            BANC_ESTADO: banco.BANC_ESTADO ? 1 : 0,
+            BANC_ESTADO: banco.BANC_ESTADO ? 1 : 0, 
         })).put(route('banco.update', banco.BANC_ID), {
             onSuccess: () => {
                 banco.reset();

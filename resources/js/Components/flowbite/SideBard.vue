@@ -50,7 +50,7 @@ defineProps({
                                 </template>
                              </DropdownNav>
                         </li> 
-                        <li>
+                        <!-- <li>
                             <a href="#"
                                 class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <svg aria-hidden="true"
@@ -69,9 +69,10 @@ defineProps({
                                     4
                                 </span>
                             </a>
-                        </li> 
+                        </li> -->
                     </ul>
-                    <ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
+                    <!--
+                        <ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
                         <li>
                             <a href="#"
                                 class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
@@ -101,6 +102,7 @@ defineProps({
                         </li>
                          
                     </ul>
+                    -->
                 </div>
                
             </aside>

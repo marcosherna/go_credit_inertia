@@ -270,8 +270,7 @@ const submit = () => {
     }
     
 }
-
-console.log(props.cliente);
+ 
 
 </script>
 

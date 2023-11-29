@@ -27,9 +27,7 @@ const cuentaContables = [
     costos,
     ingresos,
     liquidadoras
-];
-
-console.log(cuentaContables);
+]; 
 
 let sucursales = [];
 let numeros_contables = [];
@@ -41,8 +39,7 @@ const form = useForm({
     caja:false, 
     generales:true
 });
-
-console.log(props.order);
+ 
 
 const isShowModal = ref(false);
 
@@ -55,9 +52,7 @@ const openModal = () => {
 
 const filterCuentasContables = (selected)=>{ 
     const acreedores = [1,4,6];
-    const deudor = [2,3,5];
-
-    console.log(selected);
+    const deudor = [2,3,5]; 
     sucursales = props.cuentasSucursales; 
     if(selected != 0){   
         sucursales = props.cuentasSucursales.filter(

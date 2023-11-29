@@ -25,8 +25,8 @@ class ClientesController extends Controller {
             'CLIE_DOCFISCAL', 'CLIE_DIRECCION','CLIE_TEL','CLIE_TEL2','CLIE_MAIL', 
             'CLIE_PROFESION','CLIE_TIPOEMPLEO','CLIE_SCORE','CLIE_ESTADO')
                 ->with('paisNacimiento:PAIS_ID,PAIS_NOMBRE', 
-                    'departamentoNacimiento:DEPA_ID,DEPA_NOMBRE')
-                ->get();
+                    'departamentoNacimiento:DEPA_ID,DEPA_NOMBRE') 
+                ->paginate(50);
 
         return Inertia::render('Administracion/Clientes', 
             ['clientes' => $clientes]
@@ -175,6 +175,19 @@ class ClientesController extends Controller {
             ->get(); 
 
         return response()->json($solicitudes);
+    }
+
+
+    public function findAll(){
+        $clientes = Cliente::select('CLIE_ID','CLIE_NOMBRE','CLIE_NOMBRE2','CLIE_APELLIDO','CLIE_APELLIDO2', 
+            'CLIE_SEXO','ESTA_ID','PAIS_NAC', 'DEPA_NAC','CLIE_FECHANAC','CLIE_DOCIDEN', 
+            'CLIE_DOCFISCAL', 'CLIE_DIRECCION','CLIE_TEL','CLIE_TEL2','CLIE_MAIL', 
+            'CLIE_PROFESION','CLIE_TIPOEMPLEO','CLIE_SCORE','CLIE_ESTADO')
+                ->with('paisNacimiento:PAIS_ID,PAIS_NOMBRE', 
+                    'departamentoNacimiento:DEPA_ID,DEPA_NOMBRE') 
+                ->paginate(10);
+
+        return response()->json($clientes);
     }
 
 

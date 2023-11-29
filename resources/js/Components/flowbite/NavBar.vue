@@ -32,14 +32,14 @@ const page = usePage();
                         </svg>
                         <span class="sr-only">Toggle sidebar</span>
                     </button>
-                    <a href="https://flowbite.com" class="flex items-center justify-between mr-4">
+                    <Link :href="route('dashboard')" class="flex items-center justify-between mr-4">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                             <path d="m1.56 6.245 8 3.924a1 1 0 0 0 .88 0l8-3.924a1 1 0 0 0 0-1.8l-8-3.925a1 1 0 0 0-.88 0l-8 3.925a1 1 0 0 0 0 1.8Z"/>
                             <path d="M18 8.376a1 1 0 0 0-1 1v.163l-7 3.434-7-3.434v-.163a1 1 0 0 0-2 0v.786a1 1 0 0 0 .56.9l8 3.925a1 1 0 0 0 .88 0l8-3.925a1 1 0 0 0 .56-.9v-.786a1 1 0 0 0-1-1Z"/>
                             <path d="M17.993 13.191a1 1 0 0 0-1 1v.163l-7 3.435-7-3.435v-.163a1 1 0 1 0-2 0v.787a1 1 0 0 0 .56.9l8 3.925a1 1 0 0 0 .88 0l8-3.925a1 1 0 0 0 .56-.9v-.787a1 1 0 0 0-1-1Z"/>
                         </svg>
                         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">GO Credit</span>
-                    </a> 
+                    </Link> 
                 </div>
                 <div class="flex items-center lg:order-2">
                        
@@ -47,9 +47,34 @@ const page = usePage();
                         class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                         id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
                         <span class="sr-only">Open user menu</span>
-                        <img class="w-8 h-8 rounded-full"
-                            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gough.png"
-                            alt="user photo" />
+                        <span class="flex items-center justify-center w-7 h-7 shrink-0 rounded-full bg-white text-gray-900">
+                                          
+                                          <svg class="w-4 h-4 text-gray-800 dark:text-white" 
+                                             aria-hidden="true" 
+                                             xmlns="http://www.w3.org/2000/svg" 
+                                             fill="currentColor" 
+                                             viewBox="0 0 14 18">
+                                             <path d="M7 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm2 1H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+                                          </svg>
+
+                                          <!--<svg
+                                             xmlns="http://www.w3.org/2000/svg"
+                                             class="w-6 h-6"
+                                             width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24"
+                                             stroke-width="1.5"
+                                             stroke="currentColor"
+                                             fill="none"
+                                             stroke-linecap="round"
+                                             stroke-linejoin="round">
+
+                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                             <path
+                                                d="M7.502 19.423c2.602 2.105 6.395 2.105 8.996 0c2.602 -2.105 3.262 -5.708 1.566 -8.546l-4.89 -7.26c-.42 -.625 -1.287 -.803 -1.936 -.397a1.376 1.376 0 0 0 -.41 .397l-4.893 7.26c-1.695 2.838 -1.035 6.441 1.567 8.546z"
+                                             ></path>
+                                          </svg>-->
+                                       </span>
                     </button>
                     <!-- Dropdown menu -->
                     <div class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 rounded-xl"

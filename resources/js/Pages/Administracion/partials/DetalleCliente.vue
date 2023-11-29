@@ -30,9 +30,7 @@ const creditos = ref([]);
 
 onMounted(async () => {
     if(props.cliente.CLIE_ID){
-        creditos.value = await controller.takeCreditos(props.cliente.CLIE_ID, 3);
-        console.log('------------------');
-        console.log(creditos.value);
+        creditos.value = await controller.takeCreditos(props.cliente.CLIE_ID, 3); 
     } 
 });
  
@@ -40,8 +38,7 @@ onMounted(async () => {
 const openAllSolicitud =  async (idCliente) => {
     try {
         showAllSolicitud.value = true;   
-        allSolicitudes.value = await controller.getAllSolicitudes(idCliente);
-        console.log(allSolicitudes.value);
+        allSolicitudes.value = await controller.getAllSolicitudes(idCliente); 
     } catch (error) {
         console.log(error);
     }
@@ -57,10 +54,7 @@ const detalleCredito = async (idSolicitud) => {
 
     cuota.value = controller.calcularCuota(solicitud.value.SOLI_MONTO, solicitud.value.tasa_interes.TASA_VALOR ,  valorPorCuota.value);
 
-    cuotasPendientes.value = cuotas.value.filter(cuota => cuota.CUOT_ESTADO != 1).length;
-
-    console.log(cuotas.value);
-    console.log(solicitud.value);
+    cuotasPendientes.value = cuotas.value.filter(cuota => cuota.CUOT_ESTADO != 1).length; 
     
 }
 

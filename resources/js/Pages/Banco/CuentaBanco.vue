@@ -86,7 +86,7 @@ const selectedItem = (item) =>{
 const changedStatus = (id)=>{
     loading.value = true
     router.visit('/cuenta-banco-status/'+id, {
-        method: 'patch', 
+        method: 'put', 
         onSuccess: () => {
             // menssajes
         }, 

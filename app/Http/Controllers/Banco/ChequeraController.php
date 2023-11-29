@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Banco;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Banco\ChequeraRequest;
+use App\Http\Requests\Banco\ChequeRequest;
 use App\Models\Chequera;
+use App\Models\ChequeraMovimiento;
 use App\Models\CuentaBanco;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -47,5 +49,22 @@ class ChequeraController extends Controller {
     public function getCheques($CHEQ_ID) {
         $chequera = Chequera::find($CHEQ_ID); 
         return response()->json($chequera->obtenerCheques());
+    }
+
+    public function createCheque(ChequeRequest $request){
+        try {
+            $cheque = new ChequeraMovimiento();
+
+            $cheque->CHEQ_ID = $request->CHEQ_ID;
+            $cheque->CHEM_NUMERO = $request->CHEM_NUMERO;
+            $cheque->CHEM_FECHA = date('Y-m-d H:i:s');
+            $cheque->CHEM_FECHACAMBIO = null;
+            $cheque->USUA_ID = auth()->user()->USUA_ID;
+            $cheque->CHEM_ESTADO = 0;
+            $cheque->emitCheque();
+            return response()->json($cheque);
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage(), 500);
+        }
     }
 }

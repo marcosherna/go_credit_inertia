@@ -22,6 +22,22 @@ const model = {
     CHEQ_ESTADO:0,
 }
 
+const model_cheque = {
+    CHEM_ID:null,
+    CHEQ_ID:null,
+    CHEM_NUMERO:0,
+    CHEM_FECHA:null,
+    CHEM_LUGAR:null,
+    CHEM_NOMBRE:null,
+    CHEM_MONTO: 0,
+    CHEM_MONTOLETRA:null,
+    CHEM_COMENTARIO:null,
+    CHEM_FECHACAMBIO:null,
+    USUA_ID:null,
+    CHEM_ESTADO:0,
+
+}
+
 const estadoCheque = [
     { value: 0, text: 'Generado' },
     { value: 1, text: 'Transito' },

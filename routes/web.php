@@ -48,12 +48,13 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('cuenta-banco', 'index')->name('cuenta-banco-layout');
         Route::post('cuenta-banco-create', 'store')->name('cuenta-banco.store');
         Route::put('cuenta-banco-update', 'update')->name('cuenta-banco.update');
-        Route::patch('cuenta-banco-status/{id}', 'changedStatus')->name('cuenta-banco.status');
+        Route::put('cuenta-banco-status/{id}', 'changedStatus')->name('cuenta-banco.status');
     });
     
     Route::controller(ChequeraController::class)->group( function () {
         Route::get('chequera-page', 'index')->name('chequera-layout');
         Route::get('chequera-get-cheques/{CHEQ_ID}', 'getCheques')->name('chequera.get-cheques');
+        Route::post('chequera-create-cheque', 'createCheque')->name('chequera.create-cheque');
     });
     
     Route::controller(PartidaContableController::class)->group( function () {
@@ -72,6 +73,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('cliente-detalle-page/{id}', 'show')->name('cliente.detalle-layout'); 
         Route::get('cliente-solucitudes/{id}', 'solicitudes')->name('cliente.solicitudes-resource');   
         Route::get('cliente-editar/{id}', 'edit')->name('cliente.editar-layout'); 
+        Route::get('cliente-find-all', 'findAll')->name('cliente.findAll-resource');
     });
 
     Route::controller(SolicitudController::class)->prefix('solicitud')->group( function () {

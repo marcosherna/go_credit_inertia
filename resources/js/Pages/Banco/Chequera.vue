@@ -8,6 +8,8 @@ import NavigationLayout from '../../Layouts/NavigationLayout.vue';
 import MenuModuloBanco from './Partials/MenuModuloBanco.vue'; 
 import controller from './controllers/chequeController.js'; 
 
+import n2words from 'n2words'
+
 const props = defineProps({
     chequeras: Array,
     cuentasBanco: Array,
@@ -24,8 +26,13 @@ const form = useForm({
     ...controller.model
 });
 
+const form_cheque = useForm({
+    ...controller.model_cheque
+});
+
 const isShowModal = ref(false) 
 const isShowModalDetalle = ref(false)
+const emitirChequeModal = ref(false)
 const cheques = ref(null)
 
 let lstChequeras = ref([])
@@ -46,6 +53,23 @@ const onSearch = (text) =>{
     if(text == ''){
         lstChequeras.value = props.chequeras;
     }  
+}
+
+const numerToLetter = (number) => { 
+    if(number != ''){
+
+        try {
+            form_cheque.errors.CHEM_MONTOLETRA = null; 
+            let numbers = number.toString().split('.');
+            let int = numbers[0];
+            let decimal = numbers[1] || '00';  
+
+            form_cheque.CHEM_MONTOLETRA = (n2words(int, { lang: 'es' }) + ' con ' + decimal + '/100').toUpperCase(); 
+        } catch (error) {
+            form_cheque.errors.CHEM_MONTOLETRA = 'Error al convertir el monto a letras'
+        }   
+    }
+    
 }
 
 const submit = () => {
@@ -76,8 +100,7 @@ const submit = () => {
         }
     } 
 }
-const selectedItem = (item) =>{  
-     
+const selectedItem = (item) =>{    
     form.CUEB_NUMERO = item.cuenta_banco.CUEB_NUMERO
     form.CHEQ_DESDE = item.CHEQ_DESDE.toString();
     form.CHEQ_HASTA = item.CHEQ_HASTA.toString();
@@ -110,6 +133,23 @@ const detelleCheque = async (id) => {
         cheques.value = []
     }
 }
+
+
+const seleccionarChequera = (chequera)=> {
+    console.log(chequera);
+    emitirChequeModal.value = true
+    form_cheque.CHEQ_ID = chequera.CHEQ_ID
+
+    // CHEQ_VERIFICADOR - ultimo cheque  / CHEQ_DESDE - disponible
+    form_cheque.CHEM_NUMERO = `${chequera.CHEQ_VERIFICADOR == 0 ? 
+                        chequera.CHEQ_DESDE : chequera.CHEQ_VERIFICADOR + 1}`
+}
+
+
+const emitirCheque = () => {
+    console.log(form_cheque);
+}
+
 
 </script>  
 <template>
@@ -203,11 +243,17 @@ const detelleCheque = async (id) => {
  
                                 </td> 
                                 <td class="px-6 py-4">
+
+                                    <button v-if="chequera.CHEQ_ESTADO == 1"
+                                        href="#" 
+                                        @click="seleccionarChequera(chequera)"
+                                        class="font-medium text-green-600 mr-2 dark:text-green-500 hover:underline">Emitir</button>
+                                    
                                     <button 
                                         href="#" 
                                     @click="selectedItem(chequera)"
                                         class="font-medium text-green-600 dark:text-green-500 hover:underline">Editar</button>
-                                    <button v-on:click="detelleCheque(chequera.CHEQ_ID)" class="px-3 font-medium text-green-600 dark:text-green-500 hover:underline">Ver</button>
+                                    <button v-if="chequera.CHEQ_ESTADO != 1" v-on:click="detelleCheque(chequera.CHEQ_ID)" class="px-3 font-medium text-green-600 dark:text-green-500 hover:underline">Ver</button>
                                 </td>
                             </tr> 
                         </template> 
@@ -331,14 +377,14 @@ const detelleCheque = async (id) => {
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 <p class="text-gray-900 font-bold pr-5" >{{ cheque.CHEM_ID }}</p>
                                 <fw-badge>
-                                    {{ `Cantidad: ${cheque.CHEM_MONTO}`  }}
+                                    {{ `Cantidad: ${cheque.CHEM_MONTO}` }}
                                 </fw-badge> 
                             </th>
                             <td class="px-6 py-4">
                                 <div class="flex pb-2">
                                         <p class="text-gray-900 font-bold pr-5" >{{ cheque.CHEM_NOMBRE }}</p>
                                         <fw-badge>
-                                            {{ controller.estadoCheque.find( x => x.value = cheque.CHEM_ESTADO).text }}
+                                            {{ controller.estadoCheque.find( x => x.value = cheque.CHEM_ESTADO) ? controller.estadoCheque.find( x => x.value = cheque.CHEM_ESTADO).text : '' }}
                                         </fw-badge>
                                     </div>
                                     <div class="text-gray-500 text-xs">
@@ -348,33 +394,125 @@ const detelleCheque = async (id) => {
                             </td>
                             <td class="px-6 py-4">
                                 <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
-<svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
-<path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
-</svg>
-</button>
+                                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
+                                    <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
+                                </svg>
+                            </button>
 
-<!-- Dropdown menu -->
-<div id="dropdownDots" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
-      <li>
-        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-      </li>
-      <li>
-        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-      </li>
-      <li>
-        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-      </li>
-    </ul>
-    <div class="py-2">
-      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Separated link</a>
-    </div>
-</div>
+                            <!-- Dropdown menu -->
+                                <div id="dropdownDots" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
+                                    <li>
+                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+                                    </li>
+                                    </ul>
+                                    <div class="py-2">
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Separated link</a>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </template>
                 </fw-table>
             </template> 
         </fw-modal> 
+
+
+        <fw-modal :show="emitirChequeModal" 
+            maxWidth="sm"
+            @close="emitirChequeModal = false">
+            <template #header>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    chequera
+                </h3> 
+            </template>
+            <template #body> 
+                <form @submit.prevent="emitirCheque" class="p-4 md:p-5"> 
+                        <div class="grid gap-4 mb-4 grid-cols-2">
+                            <div class="col-span-2 ">
+                                <fw-input label="No. Cheque" 
+                                    v-model:value="form_cheque.CHEM_NUMERO"     
+                                    type="number"
+                                    :min="0"
+                                    :disabled="true"
+                                    placeholder="Desde"/>
+                                <div v-show="form_cheque.errors.CHEM_NUMERO" class="text-red-500 text-sm">
+                                    {{  form_cheque.errors.CHEM_NUMERO }}
+                                </div>
+                            </div>
+                            <div class="col-span-2 sm:col-span-1"> 
+                                <fw-input label="Fecha"
+                                    v-model:value="form_cheque.CHEM_FECHA"
+                                    :onUpdate:value="onchange"
+                                    :min="parseInt(form.CHEM_FECHA)"
+                                    placeholder="Hasta"
+                                    type="number"/>
+                                <div v-show="form_cheque.errors.CHEM_FECHA" class="text-red-500 text-sm">
+                                    {{  form_cheque.errors.CHEM_FECHA }}
+                                </div>
+
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <fw-input label="Lugar"
+                                    v-model:value="form_cheque.CHEM_LUGAR"  
+                                    placeholder="....."/>   
+                                <div v-show="form_cheque.errors.CHEM_LUGAR" class="text-red-500 text-sm">
+                                    {{  form_cheque.errors.CHEM_LUGAR }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-2">
+                                <fw-input label="Monto"
+                                    v-model:value="form_cheque.CHEM_MONTO"
+                                    :onUpdate:value="numerToLetter"  
+                                    type="number"
+                                    placeholder="....."/>
+                            </div>
+                            <div class="col-span-2"> 
+                                <fw-input label="Monto Letras"
+                                    v-model:value="form_cheque.CHEM_MONTOLETRA" 
+                                    :disabled="true" 
+                                    placeholder="....."/> 
+
+                                <div v-show="form_cheque.errors.CHEM_MONTOLETRA" class="text-red-500 text-sm">
+                                    {{  form_cheque.errors.CHEM_MONTOLETRA }}
+                                </div>
+                            </div>  
+
+                            <div class="col-span-2">
+                                <fw-input label="Paguese a: "
+                                    v-model:value="form_cheque.CHEM_NOMBRE"  
+                                    placeholder="....."/> 
+
+                                <div v-show="form_cheque.errors.CHEM_NOMBRE" class="text-red-500 text-sm">
+                                    {{  form_cheque.errors.CHEM_NOMBRE }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-2">
+                                <fw-text-area label="Comentarios: "
+                                    v-model:value="form_cheque.CHEM_COMENTARIOS" 
+                                    placeholder="Referencias..."> 
+                                </fw-text-area>
+                                <div v-show="form_cheque.errors.CHEM_COMENTARIOS" class="text-red-500 text-sm">
+                                    {{  form_cheque.errors.CHEM_COMENTARIOS }}
+                                </div>
+                            </div>
+
+                        </div> 
+                        
+                        <div class="flex flex-row w-full justify-end">
+                            <fw-button :disabled="form_cheque.processing" type="submit">Guardar</fw-button>
+                        </div> 
+                    </form>
+            </template> 
+        </fw-modal>
+
     </NavigationLayout>   
 </template>
