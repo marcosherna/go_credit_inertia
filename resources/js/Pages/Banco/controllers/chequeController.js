@@ -31,7 +31,7 @@ const model_cheque = {
     CHEM_NOMBRE:null,
     CHEM_MONTO: 0,
     CHEM_MONTOLETRA:null,
-    CHEM_COMENTARIO:null,
+    CHEM_COMENTARIOS:null,
     CHEM_FECHACAMBIO:null,
     USUA_ID:null,
     CHEM_ESTADO:0,
@@ -48,5 +48,6 @@ const estadoCheque = [
 export default {
     ObtenerCheques, 
     model, 
-    estadoCheque
+    estadoCheque, 
+    model_cheque
 }

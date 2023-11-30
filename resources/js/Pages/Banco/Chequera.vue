@@ -83,14 +83,21 @@ const submit = () => {
             if(form.CUEB_NUMERO != 0){
                 form.transform(data => ({
                     ...data,
+                    CHEQ_DESDE: parseInt(data.CHEQ_DESDE),
                     CHEQ_PENDIENTES: data.CHEQ_CANTIDAD, 
                     CHEQ_GENERACION : data.CHEQ_GENERACION == 1 ? 0 : 1
-                }))
+                })).post(route('chequera.store'), {
+                    preserveScroll: true,
+                    onSuccess: (data) => {
+                        isShowModal.value = false 
+                        lstChequeras.value.push(data)
+                    },
+                    onError: (error) => {
+                        console.log(error);
+                    }
+                });
+                
 
-                form.CHEQ_PENDIENTES = form.CHEQ_CANTIDAD
-                form.CHEQ_GENERACION = form.CHEQ_GENERACION == 1 ? 0 : 1
-
-                console.log(form);
             } else { 
                 form.errors.CUEB_NUMERO = 'Seleccione una opcion'
             }
@@ -147,7 +154,21 @@ const seleccionarChequera = (chequera)=> {
 
 
 const emitirCheque = () => {
+
     console.log(form_cheque);
+
+    form_cheque.transform( data => ({
+        ...data
+    })).post(route('chequera.create-cheque'), {
+        preserveScroll: true,
+        onSuccess: (data) => {
+            emitirChequeModal.value = false 
+            console.log(data);
+        },
+        onError: (error) => {
+            console.log(error);
+        }
+    });
 }
 
 
@@ -314,6 +335,10 @@ const emitirCheque = () => {
                                     :disabled="true"
                                     type="number"
                                     placeholder="....."/>
+                                    
+                                <div v-show="form.errors.CHEQ_CANTIDAD" class="text-red-500 text-sm">
+                                    {{  form.errors.CHEQ_CANTIDAD }}
+                                </div>
                             </div>
                             <div class="col-span-2 sm:col-span-1"> 
                                 <fw-select label="Generacion"
@@ -452,7 +477,7 @@ const emitirCheque = () => {
                                     :onUpdate:value="onchange"
                                     :min="parseInt(form.CHEM_FECHA)"
                                     placeholder="Hasta"
-                                    type="number"/>
+                                    type="date"/>
                                 <div v-show="form_cheque.errors.CHEM_FECHA" class="text-red-500 text-sm">
                                     {{  form_cheque.errors.CHEM_FECHA }}
                                 </div>
@@ -467,10 +492,11 @@ const emitirCheque = () => {
                                 </div>
                             </div>
 
-                            <div class="col-span-2">
+                            <div class="col-span-2"> 
                                 <fw-input label="Monto"
                                     v-model:value="form_cheque.CHEM_MONTO"
-                                    :onUpdate:value="numerToLetter"  
+                                    :onUpdate:value="numerToLetter"
+                                    :min="0" :step="0.01" pattern="^\d+(?:\.\d{1,2})?$"  
                                     type="number"
                                     placeholder="....."/>
                             </div>

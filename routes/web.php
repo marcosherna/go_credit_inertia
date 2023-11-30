@@ -41,7 +41,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('modulo-banco-page', 'index')->name('banco-layout');
         Route::post('banco-create', 'store')->name('banco.store');
         Route::put('banco-update', 'update')->name('banco.update');
-        Route::patch('banco-status/{id}', 'changedStatus')->name('banco.status');
+        Route::put('banco-status/{id}', 'changedStatus')->name('banco.status');
     });
     
     Route::controller(CuentaBancoController::class)->group( function () {
@@ -53,6 +53,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     
     Route::controller(ChequeraController::class)->group( function () {
         Route::get('chequera-page', 'index')->name('chequera-layout');
+        Route::post('chequera-create', 'store')->name('chequera.store');
         Route::get('chequera-get-cheques/{CHEQ_ID}', 'getCheques')->name('chequera.get-cheques');
         Route::post('chequera-create-cheque', 'createCheque')->name('chequera.create-cheque');
     });

@@ -64,9 +64,7 @@ const editClient = (CLIE_ID) => {
 
 const newCliente = () => {
     router.visit(route('cliente.store'));
-} 
-
-console.log(props.clientes);
+}  
 
 </script> 
 

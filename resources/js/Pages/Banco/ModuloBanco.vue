@@ -86,17 +86,17 @@ const onSearch = (text) => {
 }
 
 const changedStatus = (id)=>{
-    loading.value = true;
-    const responce = router.visit('/banco-status/'+id , {
-        method: 'patch',
-        preserveScroll: true,
-        onFinish: () =>{
+    loading.value = true; 
+ 
+    banco.put('banco-status/'+id, {
+        onSuccess: (data) => {  
+            lstBancos.value = data.props.bancos 
             loading.value = false;
         },
-        onSuccess: () => { 
-            loading.value =false;
+        onFinish: () => {
+            loading.value = false;
         },
-    }) 
+    });  
 }
 
  

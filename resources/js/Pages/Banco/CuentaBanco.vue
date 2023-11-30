@@ -24,6 +24,7 @@ const form = useForm({
     CUEB_ESTADO: true,
 });
 
+
 const isShowModal = ref(false)
 const updateOrCreate = ref(false)
 const loading = ref(false)
@@ -83,19 +84,17 @@ const selectedItem = (item) =>{
     updateOrCreate.value = true
 }
 
-const changedStatus = (id)=>{
-    loading.value = true
-    router.visit('/cuenta-banco-status/'+id, {
-        method: 'put', 
-        onSuccess: () => {
-            // menssajes
-        }, 
-        onfinish: () => {
-            // menssajes
+const changedStatus = async (id)=>{
+    loading.value = true  
+    form.put(route('cuenta-banco.status', id), {
+        onSuccess: (data) => {
+            reatListCuentasBancos.value = data.props.cuentaBancos
             loading.value = false
-        }
-        
-    })
+        },
+        onFinish: () => {
+            loading.value = false
+        },
+    })  
 }
 
  

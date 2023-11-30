@@ -41,9 +41,6 @@ class ChequeraController extends Controller {
         $chequera->CHEQ_ESTADO = 0;
         
         $chequera->Insert();
-
-        return redirect()->back()
-            ->with('message', 'Chequera agregada.');
     }
 
     public function getCheques($CHEQ_ID) {
@@ -51,18 +48,23 @@ class ChequeraController extends Controller {
         return response()->json($chequera->obtenerCheques());
     }
 
-    public function createCheque(ChequeRequest $request){
+    public function createCheque(ChequeRequest $request){ 
         try {
             $cheque = new ChequeraMovimiento();
 
+            $cheque->CHEM_ID = date('YmdHis');
             $cheque->CHEQ_ID = $request->CHEQ_ID;
             $cheque->CHEM_NUMERO = $request->CHEM_NUMERO;
-            $cheque->CHEM_FECHA = date('Y-m-d H:i:s');
-            $cheque->CHEM_FECHACAMBIO = null;
-            $cheque->USUA_ID = auth()->user()->USUA_ID;
-            $cheque->CHEM_ESTADO = 0;
-            $cheque->emitCheque();
-            return response()->json($cheque);
+            $cheque->CHEM_FECHA = $request->CHEM_FECHA;
+            $cheque->CHEM_LUGAR = $request->CHEM_LUGAR;
+            $cheque->CHEM_MONTO = $request->CHEM_MONTO;
+            $cheque->CHEM_NOMBRE = $request->CHEM_NOMBRE;
+            $cheque->CHEM_MONTOLETRA = $request->CHEM_MONTOLETRA;
+            $cheque->CHEM_COMENTARIOS = $request->CHEM_COMENTARIOS;
+            $cheque->CHEM_FECHACAMBIO = date('Y-m-d H:i:s');
+            $cheque->USUA_ID = auth()->user()->EMPL_ID;
+            $cheque->CHEM_ESTADO = 0; 
+            $cheque->emitCheque(); 
         } catch (\Throwable $th) {
             return response()->json($th->getMessage(), 500);
         }

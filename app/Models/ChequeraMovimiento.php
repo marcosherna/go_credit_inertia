@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ChequeraMovimiento extends Model
-{
+class ChequeraMovimiento extends Model {
+
+    use HasUlids;
     protected $table = 'chequera_movimiento';
     public $timestamps = false; // Si no necesitas campos created_at y updated_at
     public $incrementing = false;
