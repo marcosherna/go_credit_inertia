@@ -53,9 +53,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     
     Route::controller(ChequeraController::class)->group( function () {
         Route::get('chequera-page', 'index')->name('chequera-layout');
-        Route::post('chequera-create', 'store')->name('chequera.store');
         Route::get('chequera-get-cheques/{CHEQ_ID}', 'getCheques')->name('chequera.get-cheques');
-        Route::post('chequera-create-cheque', 'createCheque')->name('chequera.create-cheque');
+        Route::post('chequera-create-cheque', 'createCheque')->name('chequera.create-cheque'); 
+        Route::post('chequera-create', 'store')->name('chequera.store');
+        Route::put('chequera-update-status/{CHEQ_ID}', 'cambiarEstadoChequera')->name('chequera.update-status');
     });
     
     Route::controller(PartidaContableController::class)->group( function () {

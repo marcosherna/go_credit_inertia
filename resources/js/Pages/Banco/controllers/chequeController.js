@@ -8,6 +8,16 @@ const ObtenerCheques = async (id) => {
     }
 }
 
+const cambiarEstadoCheque = async (id) => {
+    try {
+        const response = await axios.put(route('chequera.update-status', id));
+        return response.data;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
 const model = {
     CHEQ_ID:null,
     CUEB_NUMERO:0,
@@ -29,7 +39,7 @@ const model_cheque = {
     CHEM_FECHA:null,
     CHEM_LUGAR:null,
     CHEM_NOMBRE:null,
-    CHEM_MONTO: 0,
+    CHEM_MONTO: '0',
     CHEM_MONTOLETRA:null,
     CHEM_COMENTARIOS:null,
     CHEM_FECHACAMBIO:null,
@@ -49,5 +59,6 @@ export default {
     ObtenerCheques, 
     model, 
     estadoCheque, 
-    model_cheque
+    model_cheque, 
+    cambiarEstadoCheque
 }

@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Banco;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Banco\ChequeraRequest;
 use App\Http\Requests\Banco\ChequeRequest;
+use App\Http\Requests\Errors\ErrorResponse;
 use App\Models\Chequera;
 use App\Models\ChequeraMovimiento;
 use App\Models\CuentaBanco;
+use Error;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -27,20 +29,25 @@ class ChequeraController extends Controller {
         ]);
     }
 
-    public function store(ChequeraRequest $request) { 
-        $chequera = new Chequera();
-        $chequera->CUEB_NUMERO = $request->CUEB_NUMERO;
-        $chequera->CHEQ_DESDE = $request->CHEQ_DESDE;
-        $chequera->CHEQ_HASTA = $request->CHEQ_HASTA;
-        $chequera->CHEQ_CANTIDAD = $request->CHEQ_CANTIDAD;
-        $chequera->CHEQ_PENDIENTES = $request->CHEQ_PENDIENTES;
-        $chequera->CHEQ_REFERENCIA = $request->CHEQ_REFERENCIA;
-        $chequera->CHEQ_FECHA = date('Y-m-d H:i:s');
-        $chequera->CHEQ_GENERACION = $request->CHEQ_GENERACION;
-        $chequera->CHEQ_VERIFICADOR = $request->CHEQ_VERIFICADOR;
-        $chequera->CHEQ_ESTADO = 0;
-        
-        $chequera->Insert();
+    public function store(ChequeraRequest $request) {  
+        try {
+            $chequera = new Chequera();   
+            $chequera->CUEB_NUMERO = $request->CUEB_NUMERO;
+            $chequera->CHEQ_DESDE = $request->CHEQ_DESDE;
+            $chequera->CHEQ_HASTA = $request->CHEQ_HASTA;
+            $chequera->CHEQ_CANTIDAD = $request->CHEQ_CANTIDAD;
+            $chequera->CHEQ_PENDIENTES = $request->CHEQ_PENDIENTES;
+            $chequera->CHEQ_REFERENCIA = $request->CHEQ_REFERENCIA;
+            $chequera->CHEQ_FECHA = date('Y-m-d H:i:s');
+            $chequera->CHEQ_GENERACION = $request->CHEQ_GENERACION;
+            $chequera->CHEQ_VERIFICADOR = $request->CHEQ_VERIFICADOR;
+            $chequera->CHEQ_ESTADO = 0;
+
+            $chequera->Insert(); 
+
+        } catch (\Throwable $th) {
+            throw $th;
+        } 
     }
 
     public function getCheques($CHEQ_ID) {
@@ -66,7 +73,21 @@ class ChequeraController extends Controller {
             $cheque->CHEM_ESTADO = 0; 
             $cheque->emitCheque(); 
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage(), 500);
+            return $th->getMessage();
+        }
+    }
+
+    public function cambiarEstadoChequera($CHEQ_ID){
+        try{
+            $chequera = Chequera::find($CHEQ_ID);
+            $chequera->archivarOArchivarChequera();
+
+        } catch (\Throwable $th) {
+            $error = new ErrorResponse();
+            $error->code = 500;
+            $error->message = $th->getMessage();
+            $error->error = $th;
+            return response()->json($error);
         }
     }
 }

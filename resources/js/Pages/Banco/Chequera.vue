@@ -7,6 +7,8 @@ import { PlusIcon, Table, ButtomToggleModal, FwInput,
 import NavigationLayout from '../../Layouts/NavigationLayout.vue';   
 import MenuModuloBanco from './Partials/MenuModuloBanco.vue'; 
 import controller from './controllers/chequeController.js'; 
+ 
+import { ElNotification } from 'element-plus'
 
 import n2words from 'n2words'
 
@@ -81,21 +83,27 @@ const submit = () => {
             form.errors.CHEQ_GENERACION = null
 
             if(form.CUEB_NUMERO != 0){
+                form.errors.CHEQ_DESDE = null;
+                form.errors.CHEQ_HASTA = null;  
+                form.CHEQ_CANTIDAD = `${(parseInt(form.CHEQ_HASTA) - parseInt(form.CHEQ_DESDE)) + 1 }`
+
                 form.transform(data => ({
                     ...data,
                     CHEQ_DESDE: parseInt(data.CHEQ_DESDE),
                     CHEQ_PENDIENTES: data.CHEQ_CANTIDAD, 
                     CHEQ_GENERACION : data.CHEQ_GENERACION == 1 ? 0 : 1
-                })).post(route('chequera.store'), {
+                })).post('/chequera-create/', {
                     preserveScroll: true,
-                    onSuccess: (data) => {
-                        isShowModal.value = false 
-                        lstChequeras.value.push(data)
+                    onSuccess: (data) => { 
+                        console.log(data)
+                        lstChequeras.value = data.props.chequeras;
+                        isShowModal.value = false  
                     },
                     onError: (error) => {
                         console.log(error);
                     }
                 });
+
                 
 
             } else { 
@@ -107,6 +115,7 @@ const submit = () => {
         }
     } 
 }
+
 const selectedItem = (item) =>{    
     form.CUEB_NUMERO = item.cuenta_banco.CUEB_NUMERO
     form.CHEQ_DESDE = item.CHEQ_DESDE.toString();
@@ -123,7 +132,7 @@ const onSelected = (item) => {
 }
 
 const onchange = (e) => { 
-    let cantida = (e - form.CHEQ_DESDE)+1 
+    let cantida = (e - form.CHEQ_DESDE) + 1 
     form.CHEQ_CANTIDAD = cantida.toString()
 }
 
@@ -141,9 +150,30 @@ const detelleCheque = async (id) => {
     }
 }
 
+const cambiarEstadoChequera = async (CHEQ_ID) => {
 
-const seleccionarChequera = (chequera)=> {
-    console.log(chequera);
+    ElNotification({
+        title: 'Warning',
+        message: 'This is a warning message',
+        type: 'warning',
+    })
+ 
+    try {
+        console.log(CHEQ_ID) 
+        const response = await controller.cambiarEstadoCheque(CHEQ_ID);
+
+        if(response.error){ 
+            console.log(response.message);
+        }
+    } catch (error) { 
+        console.log(error.response.data);   
+    }
+    
+}
+
+
+
+const seleccionarChequera = (chequera)=> { 
     emitirChequeModal.value = true
     form_cheque.CHEQ_ID = chequera.CHEQ_ID
 
@@ -153,10 +183,7 @@ const seleccionarChequera = (chequera)=> {
 }
 
 
-const emitirCheque = () => {
-
-    console.log(form_cheque);
-
+const emitirCheque = () => { 
     form_cheque.transform( data => ({
         ...data
     })).post(route('chequera.create-cheque'), {
@@ -222,9 +249,9 @@ const emitirCheque = () => {
                                 </td>
                                 <th scope="row">
                                     <div class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ chequera.cuenta_banco.CUEB_NUMERO }}
+                                        {{ chequera.cuenta_banco ? chequera.cuenta_banco.CUEB_NUMERO : '' }}
                                         <div class="text-gray-400"> 
-                                            {{ chequera.cuenta_banco.banco.BANC_NOMBRE  }}
+                                            {{ chequera.cuenta_banco ? chequera.cuenta_banco.banco.BANC_NOMBRE : ''  }}
                                         </div>
                                     </div> 
                                    
@@ -249,7 +276,7 @@ const emitirCheque = () => {
                                         :target="chequeraEstado[chequera.CHEQ_ESTADO]+ '-'+index"/>
 
                                     <fw-tooltip v-else-if="chequera.CHEQ_ESTADO == 0" 
-                                        @click="onSelected(chequera)"
+                                        @click="cambiarEstadoChequera(chequera.CHEQ_ID)"
                                         class="bg-blue-100 text-blue-800 dark:text-blue-400 border-blue-400"
                                         :label="chequeraEstado[chequera.CHEQ_ESTADO]" 
                                         content="Precione para ver activar" 
@@ -300,7 +327,7 @@ const emitirCheque = () => {
                                 <fw-input label="Desde" 
                                     v-model:value="form.CHEQ_DESDE"     
                                     type="number"
-                                    :min="0"
+                                    :min="1"
                                     placeholder="Desde"/>
                                 <div v-show="form.errors.CHEQ_DESDE" class="text-red-500 text-sm">
                                     {{  form.errors.CHEQ_DESDE }}

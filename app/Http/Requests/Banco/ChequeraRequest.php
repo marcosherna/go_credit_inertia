@@ -15,7 +15,7 @@ class ChequeraRequest extends FormRequest {
         return [
             'CUEB_NUMERO' => 'required|string|max:20',
             'CHEQ_DESDE' => 'required|numeric',
-            'CHEQ_HASTA' => 'required|numeric|min:CHEQ_DESDE',
+            'CHEQ_HASTA' => 'required|numeric',
             'CHEQ_CANTIDAD' =>  'required|numeric|min:1',
             'CHEQ_PENDIENTES' => 'required|numeric',
             'CHEQ_REFERENCIA' => 'nullable|string|max:100', 

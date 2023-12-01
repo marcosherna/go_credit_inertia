@@ -19,12 +19,12 @@
         "vue": "^3.2.36"
     },
     "dependencies": {
+        "@kyvg/vue3-notification": "^3.0.2",
         "@left4code/tw-starter": "^3.2.9",
         "chart.js": "^4.4.0",
         "element-plus": "^2.4.2",
         "flowbite": "^2.1.1",
         "n2words": "^1.18.0",
-        "vue-chartjs": "^5.2.0",
-        "vue3-html2pdf": "^1.1.2"
+        "vue-chartjs": "^5.2.0"
     }
 }
