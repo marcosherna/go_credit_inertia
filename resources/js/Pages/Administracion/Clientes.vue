@@ -1,7 +1,8 @@
 <script setup> 
 import NavigationLayout from '@/Layouts/NavigationLayout.vue';
 import { FwTable, FwBadge, FwButton, FwModal, 
-    FwInput, FwTextArea, FwSelect, FwRadioCheckbox, FwSearchBar} from '../../Components/flowbite/index';
+    FwInput, FwTextArea, FwSelect, FwRadioCheckbox, 
+    FwSearchBar, FwButtonDropdown} from '../../Components/flowbite/index';
 import controller from './partials/ClienteController.js';
 import { useForm, router, Link } from '@inertiajs/vue3';
 import { defineProps, ref, onMounted } from 'vue'; 
@@ -24,6 +25,7 @@ const departamentos = ref([]);
 const municipios = ref([]);
 const estadosCiviles = ref([]);
 const lstClientes = ref(props.clientes.data);
+const selectionItemDrop = ref([]);
 
 const openModalAdd = async () => {
     modalAdd.value = true;
@@ -66,11 +68,21 @@ const newCliente = () => {
     router.visit(route('cliente.store'));
 }  
 
+const checkboxes = [
+    { label: "Default checkbox", value: "checkbox1" },
+    { label: "Checked state", value: "checkbox2" },
+    { label: "Default checkbox", value: "checkbox3" },
+]
+
 </script> 
 
 <template lang=""> 
     <div>
-        <navigation-layout titulo="Clientes" subtitulo="Listado de clientes">
+        <navigation-layout titulo="Clientes">
+
+            
+            
+
 
             <div class="flex px-5 py-3 max-w-fit text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -106,8 +118,18 @@ const newCliente = () => {
                         <!-- BOTON --> 
                         <fw-button v-on:click="newCliente">
                             Nuevo Cliente
-                        </fw-button>
+                        </fw-button>  
+
+                        <fw-button-dropdown 
+                            dropdownId="dropdown-export"
+                            buttonText="Exportar"
+                            :checkboxes="checkboxes"
+                            classes="ms-3"
+                        />
+
                     </div>
+
+                    
 
                     <div class="relative">  
                         <fw-search-bar   
@@ -183,17 +205,7 @@ const newCliente = () => {
                         </Link>
                     </li>
                 </ul> 
-        </navigation-layout>
-
-        <fw-modal :show="modalAdd" @close="modalAdd = false">
-            <template #header>
-                Cliente
-            </template>
-            <template #body>
-                
-            </template>
-
-        </fw-modal>
+        </navigation-layout> 
 
     </div>
 

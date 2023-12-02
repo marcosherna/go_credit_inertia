@@ -82,7 +82,7 @@ class ChequeraController extends Controller {
             $chequera = Chequera::find($CHEQ_ID);
             $chequera->archivarOArchivarChequera();
 
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             $error = new ErrorResponse();
             $error->code = 500;
             $error->message = $th->getMessage();

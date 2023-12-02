@@ -8,7 +8,7 @@ import NavigationLayout from '../../Layouts/NavigationLayout.vue';
 import MenuModuloBanco from './Partials/MenuModuloBanco.vue'; 
 import controller from './controllers/chequeController.js'; 
  
-import { ElNotification } from 'element-plus'
+import { ElNotification, ElLoading } from 'element-plus'
 
 import n2words from 'n2words'
 
@@ -36,6 +36,7 @@ const isShowModal = ref(false)
 const isShowModalDetalle = ref(false)
 const emitirChequeModal = ref(false)
 const cheques = ref(null)
+const loading = ref(false)
 
 let lstChequeras = ref([])
 lstChequeras.value = props.chequeras
@@ -58,8 +59,7 @@ const onSearch = (text) =>{
 }
 
 const numerToLetter = (number) => { 
-    if(number != ''){
-
+    if(number != ''){ 
         try {
             form_cheque.errors.CHEM_MONTOLETRA = null; 
             let numbers = number.toString().split('.');
@@ -70,8 +70,7 @@ const numerToLetter = (number) => {
         } catch (error) {
             form_cheque.errors.CHEM_MONTOLETRA = 'Error al convertir el monto a letras'
         }   
-    }
-    
+    } 
 }
 
 const submit = () => {
@@ -152,21 +151,32 @@ const detelleCheque = async (id) => {
 
 const cambiarEstadoChequera = async (CHEQ_ID) => {
 
-    ElNotification({
-        title: 'Warning',
-        message: 'This is a warning message',
-        type: 'warning',
-    })
+    ElLoading.service({ fullscreen: true, text: 'Cargando...', background: 'rgba(0, 0, 0, 0.8)' })
  
-    try {
-        console.log(CHEQ_ID) 
-        const response = await controller.cambiarEstadoCheque(CHEQ_ID);
+    try {  
+        const response = await controller.cambiarEstadoCheque(CHEQ_ID);  
+        if(response.error){  
+            ElLoading.service().close()
 
-        if(response.error){ 
-            console.log(response.message);
+            ElNotification({
+                title: 'Precaucion',
+                message: response.message,
+                type: 'warning', 
+                customClass: 'notification',
+            }) 
         }
-    } catch (error) { 
-        console.log(error.response.data);   
+
+
+        ElLoading.service().close()
+    } catch (error) {  
+        ElNotification({
+                title: 'Error',
+                message: error.message,
+                type: 'error',  
+                customClass: 'notification',
+            }) 
+
+        ElLoading.service().close()    
     }
     
 }
@@ -200,6 +210,18 @@ const emitirCheque = () => {
 
 
 </script>  
+
+<style>
+    .notification{
+        background-color: #E74C3C  !important; 
+    }
+
+    .notification .el-notification__title,
+    .notification .el-notification__content {
+        color: white !important; 
+    }
+
+</style>
 <template>
     <NavigationLayout title="Modulo Banco"> 
         <div class="intro-y flex items-center mt-6">

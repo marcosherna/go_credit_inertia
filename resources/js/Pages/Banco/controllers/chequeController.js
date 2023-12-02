@@ -12,8 +12,7 @@ const cambiarEstadoCheque = async (id) => {
     try {
         const response = await axios.put(route('chequera.update-status', id));
         return response.data;
-    }
-    catch (error) {
+    } catch (error) {
         throw error;
     }
 }

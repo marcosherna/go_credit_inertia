@@ -15,6 +15,7 @@ import FwRadioCheckbox from './FwRadioCheckbox.vue'
 import FwSkeleton from './FwSkeleton.vue'
 import FwSearchBar from './FwSearchBar.vue'
 import FwBadge from './FwBadge.vue' 
+import FwButtonDropdown from './FwButtonDropdown.vue'
 
 export {
     SearchBar,
@@ -34,4 +35,5 @@ export {
     FwSkeleton,
     FwSearchBar,
     FwBadge,  
+    FwButtonDropdown
 }
