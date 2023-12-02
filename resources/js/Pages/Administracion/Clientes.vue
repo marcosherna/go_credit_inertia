@@ -69,21 +69,16 @@ const newCliente = () => {
 }  
 
 const checkboxes = [
-    { label: "Default checkbox", value: "checkbox1" },
-    { label: "Checked state", value: "checkbox2" },
-    { label: "Default checkbox", value: "checkbox3" },
+    { label: "Excel", value: true },
+    { label: "Pdf", value: false },
+    { label: "Word", value: false },
 ]
 
 </script> 
 
 <template lang=""> 
     <div>
-        <navigation-layout titulo="Clientes">
-
-            
-            
-
-
+        <navigation-layout titulo="Clientes"> 
             <div class="flex px-5 py-3 max-w-fit text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                     <li class="inline-flex items-center">
@@ -124,12 +119,12 @@ const checkboxes = [
                             dropdownId="dropdown-export"
                             buttonText="Exportar"
                             :checkboxes="checkboxes"
+                            v-model:value="selectionItemDrop"
                             classes="ms-3"
-                        />
-
+                        /> 
                     </div>
 
-                    
+                    {{ selectionItemDrop }}
 
                     <div class="relative">  
                         <fw-search-bar   

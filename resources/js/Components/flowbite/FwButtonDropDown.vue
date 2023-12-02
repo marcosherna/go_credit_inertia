@@ -93,8 +93,8 @@ const emitChange = () => {
             <input
               :id="`checkbox-item-${index+1}`"
               type="checkbox"
-              :value="checkbox.value" 
               :class="checkboxClasses"
+              :checked="checkbox.value"
             />  
             <label
               :for="`checkbox-item-${index+1}`"
