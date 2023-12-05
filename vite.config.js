@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { build, defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue'; 
 
@@ -17,4 +17,20 @@ export default defineConfig({
             },
         }), 
     ],
+    resolve: {
+        alias: {
+            '@': '/resources/js',
+        },
+    },
+    server: {
+        host: 'localhost',
+        port: 5000, 
+    },
+    build: {
+        manifest: true,
+        rollupOptions: {
+            input: 'resources/js/app.js',
+        },
+        outDir: 'public/build',
+    },
 });
