@@ -18,6 +18,6 @@ class TasaInteres extends Model {
         'TASA_ID',
         'TASA_VALOR',
         'TASA_TIPO',
-        'TASA_ESTADO',
+        'TASA_ESTADO', // Estado Tasa. 0-Inactivo 1-Activo
     ];
 }

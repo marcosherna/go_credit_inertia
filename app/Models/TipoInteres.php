@@ -16,6 +16,6 @@ class TipoInteres extends Model {
         'TIPO_ID',
         'TIPO_NOMBRE',
         'TIPO_DESCRIPCION',
-        'TIPO_ESTADO',
+        'TIPO_ESTADO', // Estado 0-Inactivo 1-Activo
     ];
 }

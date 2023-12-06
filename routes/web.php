@@ -6,9 +6,16 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Banco\ChequeraController;
 use App\Http\Controllers\BancoController;
 use App\Http\Controllers\Catalogos\EstadoCivilController;
+use App\Http\Controllers\Catalogos\FormaPagoController;
+use App\Http\Controllers\Catalogos\GarantiasController;
 use App\Http\Controllers\Catalogos\PaisController;
+use App\Http\Controllers\Catalogos\PlazosController;
+use App\Http\Controllers\Catalogos\TasaInteresController;
+use App\Http\Controllers\Catalogos\TipoCreditoController;
+use App\Http\Controllers\Catalogos\TipoInteresController;
 use App\Http\Controllers\Contable\CatalogoCuentasController;
 use App\Http\Controllers\Contable\PartidaContableController;
+use App\Http\Controllers\Creditos\CreditosController;
 use App\Http\Controllers\CuentaBanco\CuentaBancoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +89,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('solicitud-detalle/{id}', 'findById')->name('solicitud.detalle-resource');
         Route::get('solicitud-cuotas/{id}', 'findCuotas')->name('solicitud.cuotas-resource');
         Route::get('solicitud-take-cliente/{id}/{take}', 'findByIdClient')->name('solicitud.take-cliente-creditos-resource');
+        Route::post('solicitud-create', 'store')->name('solicitud.store');
     });
 
     Route::controller(PaisController::class)->prefix('Pais')->group( function () {
@@ -94,5 +102,41 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('estado-civil-all-resource', 'findAll')->name('estado-civil.all-resource');
     });
 
+
+    Route::controller(CreditosController::class)->prefix('Creditos')->group( function () { 
+        Route::get('crear-creditos', 'index')->name('creditos-layout'); 
+        Route::get('search', 'search')->name('creditos.search');
+        Route::get('fillter-by-status/{status}', 'fillterByStatus')->name('creditos.fillter-by-status');
+        Route::get('combo-box-cliente', 'ComboBoxCliente')->name('creditos.combo-box-cliente');
+        Route::get('findAll-resourse', 'findAll')->name('creditos.findAll-resourse');
+    });
+
+    Route::controller(TipoCreditoController::class)->group( function () {
+        Route::get('tipos-resource', 'Combo')->name('tipos-creditos-resource');
+    });
+
+
+    
+    Route::controller(GarantiasController::class)->group( function () {
+        Route::get('garantias-resource', 'Combo')->name('garantias-resource');
+    });
+
+
+    Route::controller(PlazosController::class)->group( function () {
+        Route::get('plazos-resource', 'Combo')->name('plazos-resource');
+    });
+
+    Route::controller(FormaPagoController::class)->group( function () {
+        Route::get('formas-pago-resource', 'Combo')->name('formas-pago-resource');
+    });
+
+    Route::controller(TasaInteresController::class)->group( function () {
+        Route::get('tasa-interes-resource', 'Combo')->name('tasa-interes-resource');
+    });
+
+
+    Route::controller(TipoInteresController::class)->group( function () {
+        Route::get('tipo-interes-resource', 'Combo')->name('tipo-interes-resource');
+    });
 
 });

@@ -14,6 +14,6 @@ class TipoCredito extends Model {
         'TIPO_ID',
         'TIPO_NOMBRE',
         'TIPO_ABREV',
-        'TIPO_ESTADO',
+        'TIPO_ESTADO', // Estado Credito 0-Inactivo 1-Activo
     ];
 }

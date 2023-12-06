@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cuotas;
 use App\Models\Solicitud;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Spatie\Ignition\Contracts\Solution;
 
@@ -15,8 +16,35 @@ class SolicitudController extends Controller{
         return Inertia::render('Administracion/Solicitud');
     }
 
-    public function store(){
-        return Inertia::render('Administracion/Solicitud');
+    public function store(Request $request){
+
+        try {
+            $solicitud = new Solicitud();   
+            $solicitud->SOLI_FECHA = $request->SOLI_FECHA;
+            $solicitud->EMPL_ID = Auth::user()->EMPL_ID;
+            $solicitud->CLIE_ID = $request->CLIE_ID;
+            $solicitud->SOLI_MONTO = $request->SOLI_MONTO;
+            $solicitud->TIPO_ID = $request->TIPO_ID;
+            $solicitud->GARA_ID = $request->GARA_ID;
+            $solicitud->PLAZ_ID = $request->PLAZ_ID;
+            $solicitud->FORM_ID = $request->FORM_ID;
+            $solicitud->TIPT_ID = $request->TIPT_ID;
+            $solicitud->TASA_ID = $request->TASA_ID;
+            $solicitud->SOLI_TIPOTASA = $request->SOLI_TIPOTASA;
+            $solicitud->SOLI_OMITIRDOM = $request->SOLI_OMITIRDOM;
+            $solicitud->SOLI_DISPERSAR = $request->SOLI_DISPERSAR;
+            $solicitud->SOLI_CATEGORIA = $request->SOLI_CATEGORIA;
+            $solicitud->SOLI_FECHAAPROB = null;
+            $solicitud->SOLI_FECHAVENCIMIENTO = $request->SOLI_FECHAVENCIMIENTO;
+            $solicitud->SOLI_OBSERVACION = $request->SOLI_OBSERVACION;
+            $solicitud->SOLI_CONDICIONES = $request->SOLI_CONDICIONES;
+            $solicitud->SOLI_OTROS = null;
+            $solicitud->SOLI_ESTADO = $request->SOLI_ESTADO; 
+            
+            return response()->json( $solicitud );
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
 

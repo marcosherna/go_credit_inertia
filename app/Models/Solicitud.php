@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Solicitud extends Model
 {
@@ -68,5 +69,10 @@ class Solicitud extends Model
 
     public function tasaInteres() {
         return $this->belongsTo(TasaInteres::class, 'TASA_ID', 'TASA_ID');
+    }
+
+
+    public function Insert(){
+        DB::table($this->table)->insert($this->toArray());
     }
 }

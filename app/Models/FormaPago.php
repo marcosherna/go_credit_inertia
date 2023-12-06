@@ -18,6 +18,6 @@ class FormaPago extends Model {
         'FORM_ID',
         'FORM_NOMBRE',
         'FORM_VALOR',
-        'FORM_ESTADO',
+        'FORM_ESTADO', // Estado Credito 0-Inactivo 1-Activo
     ];
 }

@@ -16,12 +16,7 @@ export default defineConfig({
                 },
             },
         }), 
-    ],
-    resolve: {
-        alias: {
-            '@': '/resources/js',
-        },
-    },
+    ], 
     server: {
         host: 'localhost',
         port: 5000, 
