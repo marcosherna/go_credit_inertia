@@ -190,5 +190,36 @@ class ClientesController extends Controller {
         return response()->json($clientes);
     }
 
+    public $clientes = [];
+    public function search($query = null){
+        $this->clientes = [];
+        if($query){
+            $this->clientes = Cliente::where('CLIE_NOMBRE','LIKE', '%'.$query.'%')
+                ->orWhere('CLIE_NOMBRE2','LIKE', '%'.$query.'%')
+                ->orWhere('CLIE_APELLIDO','LIKE', '%'.$query.'%')
+                ->orWhere('CLIE_APELLIDO2','LIKE', '%'.$query.'%')
+                ->orWhere('CLIE_DOCIDEN','LIKE', '%'.$query.'%')
+                ->orWhere('CLIE_DOCFISCAL','LIKE', '%'.$query.'%')
+                ->orWhere('CLIE_TEL','LIKE', '%'.$query.'%')
+                ->orWhere('CLIE_TEL2','LIKE', '%'.$query.'%')
+                ->orWhere('CLIE_MAIL','LIKE', '%'.$query.'%')
+                ->orWhere('CLIE_ID','LIKE', '%'.$query.'%')
+                ->get();
+        }
+
+        $this->clientes->transform(function($item){
+            return [
+                'CLIE_ID' => $item->CLIE_ID,
+                'NOMBRE' => $item->CLIE_NOMBRE.' '.$item->CLIE_NOMBRE2.' '.$item->CLIE_APELLIDO.' '.$item->CLIE_APELLIDO2,
+                'MAIL' => $item->CLIE_MAIL ? $item->CLIE_MAIL : 'Sin correo',
+                'TELEFONO' => $item->CLIE_TEL ? $item->CLIE_TEL : 'Sin telefono',
+                'DOCIDEN' => $item->CLIE_DOCIDEN ? $item->CLIE_DOCIDEN : 'Sin documento',
+            ];
+        });
+
+        return response()->json($this->clientes);
+
+    }
+
 
 }

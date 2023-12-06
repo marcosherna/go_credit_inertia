@@ -51,16 +51,7 @@ const model = {
         SOLI_OTROS:null, //Otras Observaciones
         SOLI_ESTADO:null, //Estado Solicitud. 0-Creada 1-Aprobada 2-Rechazada 3-Cancelada 4-CreditoAbierto 5-Finalizada 6-Desembolsada
 }
-
-const search = async (search) => {
-    try {
-        const response = await axios.get(`/api/solicitudes/search/${search}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-    
-}
+ 
 
 
 const filleter = async (filter) => {
@@ -79,6 +70,16 @@ const findAll = async () => {
     } catch (error) {
         throw error;
     }
+}
+
+const search = async (query) => {
+    try {
+        const response = await axios.get(route('cliente.search-resource', {query: query}));
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+
 }
 
 

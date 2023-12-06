@@ -1,6 +1,8 @@
 <script setup> 
 import solicitudServices  from '../../../services/solicitudServices.js';
 import { FwBadge } from '../../../Components/flowbite';
+import { Link } from '@inertiajs/vue3'; 
+import CDropDown from './CDropDown.vue';
 
 const props = defineProps({
     items: {
@@ -13,10 +15,12 @@ const props = defineProps({
     }
 })
  
+ 
 </script> 
 
 
 <template>
+    
     <div class="flex flex-col mt-6">
         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -43,7 +47,7 @@ const props = defineProps({
 
                                 <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Categoria</th>
                                 
-                                <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">License use</th>
+                                <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Pagos</th>
                                 
                                 <th scope="col" class="relative py-3.5 px-4">
                                     <span class="sr-only">Edit</span>
@@ -90,11 +94,16 @@ const props = defineProps({
                                     </div>
                                 </td>
                                 <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                        <button class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
+
+                                    <c-drop-down
+                                        :selection="item" 
+                                    />
+
+                                        <!--<button class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
                                             </svg>
-                                        </button>
+                                        </button>-->
                                     </td> 
                             </tr>
                         </tbody>
@@ -105,25 +114,28 @@ const props = defineProps({
     </div>
     
     <div class="mt-6 sm:flex sm:items-center sm:justify-between">
-    <div class="text-sm text-gray-500 dark:text-gray-400">
-      Page <span class="font-medium text-gray-700 dark:text-gray-100">{{ items.current_page }} of {{ items.last_page }}</span>
-    </div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">
+            Page 
+            <span class="font-medium text-gray-700 dark:text-gray-100">
+                {{ items.current_page }} of {{ items.last_page }}
+            </span>
+        </div>
 
-    <div class="flex items-center mt-4 gap-x-4 sm:mt-0">
-      <a v-if="items.prev_page_url" :href="items.prev_page_url" class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-        </svg>
-        <span>Previous</span>
-      </a>
+        <div class="flex items-center mt-4 gap-x-4 sm:mt-0">
+            <Link v-if="items.prev_page_url" :href="items.prev_page_url" class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                </svg>
+                <span>Previous</span>
+            </Link>
 
-      <a v-if="items.next_page_url" :href="items.next_page_url" class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
-        <span>Next</span>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-        </svg>
-      </a>
-    </div>
+            <Link v-if="items.next_page_url" :href="items.next_page_url" class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
+                <span>Next</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                </svg>
+            </Link>
+        </div>
   </div>
     
 </template>

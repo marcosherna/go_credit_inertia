@@ -18,10 +18,11 @@ class CreditosController extends Controller {
     public $solicitudes;
 
 
-    public function index() { 
+    public function index() {  
         $this->solicitudes = Solicitud::select('*')
             ->with('cliente')
             ->paginate(20);
+        
 
         $this->solicitudes->transform(function ($item) {
             $item->SOLI_MONTO = number_format($item->SOLI_MONTO, 2, ',', '.');
@@ -59,10 +60,16 @@ class CreditosController extends Controller {
     }
 
 
-    public function fillterByStatus($status) {
-        $this->solicitudes = Solicitud::select('*')
-            ->where('SOLI_ESTADO', $status)
-            ->paginate(20); 
+    public function fillterByStatus($status = null) {
+
+        if($status == null){
+            $this->solicitudes = Solicitud::select('*')
+                ->paginate(20);
+        }else{  
+            $this->solicitudes = Solicitud::select('*')
+                ->where('SOLI_ESTADO', $status)
+                ->paginate(20); 
+        } 
 
         $this->solicitudes->transform(function ($item) {
                 $item->SOLI_MONTO = number_format($item->SOLI_MONTO, 2, ',', '.');
@@ -71,6 +78,8 @@ class CreditosController extends Controller {
                 $item->cliente->NOMBRE = $item->cliente->CLIE_NOMBRE . ' ' . $item->cliente->CLIE_NOMBRE2. ' ' . $item->cliente->CLIE_APELLIDO.' '. $item->cliente->CLIE_APELLIDO2;
                 return $item;
             });
+
+        $this->solicitudes->setPath(route('creditos-layout'));
 
         return response()->json($this->solicitudes);
     }

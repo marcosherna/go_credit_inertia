@@ -7,8 +7,7 @@ use App\Models\Cuotas;
 use App\Models\Solicitud;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
-use Spatie\Ignition\Contracts\Solution;
+use Inertia\Inertia; 
 
 class SolicitudController extends Controller{
 

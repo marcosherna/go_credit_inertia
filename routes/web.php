@@ -83,6 +83,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('cliente-solucitudes/{id}', 'solicitudes')->name('cliente.solicitudes-resource');   
         Route::get('cliente-editar/{id}', 'edit')->name('cliente.editar-layout'); 
         Route::get('cliente-find-all', 'findAll')->name('cliente.findAll-resource');
+        Route::get('clente-seach/{query?}', 'search')->name('cliente.search-resource');
     });
 
     Route::controller(SolicitudController::class)->prefix('solicitud')->group( function () {
@@ -104,9 +105,9 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
 
     Route::controller(CreditosController::class)->prefix('Creditos')->group( function () { 
-        Route::get('crear-creditos', 'index')->name('creditos-layout'); 
+        Route::get('creditos-page', 'index')->name('creditos-layout'); 
         Route::get('search', 'search')->name('creditos.search');
-        Route::get('fillter-by-status/{status}', 'fillterByStatus')->name('creditos.fillter-by-status');
+        Route::get('fillter-by-status/{status?}', 'fillterByStatus')->name('creditos.fillter-by-status');
         Route::get('combo-box-cliente', 'ComboBoxCliente')->name('creditos.combo-box-cliente');
         Route::get('findAll-resourse', 'findAll')->name('creditos.findAll-resourse');
     });
