@@ -20,4 +20,13 @@ class TasaInteres extends Model {
         'TASA_TIPO',
         'TASA_ESTADO', // Estado Tasa. 0-Inactivo 1-Activo
     ];
+
+    public function getTasa(){
+        $tipos = [
+            0 => 'Unica',
+            1 => 'Mensual',
+            2 => 'Anual'
+        ];
+        return $tipos[$this->TASA_TIPO];
+    }
 }

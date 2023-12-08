@@ -16,6 +16,7 @@ use App\Http\Controllers\Catalogos\TipoInteresController;
 use App\Http\Controllers\Contable\CatalogoCuentasController;
 use App\Http\Controllers\Contable\PartidaContableController;
 use App\Http\Controllers\Creditos\CreditosController;
+use App\Http\Controllers\Creditos\DetalleCreditosController;
 use App\Http\Controllers\CuentaBanco\CuentaBancoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -110,6 +111,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('fillter-by-status/{status?}', 'fillterByStatus')->name('creditos.fillter-by-status');
         Route::get('combo-box-cliente', 'ComboBoxCliente')->name('creditos.combo-box-cliente');
         Route::get('findAll-resourse', 'findAll')->name('creditos.findAll-resourse');
+    });
+
+    Route::controller(DetalleCreditosController::class)->prefix('DetalleCreditos')->group( function () {
+        Route::get('detalle-creditos-page/{CLIE_ID}', 'index')->name('detalle-creditos-layout');
     });
 
     Route::controller(TipoCreditoController::class)->group( function () {

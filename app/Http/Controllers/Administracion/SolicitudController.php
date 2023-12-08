@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Administracion;
 use App\Http\Controllers\Controller;
 use App\Models\Cuotas;
 use App\Models\Solicitud;
+use DateInterval;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia; 
@@ -34,18 +36,19 @@ class SolicitudController extends Controller{
             $solicitud->SOLI_DISPERSAR = $request->SOLI_DISPERSAR;
             $solicitud->SOLI_CATEGORIA = $request->SOLI_CATEGORIA;
             $solicitud->SOLI_FECHAAPROB = null;
-            $solicitud->SOLI_FECHAVENCIMIENTO = $request->SOLI_FECHAVENCIMIENTO;
+            $solicitud->SOLI_FECHAVENCIMIENTO = date($request->SOLI_FECHAVENCIMIENTO);
             $solicitud->SOLI_OBSERVACION = $request->SOLI_OBSERVACION;
             $solicitud->SOLI_CONDICIONES = $request->SOLI_CONDICIONES;
             $solicitud->SOLI_OTROS = null;
-            $solicitud->SOLI_ESTADO = $request->SOLI_ESTADO; 
+            $solicitud->SOLI_ESTADO = $request->SOLI_ESTADO;
             
+            
+            //$solicitud->Insert();
             return response()->json( $solicitud );
         } catch (\Throwable $th) {
             throw $th;
         }
-    }
-
+    } 
 
     public function findById($SOLI_ID){
         $solicitud = Solicitud::where('SOLI_ID', $SOLI_ID)

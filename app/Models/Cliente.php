@@ -97,4 +97,83 @@ class Cliente extends Model {
 
         return $solicitudes;
     }
+
+    public function getNombreCompletoAttribute() {
+        return "{$this->CLIE_NOMBRE} {$this->CLIE_NOMBRE2} {$this->CLIE_APELLIDO} {$this->CLIE_APELLIDO2}";
+    }
+
+    public function getMail(){
+        $mails = [];
+        if($this->CLIE_MAIL) array_push($mails, $this->CLIE_MAIL);
+        if($this->CLIE_MAIL2) array_push($mails, $this->CLIE_MAIL2);
+        return $mails;
+    }
+
+    public function getTelefonos(){
+        $telefonos = [];
+        if($this->CLIE_TEL) array_push($telefonos, $this->CLIE_TEL);
+        if($this->CLIE_TEL2) array_push($telefonos, $this->CLIE_TEL2);
+        return $telefonos;
+    }   
+
+    public function getDireccion(){
+        $direccion = [];
+        $direccion['PAIS'] = $this->pais->PAIS_NOMBRE;
+        $direccion['DEPARTAMENTO'] = $this->departamento->DEPA_NOMBRE;
+        $direccion['MUNICIPIO'] = $this->municipio->MUNI_NOMBRE;
+        $direccion['LUGAR'] = $this->CLIE_DIRECCION;
+        return $direccion;
+    }
+
+    public function getReferencias(){
+        $referencias = [];
+
+        if ( $this->CLIE_REF1NOMBRE){
+            $referencias['REFERENCIA1'] = [
+                'NOMBRE' => $this->CLIE_REF1NOMBRE,
+                'PARENTESCO' => $this->CLIE_REF1PARENTESCO,
+                'DIRECCION' => $this->CLIE_REF1DIRECCION,
+                'TELEFONO' => $this->CLIE_REF1TELEFONO
+            ];
+        }
+
+        if($this->CLIE_REF2NOMBRE){
+            $referencias['REFERENCIA2'] = [
+                'NOMBRE' => $this->CLIE_REF2NOMBRE,
+                'PARENTESCO' => $this->CLIE_REF2PARENTESCO,
+                'DIRECCION' => $this->CLIE_REF2DIRECCION,
+                'TELEFONO' => $this->CLIE_REF2TELEFONO
+            ];
+        }
+
+        if($this->CLIE_REF3NOMBRE){
+            $referencias['REFERENCIA3'] = [
+                'NOMBRE' => $this->CLIE_REF3NOMBRE,
+                'PARENTESCO' => $this->CLIE_REF3PARENTESCO,
+                'DIRECCION' => $this->CLIE_REF3DIRECCION,
+                'TELEFONO' => $this->CLIE_REF3TELEFONO
+            ];
+        }
+
+        return $referencias;
+
+    }
+
+
+    public function getDetalles(){
+        $detalles = []; 
+        if($this->CLIE_OBSERVACIONES) array_push($detalles, $this->CLIE_OBSERVACIONES);
+        if($this->CLIE_COMENTARIOS) array_push($detalles, $this->CLIE_COMENTARIOS);
+        return $detalles;
+    }
+
+    public function getDocumentos(){
+        $documentos = [];
+        if($this->CLIE_DOCIDEN) $documentos['DUI'] = $this->CLIE_DOCIDEN;
+        if($this->CLIE_DOCFISCAL) $documentos['NIT'] = $this->CLIE_DOCFISCAL;
+        if($this->CLIE_PASAPORTE) $documentos['PASAPORTE'] = $this->CLIE_PASAPORTE;
+        if($this->CLIE_OTRODOC) $documentos['OTRODOC'] = $this->CLIE_OTRODOC;
+        if($this->CLIE_OTRODOC2) $documentos['OTRODOC'] = $this->CLIE_OTRODOC2;
+        return $documentos;
+    }
 }

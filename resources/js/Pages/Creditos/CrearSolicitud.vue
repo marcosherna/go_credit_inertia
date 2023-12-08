@@ -4,7 +4,8 @@ import { ref, onMounted} from 'vue';
 import solicitudServices from '../../services/solicitudServices';
 import { ElMessage } from 'element-plus'; 
 import {FolderOpened } from '@element-plus/icons-vue'
-import { SpinnerBars } from '../../Components/spinners/index.js'
+import { SpinnerBars } from '../../Components/spinners/index.js' 
+import { router } from '@inertiajs/vue3';
  
 const showModal = ref(false)   
 const clientes = ref([])
@@ -29,7 +30,9 @@ const onSearch = async () => {
 }
 
 const onSelection = (c) => {
-    console.log(c)
+    showModal.value = false 
+    router.visit(route('detalle-creditos-layout', {CLIE_ID: c}))
+
 }
 
 const handlerClose = () => {
@@ -126,8 +129,7 @@ const handlerClose = () => {
                             </tr>  
                         </tbody>
                     </table>
-                </div> 
-
+                </div>  
             </div> 
         </template> 
     </fw-modal> 
