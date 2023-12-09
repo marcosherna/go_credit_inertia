@@ -9,7 +9,7 @@ import {
   } from '@element-plus/icons-vue'
 
 import { ElLoading, ElMessage } from 'element-plus';  
-import solicitudServices from '../../../services/solicitudServices'; 
+import { solicitudService as solicitudServices } from '../../../Services/index.js'
 
 
 defineProps({

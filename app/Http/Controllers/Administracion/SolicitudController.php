@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Administracion;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Administracion\SolicitudRequest;
 use App\Models\Cuotas;
 use App\Models\Solicitud;
 use DateInterval;
@@ -17,7 +18,7 @@ class SolicitudController extends Controller{
         return Inertia::render('Administracion/Solicitud');
     }
 
-    public function store(Request $request){
+    public function store(SolicitudRequest $request){
 
         try {
             $solicitud = new Solicitud();   

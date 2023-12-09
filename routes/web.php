@@ -10,6 +10,7 @@ use App\Http\Controllers\Catalogos\FormaPagoController;
 use App\Http\Controllers\Catalogos\GarantiasController;
 use App\Http\Controllers\Catalogos\PaisController;
 use App\Http\Controllers\Catalogos\PlazosController;
+use App\Http\Controllers\Catalogos\ReferenciasController;
 use App\Http\Controllers\Catalogos\TasaInteresController;
 use App\Http\Controllers\Catalogos\TipoCreditoController;
 use App\Http\Controllers\Catalogos\TipoInteresController;
@@ -143,6 +144,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
     Route::controller(TipoInteresController::class)->group( function () {
         Route::get('tipo-interes-resource', 'Combo')->name('tipo-interes-resource');
+    });
+
+    Route::controller(ReferenciasController::class)->prefix('referencias')->group( function() {
+       Route::get('exist/{REFE_DUI}', 'exist')->name('referencias.exist'); 
     });
 
 });

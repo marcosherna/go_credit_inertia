@@ -1,9 +1,6 @@
-import CTable from './CTable.vue';
-import CSearchBar from './CSearchBar.vue';
-import CDropDownStatus from './CDropDownStatus.vue'; 
+  
+import CModal from './CModal.vue'; 
 
-export default {
-    CTable, 
-    CSearchBar,
-    CDropDownStatus,  
+export {
+    CModal,  
 }

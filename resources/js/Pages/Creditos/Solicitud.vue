@@ -6,13 +6,14 @@ import CDropDownStatus from './partials/CDropDownStatus.vue';
 import SolicitudServices from '../../services/solicitudServices'; 
 import CButtonExport from './partials/CButtonExport.vue';
 
-import Resourse from '../../services/ResourceService';
+import { resourseServices as Resourse, 
+    solicitudService as solicitudServices } from '../../Services/index.js'; 
+    
 import {ref } from 'vue';
 import { FwModal, FwInput, FwSelect, FwButton, FwTextArea, FwRadioCheckbox} from '../../Components/flowbite';
 
 import { ElNotification, ElLoading, ElMessage } from 'element-plus'
-import { useForm } from '@inertiajs/vue3';
-import solicitudServices from '../../services/solicitudServices';
+import { useForm } from '@inertiajs/vue3'; 
 
 const props = defineProps({ 
     response: { 

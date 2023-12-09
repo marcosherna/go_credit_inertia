@@ -4,7 +4,7 @@ import { ref } from 'vue';
 import { PlusIcon, Table, ButtomToggleModal, FwInput, 
     FwSelect, FwCheckbox, FwButton, FwTextArea, FwTooltip, FwModal, 
     FwSearchBar, FwSkeleton, FwTable, FwBadge} from '../../Components/flowbite/index';
-import NavigationLayout from '../../Layouts/NavigationLayout.vue';   
+import NavigationLayout from '@/Layouts/NavigationLayout.vue';   
 import MenuModuloBanco from './Partials/MenuModuloBanco.vue'; 
 import controller from './controllers/chequeController.js'; 
  

@@ -9,6 +9,9 @@ class TipoCredito extends Model {
     protected $table = 'tipo_credito';
     protected $primaryKey = 'TIPO_ID';
     public $timestamps = false; // Si no necesitas campos created_at y updated_at
+    
+    public $incrementing = false; // Para indicar que no es autoincremental
+    protected $keyType = 'string';
 
     protected $fillable = [
         'TIPO_ID',

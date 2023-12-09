@@ -1,7 +1,7 @@
 <script setup> 
 import { FwModal, FwSearchBar } from '../../Components/flowbite';
 import { ref, onMounted} from 'vue';
-import solicitudServices from '../../services/solicitudServices';
+import { solicitudService as solicitudServices } from '../../Services/index.js'
 import { ElMessage } from 'element-plus'; 
 import {FolderOpened } from '@element-plus/icons-vue'
 import { SpinnerBars } from '../../Components/spinners/index.js' 

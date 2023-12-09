@@ -41,8 +41,8 @@ const model = {
         TIPT_ID: 0, //Tipo Tasa Interes. Ref. Tabla tipo_interes
         TASA_ID: 0, //Tasa de Interes. Ref. Tabla tasa_interes
         SOLI_TIPOTASA: 0, //0 -> Mensual; 1-> Anual 2-> Fija
-        SOLI_OMITIRDOM:null, //Omitir Domingos: 0->NO 1->SI
-        SOLI_DISPERSAR:null, //Dispersar Domingo: 0->NO 1->SI
+        SOLI_OMITIRDOM:false, //Omitir Domingos: 0->NO 1->SI
+        SOLI_DISPERSAR:false, //Dispersar Domingo: 0->NO 1->SI
         SOLI_CATEGORIA:0, //Categoria Credito: A1,A2,B1,B2,C,D,E
         SOLI_FECHAAPROB:null, //Fecha Aprobacion Credito
         SOLI_FECHAVENCIMIENTO:null, //Fecha de Vencimiento
@@ -51,7 +51,50 @@ const model = {
         SOLI_OTROS:null, //Otras Observaciones
         SOLI_ESTADO:null, //Estado Solicitud. 0-Creada 1-Aprobada 2-Rechazada 3-Cancelada 4-CreditoAbierto 5-Finalizada 6-Desembolsada
 }
- 
+
+const validation = (form) => {  
+    form.errors = {};
+    if(form.TIPO_ID == 0){
+        form.errors.TIPO_ID = 'Debe seleccionar un tipo de credito';
+        throw new Error('Debe seleccionar un tipo de credito') ;
+    }
+
+    if(form.GARA_ID == 0){
+        form.errors.GARA_ID = 'Debe seleccionar un tipo de garantia';
+        throw new Error ('Debe seleccionar un tipo de garantia');
+    }
+
+    if(form.PLAZ_ID == 0){
+        form.errors.PLAZ_ID = 'Debe seleccionar un plazo';
+        throw new Error('Debe seleccionar un plazo');
+    }
+
+    if(form.FORM_ID == 0){
+        form.errors.FORM_ID = 'Debe seleccionar un periodo de pago';
+        throw new Error ('Debe seleccionar un periodo de pago');
+    }
+
+    if(form.TIPT_ID == 0){
+        form.errors.TIPT_ID = 'Debe seleccionar un tipo de tasa';
+        throw new Error('Debe seleccionar un tipo de tasa');
+    }
+
+    if(form.TASA_ID == 0){
+        form.errors.TASA_ID = 'Debe seleccionar una tasa';
+        throw new Error('Debe seleccionar una tasa');
+    }
+
+    if(form.SOLI_MONTO == null){
+        form.errors.SOLI_MONTO = 'Debe ingresar un monto';
+        throw new Error('Debe ingresar un monto');
+    }
+
+    if(form.SOLI_CATEGORIA == 0){
+        form.errors.SOLI_CATEGORIA = 'Debe seleccionar una categoria';
+        throw new Error('Debe seleccionar una categoria');
+    }
+
+}
 
 
 const filleter = async (filter) => {
@@ -91,5 +134,6 @@ export default {
     model,
     tipoTasa, 
     categorias, 
-    findAll
+    findAll, 
+    validation
 };

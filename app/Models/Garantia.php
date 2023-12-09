@@ -9,6 +9,8 @@ class Garantia extends Model{
     protected $table = 'garantia';
     protected $primaryKey = 'GARA_ID';
     public $timestamps = false; // Si no necesitas campos created_at y updated_at
+    public $incrementing = false; // Para indicar que no es autoincremental
+    protected $keyType = 'string';
 
     protected $fillable = [
         'GARA_ID',

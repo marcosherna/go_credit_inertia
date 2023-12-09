@@ -1,23 +1,33 @@
 <script setup>  
-import NavigationLayout from '../../Layouts/NavigationLayout.vue'; 
+import NavigationLayout from '@/Layouts/NavigationLayout.vue'; 
 import {  FwBadge, FwModal, FwSkeleton, FwInput, FwSelect, FwTextArea} from '../../Components/flowbite';  
 import { defineProps, ref, onMounted } from 'vue'; 
-import { useForm } from '@inertiajs/vue3';
-import solicitudServices from '../../services/solicitudServices';
-import resourse from '../../Services/ResourceService';
-import { SpinnerBars } from '../../Components/spinners/index'
+import { useForm } from '@inertiajs/vue3';  
+import { SpinnerBars } from '../../Components/spinners/index' 
+import { CModal } from './partials/index';
+
+import { solicitudService,
+    resourseService as resourse,
+    referenciasService} from '../../Services/index'
 
 import { ElMessage, ElLoading } from 'element-plus'; 
+
 
 const props =  defineProps({
     cliente: Object, 
 })   
 
 const form = useForm({
-    ...solicitudServices.model,
+    ...solicitudService.model,
+})
+
+
+const referecia = ref({
+    ...referenciasService.model
 })
 
 const loading = ref(false);
+const modal  = ref(false);
 
 const tiposCreditos = ref([]); 
 const garantias = ref([]);
@@ -57,23 +67,27 @@ onMounted( async () => {
 
 console.log(props.cliente)
 
-const onClick = () =>{  
+
+const onClick = () =>{
+    //modal.value = true;  
     try{
         ElLoading.service({ fullscreen: true, text: 'Generando solicitud...', background: 'rgba(0, 0, 0, 0.8)' });
+        solicitudService.validation(form)
         form.transform(data => ({
             ...data,
             CLIE_ID: props.cliente.CLIE_ID,
             SOLI_FECHA: new Date(),
             SOLI_ESTADO: 0,     
             SOLI_DISPERSAR: data.SOLI_DISPERSAR ? 1 : 0,
-            SOLI_OMITIRDOM: data.SOLI_DISPERSAR ? 1 : 0, 
-            SOLI_TIPOTASA: 2,
+            SOLI_OMITIRDOM: data.SOLI_OMITIRDOM ? 1 : 0, 
+            SOLI_TIPOTASA: 0,
             SOLI_FECHAVENCIMIENTO: resourse.calcularPlazo(plazos.value.find( p => p.PLAZ_ID === data.PLAZ_ID).PLAZ_NOMBRE, true),
-            SOLI_CATEGORIA: 1,
+            SOLI_CATEGORIA: props.cliente.CLIE_CATEGORIA,
         })).post(route('solicitud.store'), {    
             onSuccess: () => {  
             },
-            onError: () => {
+            onError: (error) => {
+                console.log(error)
                 ElMessage({
                     showClose: true,
                     message: error.message,
@@ -81,7 +95,7 @@ const onClick = () =>{
                 })
             }, 
             onFinish: () => {
-                
+                ElLoading.service().close();
             }
         })
     }catch (error) {
@@ -91,9 +105,8 @@ const onClick = () =>{
             message: error.message,
             type: 'error'
         })
-    } finally{
         ElLoading.service().close();
-    }
+    } 
 }
 
 </script>
@@ -297,12 +310,18 @@ const onClick = () =>{
                                     <fw-input label="Monto"
                                         v-model:value="form.SOLI_MONTO" 
                                         placeholder="" /> 
+                                        <div v-show="form.errors.SOLI_MONTO" class="text-red-500 text-sm">
+                                            {{  form.errors.SOLI_MONTO }}
+                                        </div>
                                 </div>
 
                                 <div class="md:col-span-5">
                                     <fw-input label="Condiciones"
                                         v-model:value="form.SOLI_CONDICIONES" 
                                         placeholder="" /> 
+                                        <div v-show="form.errors.SOLI_CONDICIONES" class="text-red-500 text-sm">
+                                        {{  form.errors.SOLI_CONDICIONES }}
+                                    </div>
                                 </div>
 
                                 <div class="md:col-span-5">
@@ -316,8 +335,11 @@ const onClick = () =>{
                                 </div>
 
                                 <div class="md:col-span-5">
+                                    <div class="inline-flex items-center pr-4">
+                                        <el-checkbox v-model="form.SOLI_OMITIRDOM" label="Omitir Domigos" /> 
+                                    </div>
                                     <div class="inline-flex items-center">
-                                        <el-checkbox v-model="form.SOLI_DISPERSAR" label="Dispersar domingo" /> 
+                                        <el-checkbox :disabled="!form.SOLI_OMITIRDOM" v-model="form.SOLI_DISPERSAR" label="Dispersar domingo" /> 
                                     </div>
                                 </div>
 
@@ -330,10 +352,11 @@ const onClick = () =>{
                                                 <option v-for="(tI, index) in tasaInteres" 
                                                     :value="tI.TASA_ID"> {{ tI.TASA_VALOR }}</option>
                                             </fw-select>
-                                            <div v-show="form.errors.CUEB_NUMERO" class="text-red-500 text-sm">
-                                                {{  form.errors.CUEB_NUMERO }}
-                                            </div>
+                                            
                                         </div>
+                                        <div v-show="form.errors.TASA_ID" class="text-red-500 text-sm">
+                                                {{  form.errors.TASA_ID }}
+                                            </div>
                                 </div>
                     
                                 <div class="md:col-span-5 text-right">
@@ -348,4 +371,10 @@ const onClick = () =>{
                     </div>
                 </div> 
     </navigation-layout>  
+
+    <c-modal
+        :show="modal"
+        v-on:close="modal = false"
+        maxWidth="xl"
+    /> 
 </template>

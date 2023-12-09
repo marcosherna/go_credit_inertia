@@ -15,8 +15,7 @@ class DetalleCreditosController extends Controller {
         
         $Cliente->NOMBRE = $Cliente->CLIE_NOMBRE . ' ' . $Cliente->CLIE_NOMBRE2. ' ' . $Cliente->CLIE_APELLIDO.' '. $Cliente->CLIE_APELLIDO2;
 
-        $Cliente->CLIE_FECHANAC = date('d-m-Y', strtotime($Cliente->CLIE_FECHANAC));
-        $Cliente->PAIS_NACIMIENTO = $Cliente->paisNacimiento->PAIS_NOMBRE;
+        $Cliente->CLIE_FECHANAC = date('d-m-Y', strtotime($Cliente->CLIE_FECHANAC)); 
         $Cliente->MAILS = $Cliente->getMail();
         $Cliente->TELEFONOS = $Cliente->getTelefonos();
         $Cliente->DIRECCION = $Cliente->getDireccion();
@@ -27,8 +26,7 @@ class DetalleCreditosController extends Controller {
             'cliente' => $Cliente->only([
                 'CLIE_ID',
                 'NOMBRE',
-                'CLIE_FECHANAC',
-                'PAIS_NACIMIENTO',
+                'CLIE_FECHANAC', 
                 'CLIE_DOCIDEN',
                 'CLIE_DOCIDENVEN',
                 'CLIE_DOCFISCAL',
