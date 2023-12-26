@@ -21,6 +21,9 @@ class DetalleCreditosController extends Controller {
         $Cliente->DIRECCION = $Cliente->getDireccion();
         $Cliente->REFERENCIAS = $Cliente->getReferencias();
         $Cliente->DOCUMENTOS = $Cliente->getDocumentos();
+        $Cliente->INFORMACIONLABORAL = $Cliente->getInformacionLaboral();
+        $Cliente->INGRESO_ADICIONAL = $Cliente->getIngresosAdicionales();
+        
 
         return Inertia::render('Creditos/CreditosDetalle', [
             'cliente' => $Cliente->only([
@@ -36,7 +39,10 @@ class DetalleCreditosController extends Controller {
                 'REFERENCIAS',
                 'CLIE_CATEGORIA',
                 'CLIE_COMENTARIOS',
-                'DOCUMENTOS'
+                'DOCUMENTOS',
+                'INFORMACIONLABORAL',
+                'INGRESO_ADICIONAL',
+                'CLIE_SCORE'
             ])
         ]);
     }

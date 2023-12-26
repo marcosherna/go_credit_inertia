@@ -51,66 +51,70 @@ class ClientesController extends Controller {
 
     public function create(ClienteRequest $request){
 
-        $cliente = new Cliente();
-        $cliente->CLIE_NOMBRE = $request->CLIE_NOMBRE; 
-        $cliente->CLIE_NOMBRE2 = $request->CLIE_NOMBRE2; 
-        $cliente->CLIE_NOMBRE3 = $request->CLIE_NOMBRE3; 
-        $cliente->CLIE_APELLIDO = $request->CLIE_APELLIDO; 
-        $cliente->CLIE_APELLIDO2 = $request->CLIE_APELLIDO2;
-        $cliente->CLIE_APELLIDO3 = $request->CLIE_APELLIDO3; 
-        $cliente->CLIE_SEXO = $request->CLIE_SEXO; 
-        $cliente->ESTA_ID = $request->ESTA_ID; 
-        $cliente->PAIS_NAC = $request->PAIS_NAC; 
-        $cliente->DEPA_NAC = $request->DEPA_NAC; 
-        $cliente->CLIE_FECHANAC = $request->CLIE_FECHANAC;
-        $cliente->CLIE_DOCIDEN = $request->CLIE_DOCIDEN;
-        $cliente->CLIE_DOCIDENVEN = $request->CLIE_DOCIDENVEN;
-        $cliente->CLIE_DOCFISCAL = $request->CLIE_DOCFISCAL;
-        $cliente->CLIE_PASAPORTE = $request->CLIE_PASAPORTE;
-        $cliente->CLIE_OTRODOC = $request->CLIE_OTRODOC;
-        $cliente->CLIE_OTRODOC2 = $request->CLIE_OTRODOC2;
-        $cliente->CLIE_ANTECEDENTES = $request->CLIE_ANTECEDENTES;
-        $cliente->PAIS_ID = $request->PAIS_NAC;
-        $cliente->DEPA_ID = $request->DEPA_NAC;
-        $cliente->MUNI_ID = $request->MUNI_ID;
-        $cliente->CLIE_DIRECCION = $request->CLIE_DIRECCION;
-        $cliente->CLIE_TEL = $request->CLIE_TEL;
-        $cliente->CLIE_TEL2 = $request->CLIE_TEL2;
-        $cliente->CLIE_MAIL = $request->CLIE_MAIL;
-        $cliente->CLIE_MAIL2 = $request->CLIE_MAIL2;
-        $cliente->CLIE_TIPOCASA = $request->CLIE_TIPOCASA;
-        $cliente->CLIE_PROFESION = $request->CLIE_PROFESION;
-        $cliente->CLIE_TIPOEMPLEO = $request->CLIE_TIPOEMPLEO;
-        $cliente->CLIE_TRABAJO = $request->CLIE_TRABAJO;
-        $cliente->CLIE_TRABAJODIR = $request->CLIE_TRABAJODIR;
-        $cliente->CLIE_TRABAJOTEL = $request->CLIE_TRABAJOTEL;
-        $cliente->CLIE_INGRESOPROM = $request->CLIE_INGRESOPROM;
-        $cliente->CLIE_INGRESOS = $request->CLIE_INGRESOS;
-        $cliente->CLIE_INGRESOADIC = $request->CLIE_INGRESOADIC;
-        $cliente->CLIE_INGRESOORIGEN = $request->CLIE_INGRESOORIGEN;
-        $cliente->CLIE_REF1NOMBRE = $request->CLIE_REF1NOMBRE;
-        $cliente->CLIE_REF1PARENTESCO = $request->CLIE_REF1PARENTESCO;
-        $cliente->CLIE_REF1DIRECCION = $request->CLIE_REF1DIRECCION;
-        $cliente->CLIE_REF1TELEFONO = $request->CLIE_REF1TELEFONO;
-        $cliente->CLIE_REF2NOMBRE = $request->CLIE_REF2NOMBRE;
-        $cliente->CLIE_REF2PARENTESCO = $request->CLIE_REF2PARENTESCO;
-        $cliente->CLIE_REF2DIRECCION = $request->CLIE_REF2DIRECCION;
-        $cliente->CLIE_REF2TELEFONO = $request->CLIE_REF2TELEFONO;
-        $cliente->CLIE_REF3NOMBRE = $request->CLIE_REF3NOMBRE;
-        $cliente->CLIE_REF3PARENTESCO = $request->CLIE_REF3PARENTESCO;
-        $cliente->CLIE_REF3DIRECCION = $request->CLIE_REF3DIRECCION;
-        $cliente->CLIE_REF3TELEFONO = $request->CLIE_REF3TELEFONO;
-        $cliente->CLIE_COMENTARIOS = $request->CLIE_COMENTARIOS;
-        $cliente->CLIE_OBSERVACIONES = $request->CLIE_OBSERVACIONES;
-        $cliente->CLIE_TIPOCLIENTE = $request->CLIE_TIPOCLIENTE;
-        $cliente->CLIE_CATEGORIA = $request->CLIE_CATEGORIA;
-        $cliente->CLIE_SCORE = $request->CLIE_SCORE;
-        $cliente->CLIE_ESTADO = $request->CLIE_ESTADO;
-        $cliente->SUCU_ID = $request->SUCU_ID;
-        $cliente->EMPR_ID = $request->EMPR_ID; // empresa del usuario en sesion
-        $cliente->USUA_LOGIN = Auth::user()->USUA_LOGIN;
-        $cliente->FECHA_CAMBIO = date('Y-m-d H:i:s'); // fecha actual
-        $cliente->insert();
+        try {
+            $cliente = new Cliente();
+            $cliente->CLIE_NOMBRE = $request->CLIE_NOMBRE; 
+            $cliente->CLIE_NOMBRE2 = $request->CLIE_NOMBRE2; 
+            $cliente->CLIE_NOMBRE3 = $request->CLIE_NOMBRE3; 
+            $cliente->CLIE_APELLIDO = $request->CLIE_APELLIDO; 
+            $cliente->CLIE_APELLIDO2 = $request->CLIE_APELLIDO2;
+            $cliente->CLIE_APELLIDO3 = $request->CLIE_APELLIDO3; 
+            $cliente->CLIE_SEXO = $request->CLIE_SEXO; 
+            $cliente->ESTA_ID = $request->ESTA_ID; 
+            $cliente->PAIS_NAC = $request->PAIS_NAC; 
+            $cliente->DEPA_NAC = $request->DEPA_NAC; 
+            $cliente->CLIE_FECHANAC = $request->CLIE_FECHANAC;
+            $cliente->CLIE_DOCIDEN = $request->CLIE_DOCIDEN;
+            $cliente->CLIE_DOCIDENVEN = $request->CLIE_DOCIDENVEN;
+            $cliente->CLIE_DOCFISCAL = $request->CLIE_DOCFISCAL;
+            $cliente->CLIE_PASAPORTE = $request->CLIE_PASAPORTE;
+            $cliente->CLIE_OTRODOC = $request->CLIE_OTRODOC;
+            $cliente->CLIE_OTRODOC2 = $request->CLIE_OTRODOC2;
+            $cliente->CLIE_ANTECEDENTES = $request->CLIE_ANTECEDENTES;
+            $cliente->PAIS_ID = $request->PAIS_NAC;
+            $cliente->DEPA_ID = $request->DEPA_NAC;
+            $cliente->MUNI_ID = $request->MUNI_ID;
+            $cliente->CLIE_DIRECCION = $request->CLIE_DIRECCION;
+            $cliente->CLIE_TEL = $request->CLIE_TEL;
+            $cliente->CLIE_TEL2 = $request->CLIE_TEL2;
+            $cliente->CLIE_MAIL = $request->CLIE_MAIL;
+            $cliente->CLIE_MAIL2 = $request->CLIE_MAIL2;
+            $cliente->CLIE_TIPOCASA = $request->CLIE_TIPOCASA;
+            $cliente->CLIE_PROFESION = $request->CLIE_PROFESION;
+            $cliente->CLIE_TIPOEMPLEO = $request->CLIE_TIPOEMPLEO;
+            $cliente->CLIE_TRABAJO = $request->CLIE_TRABAJO;
+            $cliente->CLIE_TRABAJODIR = $request->CLIE_TRABAJODIR;
+            $cliente->CLIE_TRABAJOTEL = $request->CLIE_TRABAJOTEL;
+            $cliente->CLIE_INGRESOPROM = $request->CLIE_INGRESOPROM;
+            $cliente->CLIE_INGRESOS = $request->CLIE_INGRESOS;
+            $cliente->CLIE_INGRESOADIC = $request->CLIE_INGRESOADIC;
+            $cliente->CLIE_INGRESOORIGEN = $request->CLIE_INGRESOORIGEN;
+            $cliente->CLIE_REF1NOMBRE = $request->CLIE_REF1NOMBRE;
+            $cliente->CLIE_REF1PARENTESCO = $request->CLIE_REF1PARENTESCO;
+            $cliente->CLIE_REF1DIRECCION = $request->CLIE_REF1DIRECCION;
+            $cliente->CLIE_REF1TELEFONO = $request->CLIE_REF1TELEFONO;
+            $cliente->CLIE_REF2NOMBRE = $request->CLIE_REF2NOMBRE;
+            $cliente->CLIE_REF2PARENTESCO = $request->CLIE_REF2PARENTESCO;
+            $cliente->CLIE_REF2DIRECCION = $request->CLIE_REF2DIRECCION;
+            $cliente->CLIE_REF2TELEFONO = $request->CLIE_REF2TELEFONO;
+            $cliente->CLIE_REF3NOMBRE = $request->CLIE_REF3NOMBRE;
+            $cliente->CLIE_REF3PARENTESCO = $request->CLIE_REF3PARENTESCO;
+            $cliente->CLIE_REF3DIRECCION = $request->CLIE_REF3DIRECCION;
+            $cliente->CLIE_REF3TELEFONO = $request->CLIE_REF3TELEFONO;
+            $cliente->CLIE_COMENTARIOS = $request->CLIE_COMENTARIOS;
+            $cliente->CLIE_OBSERVACIONES = $request->CLIE_OBSERVACIONES;
+            $cliente->CLIE_TIPOCLIENTE = $request->CLIE_TIPOCLIENTE;
+            $cliente->CLIE_CATEGORIA = $request->CLIE_CATEGORIA;
+            $cliente->CLIE_SCORE = $request->CLIE_SCORE;
+            $cliente->CLIE_ESTADO = 1; // activo
+            $cliente->SUCU_ID = $request->SUCU_ID;
+            $cliente->EMPR_ID = $cliente->getEmpresa(Auth::user()->EMPL_ID)->EMPR_ID; // empresa del usuario en sesion
+            $cliente->USUA_LOGIN = Auth::user()->USUA_LOGIN;
+            $cliente->FECHA_CAMBIO = date('Y-m-d H:i:s'); // fecha actual
+            $cliente->insert(); 
+        } catch (\Throwable $th) {
+            return response()->json($th); 
+        }
     }
 
 

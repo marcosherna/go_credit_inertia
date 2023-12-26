@@ -2,12 +2,11 @@
 import NavigationLayout from '@/Layouts/NavigationLayout.vue'; 
 import CTable from './partials/CTable.vue';
 import CSearchBar from './partials/CSearchBar.vue';
-import CDropDownStatus from './partials/CDropDownStatus.vue';
-import SolicitudServices from '../../services/solicitudServices'; 
+import CDropDownStatus from './partials/CDropDownStatus.vue'; 
 import CButtonExport from './partials/CButtonExport.vue';
 
-import { resourseServices as Resourse, 
-    solicitudService as solicitudServices } from '../../Services/index.js'; 
+import { resourseService as Resourse, 
+    solicitudService as SolicitudServices } from '../../Services/index.js'; 
     
 import {ref } from 'vue';
 import { FwModal, FwInput, FwSelect, FwButton, FwTextArea, FwRadioCheckbox} from '../../Components/flowbite';
@@ -98,7 +97,7 @@ const submit = async  () => {
         SOLI_ESTADO: 0, 
         SOLI_OMITIRDOM: omitirDomingoSi.value ? 1 : 0,
         SOLI_DISPERSAR: dispensaDomingoSi.value ? 1 : 0,
-        SOLI_TIPOTASA: solicitudServices.tipoTasa.find(x => x.text == data.SOLI_TIPOTASA).value,
+        SOLI_TIPOTASA: SolicitudServices.tipoTasa.find(x => x.text == data.SOLI_TIPOTASA).value,
     })).post(route('solicitud.store'), {
         onSuccess: () => {
             modal.value = false;
@@ -179,9 +178,9 @@ const findAll = async () => {
                         Monitored
                     </button> -->
                     <c-drop-down-status
-                        :options="solicitudServices.SolicitudEstado"
+                        :options="SolicitudServices.SolicitudEstado"
                         @responce="solicitudes = $event"
-                        label="filtrar"/> 
+                        label="filtrar"/>  
                 </div>
 
                  <c-search-bar 

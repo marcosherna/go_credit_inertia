@@ -28,7 +28,12 @@ const props = defineProps({
 const handlerStatusAprobar = async () => { 
     try{
         ElLoading.service(options);
-        const _data = await solicitudService.changedStatus(props.selection.SOLI_ID, 1); 
+        const _data = await solicitudService.changedStatus(props.selection.SOLI_ID, 4); 
+        ElMessage({
+            showClose: true,
+            message: 'Solicitud Aprobada',
+            type: 'success'
+        });
         window.location.reload();
         ElLoading.service().close();
     }catch(error){
@@ -47,7 +52,13 @@ const handlerStatusRechazar = async () => {
     try{
         ElLoading.service(options);
         const _data = await solicitudService.changedStatus(props.selection.SOLI_ID, 2); 
+        ElMessage({
+            showClose: true,
+            message: 'Solicitud Rechazada',
+            type: 'success'
+        });
         window.location.reload();
+        
         ElLoading.service().close();
     }catch(error){
         ElLoading.service().close();
@@ -64,6 +75,11 @@ const handlerStatusCancelar = async () => {
     try{
         ElLoading.service(options);
         const _data = await solicitudService.changedStatus(props.selection.SOLI_ID, 3); 
+        ElMessage({
+            showClose: true,
+            message: 'Solicitud Cancelada',
+            type: 'success'
+        });
         window.location.reload();
         ElLoading.service().close();
     }catch(error){
@@ -87,7 +103,7 @@ const handlerStatusCancelar = async () => {
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-                <el-dropdown-item v-on:click="handlerStatusAprobar" :icon="Check">Aprobar</el-dropdown-item> 
+                <el-dropdown-item v-on:click="handlerStatusAprobar" :icon="Check">Abrir Credito</el-dropdown-item> 
                 <el-dropdown-item v-on:click="handlerStatusRechazar" :icon="Plus">Rechazar</el-dropdown-item> 
                 <el-dropdown-item v-on:click="handlerStatusCancelar" :icon="CirclePlusFilled">
                     Cancelar

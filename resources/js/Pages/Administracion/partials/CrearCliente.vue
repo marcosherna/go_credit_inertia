@@ -5,6 +5,7 @@ import { FwTable, FwBadge, FwButton, FwModal,
     FwInput, FwTextArea, FwSelect, FwRadioCheckbox, FwSearchBar} from '../../../Components/flowbite/index.js';
 import controller from './ClienteController.js';
 import { defineProps, ref } from 'vue';
+import { ElMessage } from 'element-plus';
 
 const form = useForm({ 
     ...controller.model,   
@@ -79,52 +80,52 @@ const tipoCliente = (value, text) => {
 const validation = () => {
     if(form.CLIE_SEXO == '0'){ 
             form.errors.CLIE_SEXO = 'Seleccione una opcion';
-            throw 'error';
+            throw new Error('Seleccione un genero');
         }
 
         if(form.ESTA_ID == '0'){ 
             form.errors.ESTA_ID = 'Seleccione una opcion';
-            throw 'error';
+            throw new Error('Seleccione una opcion');
         }
 
         if(form.PAIS_NAC == '0'){ 
             form.errors.PAIS_NAC = 'Seleccione una opcion';
-            throw 'error';
+            throw new Error('Seleccione un pais');
         }
 
         if(form.DEPA_NAC == '0'){ 
             form.errors.DEPA_NAC = 'Seleccione una opcion';
-            throw 'error';
+            throw new Error('Seleccione un departamento');
         }
 
         if(form.MUNI_ID == '0'){ 
             form.errors.MUNI_ID = 'Seleccione una opcion';
-            throw 'error';
+            throw new Error('Seleccione un municipio')
         }
 
         if(form.SUCU_ID == '0'){ 
-            form.errors.SUCU_ID = 'Seleccione una opcion';
-            throw 'error';
+            form.errors.SUCU_ID = 'Seleccione una opcion'
+            throw new Error('Seleccione una sucursal')
         }
 
         if(form.CLIE_CATEGORIA == '0'){ 
             form.errors.CLIE_CATEGORIA = 'Seleccione una opcion';
-            throw 'error';
+            throw new Error('Seleccione una categiria')
         }
 
         if(form.CLIE_TIPOEMPLEO == '0'){ 
             form.errors.CLIE_TIPOEMPLEO = 'Seleccione una opcion';
-            throw 'error';
+            throw new Error('Seleccione un tipo de empleo');
         }
 
         if(form.CLIE_TIPOCASA == '0'){ 
             form.errors.CLIE_TIPOCASA = 'Seleccione una opcion';
-            throw 'error';
+            throw new Error('Seleccione un tipo de casa');
         }
 
         if(form.CLIE_INGRESOPROM == '0'){ 
             form.errors.CLIE_INGRESOPROM = 'Seleccione una opcion';
-            throw 'error';
+            throw new Error('Seleccione un ingreso promedio');
         }
 }
 
@@ -175,14 +176,26 @@ const submit = () => {
             preserveScroll: true,
             onError: (errors) => {
                 console.log(errors);
+                ElMessage({ 
+                    message: errors,
+                    type: 'error'
+                })
             },
             onSuccess: () => {
-                console.log('success');
+                ElMessage({ 
+                    message: 'Cliente creado correctamente',
+                    type: 'success'
+                })
+                form.reset(); 
             },
         });
 
 
     }catch(e){
+        ElMessage({ 
+            message: e.message,
+            type: 'error'
+        })
         console.log(e);
     }
     

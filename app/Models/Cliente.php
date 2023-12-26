@@ -176,4 +176,35 @@ class Cliente extends Model {
         if($this->CLIE_OTRODOC2) $documentos['OTRODOC'] = $this->CLIE_OTRODOC2;
         return $documentos;
     }
+
+    public function getIngresosAdicionales(){
+        $ingresos = null;
+        if($this->CLIE_INGRESOADIC == 1) {
+
+            $ingresos = [ 
+                'ORIGEN' => $this->CLIE_INGRESOORIGEN
+            ];
+        };
+        
+        return $ingresos;
+    }
+
+    public function getInformacionLaboral(){
+        $labores = []; 
+        if($this->CLIE_PROFESION) $labores['PROFESION'] = $this->CLIE_PROFESION;
+        if($this->CLIE_TIPOEMPLEO) $labores['TIPOEMPLEO'] = $this->CLIE_TIPOEMPLEO;
+        if($this->CLIE_TRABAJO) $labores['TRABAJO'] = $this->CLIE_TRABAJO;
+        if($this->CLIE_TRABAJODIR) $labores['TRABAJODIR'] = $this->CLIE_TRABAJODIR;
+        if($this->CLIE_TRABAJOTEL) $labores['TRABAJOTEL'] = $this->CLIE_TRABAJOTEL; 
+        if($this->CLIE_INGRESOS) $labores['INGRESOS'] = $this->CLIE_INGRESOS;
+        if($this->CLIE_INGRESOADIC) $labores['INGRESOADIC'] = $this->CLIE_INGRESOADIC;
+        if($this->CLIE_INGRESOORIGEN) $labores['INGRESOORIGEN'] = $this->CLIE_INGRESOORIGEN;
+        return $labores;
+    }
+
+    public function  getEmpresa($idEmpleado): Empresa{
+        $empleado = Empleado::where('EMPL_ID', $idEmpleado)->first();
+        $empresa = Empresa::where('EMPR_ID', $empleado->EMPR_ID)->first(); 
+        return $empresa;
+    }
 }

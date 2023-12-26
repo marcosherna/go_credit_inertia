@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,8 +18,9 @@ class AppServiceProvider extends ServiceProvider
     }
 
      
-    public function boot()
-    {
-        //
+    public function boot() {
+        Inertia::share('csrf', function () {
+            return csrf_token();
+        });
     }
 }

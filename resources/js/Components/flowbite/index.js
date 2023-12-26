@@ -16,6 +16,7 @@ import FwSkeleton from './FwSkeleton.vue'
 import FwSearchBar from './FwSearchBar.vue'
 import FwBadge from './FwBadge.vue' 
 import FwButtonDropdown from './FwButtonDropdown.vue'
+import FwAlert from './FwAlert.vue'
 
 export {
     SearchBar,
@@ -35,5 +36,6 @@ export {
     FwSkeleton,
     FwSearchBar,
     FwBadge,  
-    FwButtonDropdown
+    FwButtonDropdown, 
+    FwAlert
 }

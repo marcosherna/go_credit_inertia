@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Administracion\AplicarPagosController;
 use App\Http\Controllers\Administracion\ClientesController;
+use App\Http\Controllers\Administracion\CreditosDesembolsadosController;
+use App\Http\Controllers\Administracion\ModuloCajaController;
 use App\Http\Controllers\Administracion\SolicitudController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Banco\ChequeraController;
@@ -17,8 +20,11 @@ use App\Http\Controllers\Catalogos\TipoInteresController;
 use App\Http\Controllers\Contable\CatalogoCuentasController;
 use App\Http\Controllers\Contable\PartidaContableController;
 use App\Http\Controllers\Creditos\CreditosController;
+use App\Http\Controllers\Creditos\CreditosPorAprobarController;
+use App\Http\Controllers\Creditos\CreditosPorProcesarController;
 use App\Http\Controllers\Creditos\DetalleCreditosController;
 use App\Http\Controllers\CuentaBanco\CuentaBancoController;
+use App\Models\Solicitud;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,7 +46,7 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 
 
-Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
+Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','flash'])->group(function () {
 
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
@@ -93,6 +99,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('solicitud-cuotas/{id}', 'findCuotas')->name('solicitud.cuotas-resource');
         Route::get('solicitud-take-cliente/{id}/{take}', 'findByIdClient')->name('solicitud.take-cliente-creditos-resource');
         Route::post('solicitud-create', 'store')->name('solicitud.store');
+        Route::put('solicitud-update/{id}/{status}', 'changedStatus')->name('solicitud-status.update');
+        Route::get('solicitud-find', 'find')->name('solicitud.find-resource');
+        Route::get('solicitud-search/{query?}', 'search')->name('solicitud.search-resource');
+        Route::put('solicitud-update/{id}', 'edit')->name('solicitud.edit-resource');
     });
 
     Route::controller(PaisController::class)->prefix('Pais')->group( function () {
@@ -114,15 +124,34 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('findAll-resourse', 'findAll')->name('creditos.findAll-resourse');
     });
 
+    Route::controller(CreditosPorAprobarController::class)->prefix('CreditosPorAprobar')->group( function () {
+        Route::get('creditos-por-aprobar-page', 'index')->name('creditos-por-aprobar-layout');
+    });
+
+    Route::controller(CreditosPorProcesarController::class)->prefix('CreditosPorProcesar')->group( function () {
+        Route::get('creditos-por-procesar-page', 'index')->name('creditos-por-procesar-layout');
+    });
+    Route::controller(CreditosDesembolsadosController::class)->prefix('CreditosDesembolsados')->group( function () {
+        Route::get('creditos-desembolsados-page', 'index')->name('creditos-desembolsados-layout');
+    });
+
     Route::controller(DetalleCreditosController::class)->prefix('DetalleCreditos')->group( function () {
         Route::get('detalle-creditos-page/{CLIE_ID}', 'index')->name('detalle-creditos-layout');
     });
 
-    Route::controller(TipoCreditoController::class)->group( function () {
-        Route::get('tipos-resource', 'Combo')->name('tipos-creditos-resource');
+
+    /** Modulo Caja */
+    Route::controller(ModuloCajaController::class)->prefix('modulo')->group( function () {
+        Route::get('modulo-caja-page', 'index')->name('modulo-caja-layout');
     });
 
+    Route::controller(AplicarPagosController::class)->prefix('modulo')->group( function () {
+        Route::get('aplicar-pagos-page', 'index')->name('aplicar-pagos-layout');
+    });
 
+    Route::controller(TipoCreditoController::class)->group( function () {
+        Route::get('tipos-resource', 'Combo')->name('tipos-creditos-resource');
+    }); 
     
     Route::controller(GarantiasController::class)->group( function () {
         Route::get('garantias-resource', 'Combo')->name('garantias-resource');

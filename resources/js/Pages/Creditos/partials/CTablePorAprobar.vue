@@ -38,25 +38,26 @@ const props = defineProps({
                                     </button>
                                 </th>
                                 <th scope="col" class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    Estado
-                                </th>
-                                <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     Cliente
                                 </th>
+                                <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    Ejecutivo
+                                </th>
 
-                                <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Categoria</th>
+                                <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Estado</th>
+
+                                <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Monto</th>
+
                                 
-                                <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Pagos</th>
-                                
+                                 
                                 <th scope="col" class="relative py-3.5 px-4">
                                     <span class="sr-only">Edit</span>
                                 </th>
-                            </tr>
-
+                            </tr> 
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
                             <tr v-for="(item, index) in items.data">
-                                
+                                {{ console.log(item)  }}
                                 <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
                                     <div>
                                         <h2 class="font-medium text-gray-800 dark:text-white ">
@@ -66,38 +67,43 @@ const props = defineProps({
                                     </div>
                                 </td>
                                 <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
-                                    <div class="inline px-3 py-1 text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800"> 
-                                        {{ solicitudServices.SolicitudEstado[item.SOLI_ESTADO].text }}
-                                    </div>
-                                </td>
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
                                     <div>
                                         <h4 class="text-gray-700 dark:text-gray-200">
                                             {{ item.cliente.NOMBRE  }} 
                                             
-                                            <fw-badge  class="bg-blue-500">Tel. {{ item.cliente.CLIE_TEL }}</fw-badge>
+                                            <fw-badge  class="bg-blue-500">Tel. {{ item.cliente.TELEFONOS[0] }}</fw-badge>
                                             
                                         </h4>
                                         <p class="text-gray-500 dark:text-gray-400">{{ item.SOLI_CONDICIONES }} {{ item.SOLI_OBSERVACION }}</p>
                                     </div>
                                 </td>
                                 <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="flex items-center"> 
-                                        <div class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0"></div>
-                                        <p class="flex items-center justify-center w-6 h-6 -mx-1 text-xs text-blue-600 bg-blue-100 border-2 border-white rounded-full">{{ item.SOLI_CATEGORIA }}</p>
+                                    <div>
+                                        <h4 class="text-gray-700 dark:text-gray-200">
+                                            {{ `${item.garantia.NOMBRE} / ${item.empleado.NOMBRE}` }}  
+                                        </h4>
+                                        <p class="text-gray-500 dark:text-gray-400">Plazo: {{ item.plazo.PLAZ_NOMBRE  }}, {{ item.forma_pago.FORM_NOMBRE }}</p>
                                     </div>
                                 </td>
                                 <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="w-48 h-1.5 bg-blue-200 overflow-hidden rounded-full">
-                                        <div class="bg-blue-500 w-2/3 h-1.5"></div>
+                                    <div>
+                                        
+                                        <fw-badge
+                                            :color="solicitudServices.estado.find( x => x.value == item.SOLI_ESTADO ).color"> {{  solicitudServices.estado.find( x => x.value == item.SOLI_ESTADO ).text }}</fw-badge>
                                     </div>
                                 </td>
+                                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                                    <div class="flex items-center"> 
+                                        <div class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0"></div>
+
+                                        ${{ item.SOLI_MONTO }}
+                                    </div>
+                                </td>  
                                 <td class="px-4 py-4 text-sm whitespace-nowrap">
 
                                     <c-drop-down
                                         :selection="item" 
-                                    />
-
+                                    /> 
                                         <!--<button class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />

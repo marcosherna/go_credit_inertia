@@ -122,9 +122,7 @@ const checkboxes = [
                             v-model:value="selectionItemDrop"
                             classes="ms-3"
                         /> 
-                    </div>
-
-                    {{ selectionItemDrop }}
+                    </div> 
 
                     <div class="relative">  
                         <fw-search-bar   

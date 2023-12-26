@@ -1,5 +1,5 @@
 //Estado Solicitud. 0-Creada 1-Aprobada 2-Rechazada 3-Cancelada 4-CreditoAbierto 5-Finalizada 6-Desembolsada
-import { router } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import axios from 'axios'; 
 
 const SolicitudEstado = [
@@ -10,6 +10,16 @@ const SolicitudEstado = [
     { text: 'Credito Abierto', value: 4 },
     { text: 'Finalizada', value: 5 },
     { text: 'Desembolsada', value: 6 }
+]
+
+const estado = [
+    { text: 'Pendiente', value: 0, color: 'green' },
+    { text: 'Aprobada', value: 1, color: 'blue' },
+    { text: 'Rechazada', value: 2, color: 'yellow' },
+    { text: 'Cancelada', value: 3, color: 'red' },
+    { text: 'Credito Abierto', value: 4, color: 'green' },
+    { text: 'Finalizada', value: 5, color: 'blue'},
+    { text: 'Desembolsada', value: 6, color: 'green'}
 ]
 
 const tipoTasa = [  
@@ -87,12 +97,7 @@ const validation = (form) => {
     if(form.SOLI_MONTO == null){
         form.errors.SOLI_MONTO = 'Debe ingresar un monto';
         throw new Error('Debe ingresar un monto');
-    }
-
-    if(form.SOLI_CATEGORIA == 0){
-        form.errors.SOLI_CATEGORIA = 'Debe seleccionar una categoria';
-        throw new Error('Debe seleccionar una categoria');
-    }
+    } 
 
 }
 
@@ -125,7 +130,78 @@ const search = async (query) => {
 
 }
 
+const changedStatus = async (id, status) => {
+    try {
+        const response = await axios.put(route('solicitud-status.update', { id:id ,status: status}));
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
+const find = async (solicitud) => {
+    try {
+        const response = await axios.get(route('solicitud.find-resource', solicitud));
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const formToModel = (form) => {
+    return {
+        SOLI_ID: form.SOLI_ID, // Id Solicitud
+        SOLI_FECHA: form.SOLI_FECHA, // Fecha de CreaciÃ³n
+        EMPL_ID: form.EMPL_ID, // Ejecutivo que la Crea
+        CLIE_ID: form.CLIE_ID, // ID Cliente. Ref tabla cliente
+        SOLI_MONTO: form.SOLI_MONTO, //Monto Solicitado
+        TIPO_ID: form.TIPO_ID, //Tipo de Credito Ref. Tabla Tipo_credito
+        GARA_ID: form.GARA_ID, //Garantia del CreditoTipo Ref. Tabla Garantias
+        PLAZ_ID: form.PLAZ_ID, //Plazo del Credito. Ref Tabla Plazos
+        FORM_ID: form.FORM_ID, //Periodo de Pago. Ref. tabla Formas de Pago
+        TIPT_ID: form.TIPT_ID, //Tipo Tasa Interes. Ref. Tabla tipo_interes
+        TASA_ID: form.TASA_ID, //Tasa de Interes. Ref. Tabla tasa_interes
+        SOLI_TIPOTASA: form.SOLI_TIPOTASA, //0 -> Mensual; 1-> Anual 2-> Fija
+        SOLI_OMITIRDOM:form.SOLI_OMITIRDOM, //Omitir Domingos: 0->NO 1->SI
+        SOLI_DISPERSAR:form.SOLI_DISPERSAR, //Dispersar Domingo: 0->NO 1->SI
+        SOLI_CATEGORIA:form.SOLI_CATEGORIA, //Categoria Credito: A1,A2,B1,B2,C,D,E
+        SOLI_FECHAAPROB:form.SOLI_FECHAAPROB, //Fecha Aprobacion Credito
+        SOLI_FECHAVENCIMIENTO:form.SOLI_FECHAVENCIMIENTO, //Fecha de Vencimiento
+        SOLI_OBSERVACION:form.SOLI_OBSERVACION, //Observaciones a Solicitud
+        SOLI_CONDICIONES:form.SOLI_CONDICIONES, //Condiciones Adicionales
+        SOLI_OTROS:form.SOLI_OTROS
+    };
+}
+
+
+const create = async (form) => {
+    try {
+        const response = await axios.post(route('solicitud.store'), form);
+        return response.data;
+    } catch (error) { 
+        throw error;
+    }
+}
+
+const searchSolicitud = async ( query ) => { 
+    try {
+        const response = await axios.get(route('solicitud.search-resource', {query: query}));
+        return response.data;
+    } catch (error) {
+        
+        
+        throw error;
+    }
+}
+
+const edit = async (id, body) => {
+    try {
+        const response = await axios.put(route('solicitud.edit-resource'),{id:id},body);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
 export default {
     SolicitudEstado, 
@@ -135,5 +211,12 @@ export default {
     tipoTasa, 
     categorias, 
     findAll, 
-    validation
+    validation, 
+    changedStatus,
+    find, 
+    formToModel,
+    create, 
+    searchSolicitud,
+    edit, 
+    estado
 };

@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUlids; 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Solicitud extends Model
 {
-    use HasFactory;
+    use HasUlids;
     protected $table = 'solicitud';
     protected $primaryKey = 'SOLI_ID';
     public $timestamps = false; // Si no necesitas campos created_at y updated_at 
@@ -72,7 +72,8 @@ class Solicitud extends Model
     }
 
 
-    public function Insert(){
-        DB::table($this->table)->insert($this->toArray());
+    public function Insert(){ 
+        // insertar y devolver el id
+        return DB::table($this->table)->insert($this->toArray());
     }
 }

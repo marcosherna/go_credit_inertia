@@ -38,12 +38,12 @@ class ClienteRequest extends FormRequest {
             'CLIE_TEL2' => 'nullable|string|max:20',
             'CLIE_MAIL' => 'required|string|max:50',
             'CLIE_MAIL2' => 'nullable|string|max:50',
-            'CLIE_TIPOCASA' => 'required|integer|max:1',
+            'CLIE_TIPOCASA' => 'required|integer',
             'CLIE_PROFESION' => 'required|string|max:50',
-            'CLIE_TIPOEMPLEO' => 'required|integer|max:1',
+            'CLIE_TIPOEMPLEO' => 'required|integer',
             'CLIE_TRABAJO' => 'required|string|max:50',
             'CLIE_TRABAJODIR' => 'required|string|max:100',
-            'CLIE_TRABAJOTEL' => 'required|string|max:20',
+            'CLIE_TRABAJOTEL' => 'required|string|max:12',
             'CLIE_INGRESOPROM' => 'required|numeric',
             'CLIE_INGRESOS' => 'required|numeric',
             'CLIE_INGRESOADIC' => 'required|boolean',
@@ -74,7 +74,18 @@ class ClienteRequest extends FormRequest {
     }
 
     public function messages() {
-        return [
+        return [ 
+            'CLIE_TIPOEMPLEO.required' => 'El campo es requerido',
+            'CLIE_TIPOEMPLEO.integer' => 'El campo debe ser de tipo entero', 
+            'CLIE_INGRESOORIGEN.required' => 'El campo es requerido',
+            'CLIE_INGRESOORIGEN.string' => 'El campo debe ser de tipo string',
+            'CLIE_INGRESOORIGEN.max' => 'El campo no debe exceder de 50 caracteres',
+            'CLIE_INGRESOS.required' => 'El campo es requerido',
+            'CLIE_INGRESOS.numeric' => 'El campo debe ser de tipo numerico',
+            'CLIE_PROFESION.required' => 'El campo es requerido',
+            'CLIE_PROFESION.string' => 'El campo debe ser de tipo string',
+            'CLIE_TRABAJO.required' => 'El campo  es requerido',
+            'CLIE_TIPOCASA.required' => 'El campo es requerido',
             'CLIE_NOMBRE.required' => 'El campo CLIE_NOMBRE es requerido',
             'CLIE_NOMBRE.string' => 'El campo CLIE_NOMBRE debe ser de tipo string',
             'CLIE_NOMBRE.max' => 'El campo CLIE_NOMBRE no debe exceder de 50 caracteres',
@@ -150,10 +161,14 @@ class ClienteRequest extends FormRequest {
             'CLIE_MAIL.max' => 'El campo CLIE_MAIL no debe exceder de 50 caracteres',
             'CLIE_MAIL2.required' => 'El campo CLIE_MAIL2 es requerido',
             'CLIE_MAIL2.string' => 'El campo CLIE_MAIL2 debe ser de tipo string', 
-            'CLIE_MAIL2.max' => 'El campo CLIE_MAIL2 no debe exceder de 50 caracteres',
-            'CLIE_TIPOCASA.required' => 'El campo CLIE_TIPOCASA es requerido',
-            'CLIE_TIPOCASA.string' => 'El campo CLIE_TIPOCASA debe ser de tipo string',
-
+            'CLIE_MAIL2.max' => 'El campo CLIE_MAIL2 no debe exceder de 50 caracteres', 
+            'CLIE_TIPOCASA.integer' => 'El campo debe ser de tipo entero',
+            'CLIE_TRABAJODIR.required' => 'El campo es requerido',
+            'CLIE_TRABAJODIR.string' => 'El campo debe ser de tipo string',
+            'CLIE_TRABAJODIR.max' => 'El campo no debe exceder de 100 caracteres',
+            'CLIE_TRABAJOTEL.required' => 'El campo es requerido',
+            'CLIE_TRABAJOTEL.string' => 'El campo debe ser de tipo string',
+            'CLIE_TRABAJOTEL.max' => 'El campo no debe exceder de 12 caracteres',
         ];
     }
 }

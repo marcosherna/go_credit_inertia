@@ -11,7 +11,7 @@ class SolicitudRequest extends FormRequest {
 
     public function rules() {
         return [ 
-            'SOLI_FECHA' => 'required|date',
+            'SOLI_FECHA' => 'required|string',
             'EMPL_ID' => 'nullable|string',
             'CLIE_ID' => 'required|string|max:20',
             'SOLI_MONTO' => 'required|numeric|min:0',
@@ -24,7 +24,7 @@ class SolicitudRequest extends FormRequest {
             'SOLI_TIPOTASA' => 'nullable|integer',
             'SOLI_OMITIRDOM' => 'required|integer',
             'SOLI_DISPERSAR' => 'required|integer',
-            'SOLI_CATEGORIA' => 'required|string|max:20',
+            'SOLI_CATEGORIA' => 'nullable|string|max:20',
             'SOLI_FECHAAPROB' => 'nullable|date',
             'SOLI_FECHAVENCIMIENTO' => 'required|date',
             'SOLI_OBSERVACION' => 'required|string|max:200',
@@ -36,8 +36,7 @@ class SolicitudRequest extends FormRequest {
 
     public function messages() {
         return [   
-            'SOLI_FECHA.required' => 'El campo : es obligatorio.',
-            'SOLI_FECHA.date' => 'El campo : debe ser de tipo date.', 
+            'SOLI_FECHA.required' => 'El campo : es obligatorio.', 
             'EMPL_ID.string' => 'El campo : debe ser de tipo string.', 
             'CLIE_ID.required' => 'El campo : es obligatorio.',
             'CLIE_ID.string' => 'El campo : debe ser de tipo string.',
@@ -62,6 +61,8 @@ class SolicitudRequest extends FormRequest {
             'SOLI_OBSERVACION.required' => 'El campo : es obligatorio.',
             'SOLI_OBSERVACION.string' => 'El campo : debe ser de tipo string.',
             'SOLI_OBSERVACION.max' => 'El campo : no debe ser mayor a 200 caracteres.',
+            'SOLI_FECHAVENCIMIENTO.required' => 'El campo : es obligatorio.',
+            'SOLI_FECHAVENCIMIENTO.date' => 'El campo : debe ser de tipo date.',    
         ];
     }
 }

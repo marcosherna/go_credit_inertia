@@ -105,9 +105,9 @@ const calcularPlazo = (plazo, omitirDomingos) => {
    
     const dd = String(fechaSalida.getDate()).padStart(2, '0');
     const mm = String(fechaSalida.getMonth() + 1).padStart(2, '0'); // Meses comienzan desde 0
-    const yy = String(fechaSalida.getFullYear()).slice(-2);
+    const yy = String(fechaSalida.getFullYear());
 
-    return `${dd}/${mm}/${yy}`;	
+    return `${yy}-${mm}-${dd}`;	
 };
 
 

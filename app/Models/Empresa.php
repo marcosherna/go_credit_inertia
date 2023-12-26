@@ -10,6 +10,9 @@ class Empresa extends Model {
     protected $table = 'empresa';
     protected $primaryKey = 'EMPR_ID';
     public $timestamps = false;
+    public $incrementing = false; // Para indicar que no es autoincremental
+    protected $keyType = 'string'; // Tipo de la clave primaria
+
 
     protected $fillable = [
         'EMPR_ID',
