@@ -21,10 +21,10 @@ class BancoController extends Controller {
         ->orWhere('BANC_DETALLE', 'like', '%'.$this->search.'%') 
         ->orWhereHas('sucursal', function($query){
             $query->where('SUCU_NOMBRE', 'like', '%'.$this->search.'%');
-        })->orWhere('BANC_ID', 'like', '%'.$this->search.'%')
-        ->get();
+        })->orWhere('BANC_ID', 'like', '%'.$this->search.'%')->paginate(10);
+
         return inertia('Banco/ModuloBanco', [
-            'bancos' => $bancos, 
+            'paginate' => $bancos, 
             'sucursales' => Sucursal::select('SUCU_ID', 'SUCU_NOMBRE')->get()
         ]);
     }
@@ -72,5 +72,6 @@ class BancoController extends Controller {
             throw $th;
         }
     }
+
 }
 

@@ -23,6 +23,7 @@ class CreditosPorAprobarController extends Controller {
             ->where('SOLI_FECHAAPROB', '=', null)
             ->where('EMPL_ID', '=', Auth::user()->EMPL_ID)
             ->orWhere('SOLI_ESTADO', '=', 3)
+            ->with('tasaInteres')
             ->paginate(10);
 
             $this->solicitudes->transform(function ($item) {
@@ -38,7 +39,8 @@ class CreditosPorAprobarController extends Controller {
                 $item->garantia->NOMBRE = $item->garantia->GARA_NOMBRE;
 
                 $item->plazo = $item->plazo->PLAZ_NOMBRE;
-                $item->formaPago = $item->formaPago->FORM_NOMBRE;
+                $item->formaPago = $item->formaPago->FORM_NOMBRE; 
+                $item->OBSERVADO = $item->estaObservador();
 
                 return $item;
             });

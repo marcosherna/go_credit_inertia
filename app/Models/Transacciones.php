@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Transacciones extends Model {
     protected $table = 'transacciones';
@@ -18,5 +19,9 @@ class Transacciones extends Model {
 
     public function tipoTransaccion() {
         return $this->belongsTo(TipoTransaccion::class, 'TIPT_ID', 'TIPT_ID');
+    }
+
+    public function insert() {
+        DB::table($this->table)->insert($this->toArray());
     }
 }

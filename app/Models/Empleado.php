@@ -55,4 +55,8 @@ class Empleado extends Model {
     public function empresa() {
         return $this->belongsTo(Empresa::class, 'EMPR_ID', 'EMPR_ID');
     }
+
+    public function nombreCompleto(){
+        return $this->EMPL_NOMBRE . ' ' . $this->EMPL_NOMBRE2 . ' ' . $this->EMPL_APELLIDO . ' ' . $this->EMPL_APELLIDO2;
+    }
 }

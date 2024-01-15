@@ -1,6 +1,9 @@
 import { build, defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue'; 
+import path from 'path';
+
+console.log(path.resolve(__dirname, 'public/assets'));
 
 export default defineConfig({
     plugins: [
@@ -17,6 +20,13 @@ export default defineConfig({
             },
         }), 
     ], 
+    resolve : {
+        alias : {
+            '@assets' : path.resolve(__dirname, 'public/assets'),
+            '@Components' : path.resolve(__dirname, 'resources/js/Components'),
+            '@Services' : path.resolve(__dirname, 'resources/js/Services/index.js'),
+        }
+    },
     server: {
         host: 'localhost',
         port: 5000, 

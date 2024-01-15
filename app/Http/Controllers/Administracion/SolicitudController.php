@@ -49,6 +49,22 @@ class SolicitudController extends Controller{
 
             $soli = Solicitud::where('EMPL_ID', Auth::user()->EMPL_ID)
             ->where('CLIE_ID', $request->CLIE_ID)
+            ->where('SOLI_FECHAVENCIMIENTO', date($request->SOLI_FECHAVENCIMIENTO))
+            ->where('SOLI_MONTO', $request->SOLI_MONTO)
+            ->where('TIPO_ID', $request->TIPO_ID)
+            ->where('GARA_ID', $request->GARA_ID)
+            ->where('PLAZ_ID', $request->PLAZ_ID)
+            ->where('FORM_ID', $request->FORM_ID)
+            ->where('TIPT_ID', $request->TIPT_ID)
+            ->where('TASA_ID', $request->TASA_ID)
+            ->where('SOLI_TIPOTASA', $request->SOLI_TIPOTASA)
+            ->where('SOLI_OMITIRDOM', $request->SOLI_OMITIRDOM)
+            ->where('SOLI_DISPERSAR', $request->SOLI_DISPERSAR)
+            ->where('SOLI_CATEGORIA', $request->SOLI_CATEGORIA)
+            ->where('SOLI_FECHAAPROB', null)
+            ->where('SOLI_OBSERVACION', $request->SOLI_OBSERVACION)
+            ->where('SOLI_CONDICIONES', $request->SOLI_CONDICIONES)
+            ->where('SOLI_OTROS', null)
             ->where('SOLI_ESTADO', '=', 98)->first();
 
             return response()->json($soli);
@@ -95,7 +111,7 @@ class SolicitudController extends Controller{
 
         if($solicitud){
             $solicitud->SOLI_ESTADO = $SOLI_ESTADO;
-            $solicitud->save();
+            $solicitud->save(); 
         }   
 
         return response()->json( $solicitud );
@@ -161,32 +177,32 @@ class SolicitudController extends Controller{
         return $solicitud;
     }
 
-    public function edit(SolicitudRequest $request){
+    public function edit($SOLI_ID, SolicitudRequest $request){
         try {
-            $solictud = Solicitud::where('SOLI_ID', $request->SOLI_ID)->first();
-            $solictud->SOLI_FECHA = $request->SOLI_FECHA;
-            $solictud->EMPL_ID = $request->EMPL_ID;
-            $solictud->CLIE_ID = $request->CLIE_ID;
-            $solictud->SOLI_MONTO = $request->SOLI_MONTO;
-            $solictud->TIPO_ID = $request->TIPO_ID;
-            $solictud->GARA_ID = $request->GARA_ID;
-            $solictud->PLAZ_ID = $request->PLAZ_ID;
-            $solictud->FORM_ID = $request->FORM_ID;
-            $solictud->TIPT_ID = $request->TIPT_ID;
-            $solictud->TASA_ID = $request->TASA_ID;
-            $solictud->SOLI_TIPOTASA = $request->SOLI_TIPOTASA;
-            $solictud->SOLI_OMITIRDOM = $request->SOLI_OMITIRDOM;
-            $solictud->SOLI_DISPERSAR = $request->SOLI_DISPERSAR;
-            $solictud->SOLI_CATEGORIA = $request->SOLI_CATEGORIA;
-            $solictud->SOLI_FECHAAPROB = $request->SOLI_FECHAAPROB;
-            $solictud->SOLI_FECHAVENCIMIENTO = $request->SOLI_FECHAVENCIMIENTO;
-            $solictud->SOLI_OBSERVACION = $request->SOLI_OBSERVACION;
-            $solictud->SOLI_CONDICIONES = $request->SOLI_CONDICIONES;
-            $solictud->SOLI_OTROS = $request->SOLI_OTROS;
-            $solictud->SOLI_ESTADO = $request->SOLI_ESTADO;
-            $solictud->save();
+            $solicitud = Solicitud::where('SOLI_ID', $SOLI_ID)->first();
+            $solicitud->SOLI_FECHA = date($request->SOLI_FECHA);
+            $solicitud->EMPL_ID = $request->EMPL_ID;
+            $solicitud->CLIE_ID = $request->CLIE_ID;
+            $solicitud->SOLI_MONTO = $request->SOLI_MONTO;
+            $solicitud->TIPO_ID = $request->TIPO_ID;
+            $solicitud->GARA_ID = $request->GARA_ID;
+            $solicitud->PLAZ_ID = $request->PLAZ_ID;
+            $solicitud->FORM_ID = $request->FORM_ID;
+            $solicitud->TIPT_ID = $request->TIPT_ID;
+            $solicitud->TASA_ID = $request->TASA_ID;
+            $solicitud->SOLI_TIPOTASA = $request->SOLI_TIPOTASA;
+            $solicitud->SOLI_OMITIRDOM = $request->SOLI_OMITIRDOM;
+            $solicitud->SOLI_DISPERSAR = $request->SOLI_DISPERSAR;
+            $solicitud->SOLI_CATEGORIA = $request->SOLI_CATEGORIA;
+            $solicitud->SOLI_FECHAAPROB = $request->SOLI_FECHAAPROB;
+            $solicitud->SOLI_FECHAVENCIMIENTO = date($request->SOLI_FECHAVENCIMIENTO);;
+            $solicitud->SOLI_OBSERVACION = $request->SOLI_OBSERVACION;
+            $solicitud->SOLI_CONDICIONES = $request->SOLI_CONDICIONES;
+            $solicitud->SOLI_OTROS = $request->SOLI_OTROS;
+            $solicitud->SOLI_ESTADO = $request->SOLI_ESTADO;
+            $solicitud->save();
             
-            return response()->json(true);
+            return response()->json($solicitud);
         } catch (\Throwable $th) {
             return response()->json($th);
         }

@@ -76,9 +76,7 @@ const handlerClose = () => {
                 </div>
 
                 <div class="overflow-x-auto mt-5">
-                    <div v-if="loading" class="w-full flex flex-row justify-center">
-                        <spinner-bars/>
-                    </div>
+                    <spinner-bars :show="loading"/>
                     <table v-if="!loading" class="table-auto w-full">
                         <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
                             <tr>

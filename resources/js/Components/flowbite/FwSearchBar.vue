@@ -4,7 +4,11 @@
 
     defineProps({
         search: String,
-        placeholder:String
+        placeholder:String, 
+        class: {
+            type: String,
+            default: ''
+        }
     });
 
     const emitSearch = defineEmits(['search']);
@@ -33,6 +37,8 @@
     <input  type="text" 
             v-model="search"
             @input="handleSearch" 
+            v-bind="$attrs"
             class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+            :class="class"
             :placeholder="placeholder">
 </template>

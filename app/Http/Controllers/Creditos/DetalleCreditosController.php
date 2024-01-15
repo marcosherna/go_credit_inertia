@@ -3,12 +3,19 @@
 namespace App\Http\Controllers\Creditos;
 
 use App\Http\Controllers\Controller;
-use App\Models\Cliente; 
+use App\Models\Cliente;
+use App\Models\Solicitud;
 use Inertia\Inertia;
 
 class DetalleCreditosController extends Controller {
-    public function index($CLIE_ID) {
+    public function index($CLIE_ID, $SOLI_ID =NULL) {
 
+        $SOLICITUD = NULL;
+        if($SOLI_ID != NULL) {
+            $SOLICITUD = Solicitud::select('*')
+                ->where('SOLI_ID', '=', $SOLI_ID)
+                ->first(); 
+        }
         $Cliente = Cliente::select('*')
             ->where('CLIE_ID', '=', $CLIE_ID)
             ->first(); 
@@ -43,7 +50,8 @@ class DetalleCreditosController extends Controller {
                 'INFORMACIONLABORAL',
                 'INGRESO_ADICIONAL',
                 'CLIE_SCORE'
-            ])
+            ]), 
+            'solicitud' => $SOLICITUD
         ]);
     }
 }

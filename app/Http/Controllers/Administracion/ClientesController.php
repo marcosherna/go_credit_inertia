@@ -49,8 +49,7 @@ class ClientesController extends Controller {
     }
 
 
-    public function create(ClienteRequest $request){
-
+    public function create(ClienteRequest $request){ 
         try {
             $cliente = new Cliente();
             $cliente->CLIE_NOMBRE = $request->CLIE_NOMBRE; 

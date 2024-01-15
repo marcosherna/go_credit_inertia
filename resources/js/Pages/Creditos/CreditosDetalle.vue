@@ -19,12 +19,15 @@ import { ElMessage, ElLoading } from 'element-plus';
 
 const props = defineProps({
     cliente: Object,
+    solicitud: Object,
 })
 
 const form = useForm({
     ...solicitudService.model,
 })
  
+
+console.log(props.solicitud)
 
 
 const loading = ref(false);
@@ -63,6 +66,30 @@ onMounted(async () => {
         formasPago.value = _formasPago;
         tasaInteres.value = _tasaInteres;
         tipoInteres.value = _tipoInteres; 
+
+
+        if (props.solicitud) {
+            isEdit.value = true; 
+            form.SOLI_ID = `${props.solicitud.SOLI_ID}`;
+            form.EMPL_ID = `${props.solicitud.EMPL_ID}`;
+            form.SOLI_MONTO = `${props.solicitud.SOLI_MONTO}`;
+            form.SOLI_CONDICIONES = props.solicitud.SOLI_CONDICIONES; 
+            form.SOLI_OBSERVACION = props.solicitud.SOLI_OBSERVACION;
+            form.SOLI_DISPERSAR = props.solicitud.SOLI_DISPERSAR;
+            form.SOLI_OMITIRDOM = props.solicitud.SOLI_OMITIRDOM;
+            form.TIPO_ID = props.solicitud.TIPO_ID;
+            form.FORM_ID = props.solicitud.FORM_ID;
+            form.PLAZ_ID = props.solicitud.PLAZ_ID;
+            form.TASA_ID = props.solicitud.TASA_ID;
+            form.TIPT_ID = props.solicitud.TIPT_ID;
+            form.GARA_ID = props.solicitud.GARA_ID;
+            form.SOLI_ESTADO = props.solicitud.SOLI_ESTADO;
+            form.SOLI_FECHA = props.solicitud.SOLI_FECHA;
+            form.SOLI_FECHAVENCIMIENTO = props.solicitud.SOLI_FECHAVENCIMIENTO;
+            form.SOLI_CATEGORIA = props.solicitud.SOLI_CATEGORIA;
+            form.SOLI_TIPOTASA = props.solicitud.SOLI_TIPOTASA;
+            form.CLIE_ID = props.solicitud.CLIE_ID;  
+        }
     } catch (error) {
         ElMessage({
             showClose: true,
@@ -126,9 +153,7 @@ const post = async () => {
         model.SOLI_OMITIRDOM = model.SOLI_OMITIRDOM ? 1 : 0;
         model.SOLI_TIPOTASA = 0;
         model.SOLI_FECHAVENCIMIENTO = resourse.calcularPlazo(plazos.value.find(p => p.PLAZ_ID === form.PLAZ_ID).PLAZ_NOMBRE, true);
-        model.SOLI_CATEGORIA = props.cliente.CLIE_CATEGORIA;
-
-        console.log(model)
+        model.SOLI_CATEGORIA = props.cliente.CLIE_CATEGORIA; 
 
         ElLoading.service({ fullscreen: true, text: 'Generando solicitud...', background: 'rgba(0, 0, 0, 0.8)' });
         const _solicitud = await solicitudService.create(model);
@@ -159,8 +184,8 @@ const post = async () => {
 }
 
 
-const onClick = () => {
-    try {
+const onClick = async () => {
+    try { 
         solicitudService.validation(form);
         if (!isEdit.value) {
             const garantia = garantias.value.find(g => g.GARA_ID === form.GARA_ID);
@@ -185,9 +210,15 @@ const onClick = () => {
                 disabledOptionGarantia.value = false;
                 return;
             }
-            post()
+            await post()
             return;
         }
+
+        if(isEdit.value){
+            await onEdit(); 
+            return;
+        }
+
     } catch (error) {
         ElMessage({
             showClose: true,
@@ -199,11 +230,13 @@ const onClick = () => {
 
 
 const onEdit = async () => {  
-    try {
+    try { 
+        console.log(form)
         solicitudService.validation(form);  
-        const model = solicitudService.formToModel(form);
+        const model = solicitudService.formToModel(form); 
+        model.EMPL_ID = form.EMPL_ID;
         model.CLIE_ID = props.cliente.CLIE_ID;
-        model.SOLI_FECHA = new Date().toLocaleDateString();
+        model.SOLI_FECHA = form.SOLI_FECHA;
         model.SOLI_ESTADO = 0;
         model.SOLI_DISPERSAR = model.SOLI_DISPERSAR ? 1 : 0;
         model.SOLI_OMITIRDOM = model.SOLI_OMITIRDOM ? 1 : 0;
@@ -211,14 +244,21 @@ const onEdit = async () => {
         model.SOLI_FECHAVENCIMIENTO = resourse.calcularPlazo(plazos.value.find(p => p.PLAZ_ID === form.PLAZ_ID).PLAZ_NOMBRE, true);
         model.SOLI_CATEGORIA = props.cliente.CLIE_CATEGORIA; 
         ElLoading.service({ fullscreen: true, text: 'Generando solicitud...', background: 'rgba(0, 0, 0, 0.8)' }); 
-        const _solicitud = await solicitudService.edit(model);
-        console.log(_solicitud)  
+        const _solicitud = await solicitudService.edit(model.SOLI_ID,model);   
+
+        ElMessage({
+            showClose: true,
+            message: 'Solicitud editada con exito ',
+            type: 'success'
+        })
+
+        form.reset();
+
         ElLoading.service().close();
 
     } catch (error) {
         if (error.response) {
-            form.errors = error.response.data.errors
-            console.log(error.response)
+            form.errors = error.response.data.errors 
             ElLoading.service().close();
         }
         if (error instanceof Error) {
@@ -232,6 +272,12 @@ const onEdit = async () => {
             ElLoading.service().close();
             return;
         }
+
+        ElMessage({
+            showClose: true,
+            message: 'Algo salio mal al editar la solicitud',
+            type: 'error'
+        })
     }
 
 }
@@ -255,6 +301,7 @@ const onSave = async (data) => {
 const onConfirm = async () => {
     try {
         ElLoading.service({ fullscreen: true, text: 'Generando solicitud...', background: 'rgba(0, 0, 0, 0.8)' });
+        console.log(form.SOLI_ID)
         const response = await solicitudService.changedStatus(form.SOLI_ID, 0); // 0 - Creado
         if (response.SOLI_ESTADO != form.SOLI_ESTADO) {
             ElMessage({
@@ -308,9 +355,7 @@ const onConfirm = async () => {
 
             <div class="border border-gray-200 dark:border-gray-700 md:rounded-lg p-4 px-4 mt-4 md:p-8 mb-6">
                         <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
-                            <div class="text-gray-600"> 
-                                    <!-- component -->
-                                    <!-- This is an example component -->
+                            <div class="text-gray-600">  
                                     <div class="relative"> 
 
                                         <div class="flex"> 
@@ -343,42 +388,12 @@ const onConfirm = async () => {
                                                                     </fw-badge>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <!-- <div class="flex mr-6"> 
-                                                            <div class="p-2 rounded ml-2 hover:bg-blue-100 text-gray-700">
-                                                                <svg class="h-5 w-5 " xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                                    <path fill-rule="evenodd" d="M15 13.442c-.633 0-1.204.246-1.637.642l-5.938-3.463c.046-.188.075-.384.075-.584s-.029-.395-.075-.583L13.3 6.025A2.48 2.48 0 0015 6.7c1.379 0 2.5-1.121 2.5-2.5S16.379 1.7 15 1.7s-2.5 1.121-2.5 2.5c0 .2.029.396.075.583L6.7 8.212A2.485 2.485 0 005 7.537c-1.379 0-2.5 1.121-2.5 2.5s1.121 2.5 2.5 2.5a2.48 2.48 0 001.7-.675l5.938 3.463a2.339 2.339 0 00-.067.546A2.428 2.428 0 1015 13.442z"/>
-                                                                </svg>
-                                                            </div>
-                                                            <div class="p-2 rounded ml-2 hover:bg-blue-100 text-gray-700">
-                                                                <svg class="h-5 w-5 " xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                                    <path fill-rule="evenodd" d="M10.001 7.8a2.2 2.2 0 100 4.402A2.2 2.2 0 0010 7.8zm-7 0a2.2 2.2 0 100 4.402A2.2 2.2 0 003 7.8zm14 0a2.2 2.2 0 100 4.402A2.2 2.2 0 0017 7.8z"/>
-                                                                </svg>
-                                                            </div>
-                                                        </div> -->
+                                                        </div> 
                                                         
                                                     </div>
                                                         <div class="flex overflow-auto">
-                                                        <div class="mr-10" >
-                                                            <!--
-                                                            <div class="w-full px-2 hover:bg-blue-100 py-2 text-2xl font-semibold">
-                                                                {{ `Score / ${cliente.CLIE_SCORE}`  }}
-                                                            </div> -->
+                                                        <div class="mr-10" > 
                                                             <div class="flex mt-1">   
-                                                                <!--<div  class="flex py-1 px-3 mr-2 cursor-pointer bg-gray-200 hover:bg-gray-300 rounded">
-                                                                    <svg class="h-5 w-5 text-gray-700" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.602 19.8c-1.293 0-2.504-.555-3.378-1.44-1.695-1.716-2.167-4.711.209-7.116l9.748-9.87c.988-1 2.245-1.387 3.448-1.06 1.183.32 2.151 1.301 2.468 2.498.322 1.22-.059 2.493-1.046 3.493l-9.323 9.44c-.532.539-1.134.858-1.738.922-.599.064-1.17-.13-1.57-.535-.724-.736-.828-2.117.378-3.337l6.548-6.63c.269-.272.705-.272.974 0s.269.714 0 .986l-6.549 6.631c-.566.572-.618 1.119-.377 1.364.106.106.266.155.451.134.283-.029.606-.216.909-.521l9.323-9.439c.64-.648.885-1.41.69-2.145a2.162 2.162 0 00-1.493-1.513c-.726-.197-1.48.052-2.12.7l-9.748 9.87c-1.816 1.839-1.381 3.956-.209 5.143 1.173 1.187 3.262 1.629 5.079-.212l9.748-9.87a.683.683 0 01.974 0 .704.704 0 010 .987L9.25 18.15c-1.149 1.162-2.436 1.65-3.648 1.65z"/></svg>
-                                                                    <div  class="ml-2 text-sm text-gray-700  font-normal antialiased tracking-normal">
-                                                                        Hitorial
-                                                                    </div>
-                                                                </div> 
-
-                                                                
-                                                                <div class="flex py-1 px-3 mr-1 cursor-pointer bg-gray-200 hover:bg-gray-300 rounded">
-                                                                    <svg class="h-5 w-5 text-gray-700" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.859 14.691l-.81.805a1.814 1.814 0 01-2.545 0 1.762 1.762 0 010-2.504l2.98-2.955c.617-.613 1.779-1.515 2.626-.675a.992.992 0 101.397-1.407c-1.438-1.428-3.566-1.164-5.419.675l-2.98 2.956A3.719 3.719 0 002 14.244a3.72 3.72 0 001.108 2.658c.736.73 1.702 1.096 2.669 1.096s1.934-.365 2.669-1.096l.811-.805a.988.988 0 00.005-1.4.995.995 0 00-1.403-.006zm9.032-11.484c-1.547-1.534-3.709-1.617-5.139-.197l-1.009 1.002a.99.99 0 101.396 1.406l1.01-1.001c.74-.736 1.711-.431 2.346.197.336.335.522.779.522 1.252s-.186.917-.522 1.251l-3.18 3.154c-1.454 1.441-2.136.766-2.427.477a.99.99 0 10-1.396 1.406c.668.662 1.43.99 2.228.99.977 0 2.01-.492 2.993-1.467l3.18-3.153A3.732 3.732 0 0018 5.866a3.726 3.726 0 00-1.109-2.659z"/></svg>
-                                                                    <div class="ml-2 text-sm text-gray-700  font-normal antialiased tracking-normal">
-                                                                        Referencias
-                                                                    </div>
-                                                                </div> -->
                                                             </div>
                                                             <div class="items-center py-1 mt-5 mb-1 text-sm font-medium text-gray-800">
                                                                 Direccion
@@ -506,10 +521,7 @@ const onConfirm = async () => {
                             </div>
 
                         <div class="lg:col-span-2 md:pl-4"> 
-
-                            <div v-if="loading" class="h-full flex justify-center items-center">
-                                <spinner-bars/>
-                            </div>
+                                <spinner-bars class="flex  w-full justify-center" :show="loading"/>
                             <div v-if="!loading" class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">  
                                 <div class="md:col-span-2">
                                     <fw-select label="Tipo Credito"

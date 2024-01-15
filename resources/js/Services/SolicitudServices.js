@@ -196,11 +196,26 @@ const searchSolicitud = async ( query ) => {
 
 const edit = async (id, body) => {
     try {
-        const response = await axios.put(route('solicitud.edit-resource'),{id:id},body);
+        const response = await axios.put(route('solicitud.edit-resource', {id:id}), body);
         return response.data;
     } catch (error) {
         throw error;
     }
+}
+
+const observar = async (observaciones) => {
+    try {
+        const response = await axios.put(route('creditos-por-aprobar-observar-credito'), observaciones);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw  new Error('Error al observar la solicitud');
+    }
+}
+
+const navEditPage = (CLIE_ID, SOLI_ID) => {
+    router.visit(route('detalle-creditos-layout', { CLIE_ID: CLIE_ID, SOLI_ID: SOLI_ID })) 
+
 }
 
 export default {
@@ -218,5 +233,7 @@ export default {
     create, 
     searchSolicitud,
     edit, 
-    estado
+    estado, 
+    observar, 
+    navEditPage
 };

@@ -21,11 +21,11 @@ class ChequeraController extends Controller {
     public function index() { 
         $chequeras = Chequera::with('cuentaBanco.banco:BANC_ID,BANC_NOMBRE') 
             ->orderBy('CHEQ_ID', 'desc')
-            ->get();
+            ->paginate(10);
             
         return Inertia::render('Banco/Chequera', [
             'cuentasBanco' => CuentaBanco::select('CUEB_NUMERO', 'BANC_ID')->with('banco:BANC_ID,BANC_NOMBRE')->get(),
-            'chequeras' => $chequeras,
+            'paginate' => $chequeras,
         ]);
     }
 

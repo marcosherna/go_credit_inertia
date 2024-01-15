@@ -24,6 +24,8 @@
         "chart.js": "^4.4.0",
         "element-plus": "^2.4.2",
         "flowbite": "^2.1.1",
+        "html2pdf.js": "^0.10.1",
+        "jspdf": "^2.5.1",
         "n2words": "^1.18.0",
         "pdfmake": "^0.2.8",
         "vue-chartjs": "^5.2.0"

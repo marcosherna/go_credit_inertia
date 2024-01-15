@@ -30,6 +30,14 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+
+            Route::middleware(['web','auth:sanctum',config('jetstream.auth_session'),'verified','flash'])
+                ->prefix('administrar')
+                ->group(base_path('routes/web/administrar/caja.php'));
+
+            Route::middleware(['web','auth:sanctum',config('jetstream.auth_session'),'verified','flash'])
+                ->prefix('contabilidad')
+                ->group(base_path('routes/web/contabilidad/banco.php'));
         });
     }
 

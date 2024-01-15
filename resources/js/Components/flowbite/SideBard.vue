@@ -8,9 +8,7 @@ defineProps({
     DropdownNav,
     DropdownNavItem
 })
-
-const showModal = ref(false)
-
+ 
 </script> 
 
 <template lang="">

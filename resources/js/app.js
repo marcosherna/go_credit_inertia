@@ -1,5 +1,8 @@
 import './bootstrap';
-import '../css/app.css';
+import '../css/app.css';  
+import '../css/transition.min.css';
+import '../css/loading.min.css'
+
 
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
@@ -13,13 +16,13 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')), 
     setup({ el, App, props, plugin }) { 
         return createApp({ render: () => h(App, props) })
             .use(plugin) 
             .use(ElementPlus)
-            .use(ZiggyVue, Ziggy) 
-            .mount(el)
+            .mixin({ methods: { appRoute:route } }) 
+            .mount(el) /**.use(ZiggyVue, Ziggy) */
     },
     progress: {
         color: '#4B5563',

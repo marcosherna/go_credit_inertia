@@ -36,7 +36,7 @@ class Solicitud extends Model
         'SOLI_OBSERVACION',
         'SOLI_CONDICIONES',
         'SOLI_OTROS',
-        'SOLI_ESTADO',
+        'SOLI_ESTADO', // Estado Solicitud. 0-Creada 1-Aprobada 2-Rechazada 3-Cancelada 4-CreditoAbierto 5-Finalizada 6-Desembolsada
     ];
 
     public function empleado() {
@@ -75,5 +75,58 @@ class Solicitud extends Model
     public function Insert(){ 
         // insertar y devolver el id
         return DB::table($this->table)->insert($this->toArray());
+    }
+
+    public function montoMasInteres() {
+        return doubleval($this->SOLI_MONTO) + ((doubleval($this->tasaInteres->TASA_VALOR) / 100) * $this->SOLI_MONTO);
+    }
+
+    public function cantidadCuotas() { 
+        $cuotas = intval($this->plazo->PLAZ_VALOR) / intval($this->formaPago->FORM_VALOR); 
+        return round($cuotas);
+    }
+    
+    public function montoCuota() {
+        return $this->montoMasInteres() / $this->cantidadCuotas();
+    }
+
+    public function cuotas(){
+        $cuotas = $this->hasMany(Cuotas::class, 'SOLI_ID', 'SOLI_ID')->get(); 
+        $cuotas->transform(function ($item) { 
+            $item->ESTADO = $item->estado();
+            $item->DIAS_VENCIDOS = $item->diasVencidos();
+            return $item;
+        });
+        return $cuotas;
+    }
+
+    public function estaObservador (){
+        $result = false;
+        if (strpos($this->SOLI_OBSERVACION, '[OBSERVADO]-') !== false) {
+            $result =  true;
+        }
+        return $result;
+    }
+
+
+    public function interesReal(){
+        $interes = 0;
+
+        switch($this->tasaInteres->getTasa()){
+            case 'Unica':
+                $interes = ($this->tasaInteres->TASA_VALOR / 100);
+                break;
+            case 'Mensual':
+                $interes = ($this->tasaInteres->TASA_VALOR * ($this->plazo->PLAZ_VALOR / 30)) / 100; 
+                break;
+            case 'Anual':
+                $interes = ((($this->tasaInteres->TASA_VALOR / 12) * ($this->plazo->PLAZ_VALOR / 30)) / 100); 
+                break;
+            default: 
+                $interes = ($this->tasaInteres->TASA_VALOR / 100);
+                break;
+        }
+
+        return $interes;
     }
 }

@@ -1,0 +1,65 @@
+import { router } from "@inertiajs/vue3";
+import axios from "axios";
+import { ElMessage } from "element-plus";
+
+const allCreditos = async () => {
+    try {
+        const response = await axios.get(route('aplicar-pagos.all-creditos'));
+        return response.data;
+    } catch (error) {
+        ElMessage({
+            showClose: true,
+            message: "Error al cargar los creditos",
+            type: "error",
+        })      
+    }
+}
+
+const search = async (query) => {
+    try {
+        const response = await axios.get(route('aplicar-pagos.search', {query: query}));
+        return response.data;
+    } catch (error) {
+        ElMessage({
+            showClose: true,
+            message: "Error al cargar los creditos",
+            type: "error",
+        });
+    }
+}
+
+const detealleCredito = async (id) => {
+    try {
+        const response = await axios.get(route('aplicar-pagos.detalle-credito', {ID_CREDITO: id}));
+        return response.data;
+    } catch (error) {
+        ElMessage({
+            showClose: true,
+            message: "Error al cargar el credito",
+            type: "error",
+        });
+    }
+}
+
+
+const getById = async (id) => {
+    try {
+        const response = await axios.get(route('aplicar-pagos.obtenerPorId', {ID_CREDITO: id}));
+        return response.data;
+    } catch (error) {
+        ElMessage({
+            showClose: true,
+            message: "Error al cargar el credito",                
+            type: "error",
+        })
+    }
+}
+
+
+
+export default {
+    allCreditos,
+    search, 
+    detealleCredito,
+    getById
+}

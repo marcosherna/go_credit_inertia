@@ -32,6 +32,7 @@ class CreditosPorProcesarController extends Controller {
 
                 $item->plazo = $item->plazo->PLAZ_NOMBRE;
                 $item->formaPago = $item->formaPago->FORM_NOMBRE;
+                
 
                 return $item;
             });
@@ -39,6 +40,17 @@ class CreditosPorProcesarController extends Controller {
         return Inertia::render('Creditos/SolicitudPorProcesar',[
             'response' => $this->solicitudes, 
             'count' => $this->solicitudes->count(),
+        ]);
+    }
+
+    public function observarCredito(Request $request){
+        $solicitud = Solicitud::find($request->SOLI_ID);
+        $solicitud->SOLI_OBSERVACION = $request->SOLI_OBSERVACION;
+        $solicitud->SOLI_ESTADO = 0;
+        $solicitud->save();
+        return response()->json([
+            'message' => 'Solicitud observada con exito',
+            'status' => 200
         ]);
     }
 }

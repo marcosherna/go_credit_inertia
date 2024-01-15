@@ -1,7 +1,18 @@
 <script setup>
+defineProps({
+    show:{
+        type: Boolean,
+        default: false
+    },
+    class:{
+        type: String,
+        default: 'w-full h-full flex justify-center items-center'
+    }
+})
 </script> 
 <template>
-    <svg width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <div v-if="show" :class="class">
+        <svg width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <rect x="1" y="6" width="2.8" height="12" fill="green">
             <animate id="spinner_CcmT" begin="0;spinner_IzZB.end-0.1s" attributeName="y" calcMode="spline" dur="0.6s"
                 values="6;1;6" keySplines=".36,.61,.3,.98;.36,.61,.3,.98" />
@@ -33,4 +44,5 @@
                 keySplines=".36,.61,.3,.98;.36,.61,.3,.98" />
         </rect> 
     </svg>
+    </div>
 </template>

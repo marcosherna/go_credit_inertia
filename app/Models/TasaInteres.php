@@ -29,4 +29,5 @@ class TasaInteres extends Model {
         ];
         return $tipos[$this->TASA_TIPO];
     }
+ 
 }

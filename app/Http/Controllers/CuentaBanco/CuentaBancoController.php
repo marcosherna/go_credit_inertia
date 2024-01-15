@@ -20,7 +20,7 @@ class CuentaBancoController extends Controller {
     public function index() { 
         $cuentasBanco = CuentaBanco::with('banco:BANC_ID,BANC_NOMBRE',
             'tipoCuenta:TIPO_ID,TIPO_NOMBRE',
-            'cuentaSucursal:CUEN_ID,CUEN_NOMBRE')->get(); 
+            'cuentaSucursal:CUEN_ID,CUEN_NOMBRE')->paginate(10); 
           
         $cuentasSucursales = CuentaSucursal::select('CUEN_ID','CUEN_NOMBRE','SUCU_ID')
             ->with('sucursal:SUCU_ID,SUCU_NOMBRE')
@@ -31,7 +31,7 @@ class CuentaBancoController extends Controller {
 
 
         return Inertia::render('Banco/CuentaBanco', [
-            'cuentaBancos' => $cuentasBanco,
+            'paginate' => $cuentasBanco,
             'tiposCuenta' => TipoCuenta::select('TIPO_ID','TIPO_NOMBRE')->where('TIPO_ESTADO', 1)->get(),
             'cuentasSucursales' => $cuentasSucursales,
             'bancos' => $bancos 

@@ -1,139 +1,322 @@
 <script setup>
-import ModuloCajaLayout from './partials/ModuloCajaLayout.vue';
+import ModuloCajaLayout from '@/Pages/Administracion/partials/ModuloCajaLayout.vue';
+import {
+    FwTable, FwBadge, FwButton, FwModal,
+    FwInput, FwTextArea, FwSelect, FwRadioCheckbox,
+    FwSearchBar, FwButtonDropdown
+} from '@Components/flowbite/index';
+import { CCardIndicator } from '@Components/Customs/index';
+import { SpinnerBars } from '@Components/spinners/index.js';
+import { aplicarPagoService } from '../../Services/index.js';
+import { FolderOpened, DocumentAdd, ElemeFilled, 
+    Ticket, Flag, Briefcase, Notification, DataLine, Wallet} from '@element-plus/icons-vue'
+import { ref } from 'vue';
+import { ElLoading, ElMessage } from 'element-plus';   
 
+const modal = ref(false);
+const loading = ref(false);
+const loadingTable = ref(false);
+const creditos = ref([]);
+const txtSearch = ref('');
+const CREDIT_ID = ref('');
+const credito = ref(null);
+
+const data = async () => {
+    try {
+        const response = await aplicarPagoService.allCreditos();
+        creditos.value = response;
+    } catch (error) {
+        ElLoading.value = false
+        ElMessage({
+            showClose: true,
+            message: 'Algo salio mal, intente nuevamente',
+            type: 'error'
+
+        })
+    }
+}
+
+const handleModal = async () => {
+    modal.value = !modal.value;
+    loading.value = true;
+    await data();
+    loading.value = false;
+
+};
+
+const onSearch = async () => {
+    try {
+        if (txtSearch.value == '') {
+            await data();
+            return;
+        };
+
+        loading.value = true;
+        const response = await aplicarPagoService.search(txtSearch.value);
+        creditos.value = response;
+        console.log(response);
+        loading.value = false;
+
+    } catch (error) {
+        loading.value = false;
+        ElMessage({
+            showClose: true,
+            message: 'Algo salio mal, intente nuevamente',
+            type: 'error'
+        })
+    }
+};
+
+const getById = async (ID_CREDITO) => {
+    try {
+        loadingTable.value = true;
+        const response = await aplicarPagoService.getById(ID_CREDITO);
+        console.log(response);
+        loadingTable.value = false;
+    } catch (error) {
+        loadingTable.value = false;
+        ElMessage({
+            showClose: true,
+            message: 'Algo salio mal, intente nuevamente',
+            type: 'error'
+        })  
+    }
+}
+
+const clickSearch = async () => {
+
+    try {
+        if(CREDIT_ID.value ==  '') throw new Error('Digite el Id del credito')
+        if(!parseInt(CREDIT_ID.value)) throw new Error('El Id del credito debe ser un numero')
+
+        await getById(CREDIT_ID.value);
+
+    } catch (error) {
+        loadingTable.value = false;
+        ElMessage({
+            showClose: true, 
+            message : error.message ? error.message : 'Algo salio mal, intente nuevamente',
+            type: 'error'
+        })
+    }
+    console.log(CREDIT_ID.value);
+}
+
+const seleccionCredito = async (creditoSeleccionado) => {
+    try {
+        modal.value = false;
+        loadingTable.value = true;
+        const _credito = await aplicarPagoService.detealleCredito(creditoSeleccionado.SOLI_ID);
+        credito.value = _credito;
+        console.log(_credito);
+        loadingTable.value = false;
+    } catch (error) {
+        modal.value = false;
+        credito.value = null;
+        loadingTable.value = false;
+        ElMessage({
+            showClose: true,
+            message: 'Algo salio mal, intente nuevamente',
+            type: 'error'
+        })
+    }
+} 
 </script>
 <template> 
-    <modulo-caja-layout> 
-        <div class="w-full h-screen  ">
-            <div class="flex">
-                <h1 class="text-3xl font-bold mb-4 w-full">Pagar</h1>
-            </div>
+    <modulo-caja-layout>  
 
-            <div class="flex">
-                <div class="mr-16 w-full">
+        <h2 class="pb-5">Pago de Creditos</h2>
 
-                    <!-- <div class="mb-4">
-                        <label for="location" class="mr-2">Select Location:</label>
-                        <select id="location"  class="lign-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 px-4 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none">
-                            <option value="US" selected>US</option>
-                            <option value="EU">EU</option>
-                        </select>
-                    </div> 
-                    <div class="mb-4">
-                        <label for="frequency" class="mr-2">Frequency:</label>
-                        <select id="frequency"  class="lign-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 px-4 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none">
-                            <option value="daily">Daily</option>
-                            <option value="weekly">Weekly</option>
-                            <option value="monthly">Monthly</option>
-                            <option value="quarterly">Quarterly</option>
-                            <option value="yearly">Yearly</option>
-                        </select>
-                    </div>--> 
-                    <div class="mb-4">
-                        <label for="duration" class="mr-2">Cuota</label>
-                        <select id="duration"  class="lign-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 px-4 rounded-lg bg-green-300 text-white shadow-md shadow-green-300 hover:shadow-lg hover:shadow-green-300 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none">
-                            <option value="0.25">Cuota 1</option>
-                            <option value="0.5">Cuota 2</option>
-                            <option value="0.75">Cuota 3</option> 
-                        </select>
+        <div class="relative flex">
+            <fw-search-bar v-model="CREDIT_ID" v-on:keyup.enter="clickSearch" 
+                class="w-full" 
+                placeholder="Buscar..." />
+            <fw-button :disabled="!(CREDIT_ID.length > 0)" class="mx-2" type="button" v-on:click="clickSearch">
+                Buscar
+            </fw-button>
+            <fw-button type="button" v-on:click="handleModal">
+                <el-icon size="17">
+                    <DocumentAdd />
+                </el-icon>
+            </fw-button>
+        </div> 
+        <el-empty v-if="!(credito != null) && !loadingTable" description="Selecciona un credito" />
+        <spinner-bars class="flex justify-center items-center h-72" :show="loadingTable" />
+        <div v-if="credito != null && !loadingTable" class="bg-gray-50 py-5"> 
+            <div class="w-full ">
+                <div class="md:flex items-start">
+                    <div class="px-5 py-6 md:w-6/12 border border-gray-200 rounded-lg">
+
+                        <!-- component --> 
+                        <div class="bg-white ">   
+                            <div class="p-4">
+                                <p class="tracking-wide text-sm font-bold text-gray-700"> .CREDITO No. {{ credito.SOLI_ID }}</p>
+                                <p class="text-3xl text-gray-900">${{ credito.SOLI_MONTO }}</p>
+                                <p class="text-gray-700"> 
+                                    No. {{ credito.CLIENTE.CLIE_ID }}
+                                    {{ credito.CLIENTE.NOMBRE_COMPLETO }}</p>
+                            </div>
+                            <div class="flex p-4 border-t border-gray-300 text-gray-700">
+                                <div class="flex-1 inline-flex items-center">
+                                    <el-icon size="24">
+                                        <Notification />
+                                    </el-icon>
+                                    <p><span class="pl-2 text-gray-900 font-bold">${{ +credito.MONTO_CUOTA.toFixed(2) }}</span> Cuota</p>
+                                </div>
+                                <div class="flex-1 inline-flex items-center">
+                                    <el-icon size="22"><DataLine /></el-icon>
+                                    <p><span class="pl-2 text-gray-900 font-bold">{{ credito.CANTIDAD_CUOTAS }}</span> Cuotas</p>
+                                </div> 
+                            </div>
+
+                            <div class="flex p-4 border-t border-gray-300 text-gray-700">
+                                <div class="flex-1 inline-flex items-center">
+                                    <el-icon size="22"><Wallet /></el-icon>
+                                    <p><span class="pl-2 text-gray-900 font-bold">Aprobado </span>{{ credito.SOLI_FECHAAPROB }}</p>
+                                </div> 
+                            </div>
+
+                            
+                            <div class="flex p-4 border-t border-gray-300 text-gray-700">
+                                <div class="flex-1 inline-flex items-center">
+                                    <el-icon size="24">
+                                        <Notification />
+                                    </el-icon>
+                                    <p><span class="pl-2 text-gray-900 font-bold">15%</span> Interes</p>
+                                </div>
+                                <div class="flex-1 inline-flex items-center">
+                                    <el-icon size="22"><DataLine /></el-icon>
+                                    <p><span class="pl-2 text-gray-900 font-bold">${{ credito.MONTO_TOTAL }}</span> Total</p>
+                                </div> 
+                            </div>
+
+
+                            <div class="px-4 pt-3 pb-4 border-t border-gray-300 bg-gray-100">
+                                <div class="text-xs uppercase font-bold text-gray-600 tracking-wide">Aproba por</div>
+                                <div class="flex items-center pt-2"> 
+                                    <div>
+                                        <p class="font-bold text-gray-900">{{ credito.EMPLEADO.NOMBRE_COMPLETO }}</p> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="px-3 md:w-6/12">
+                        <div
+                            class="w-full mx-auto rounded-lg bg-white border border-gray-200 text-gray-800 font-light mb-6">
+                            <div class="w-full p-3 border-b border-gray-200">
+                                <div>
+                                    <div class="mb-3">
+                                        <label class="text-gray-600 font-semibold text-sm mb-2 ml-1">Referencia</label>
+                                        <div>
+                                            <input
+                                                class="w-full px-3 py-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                                                placeholder="0000" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="text-gray-600 font-semibold text-sm mb-2 ml-1">Cantidad a
+                                            Abonar</label>
+                                        <div>
+                                            <input
+                                                class="w-full px-3 py-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                                                placeholder="00.00" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="text-gray-600 font-semibold text-sm mb-2 ml-1">Total recivido</label>
+                                        <div>
+                                            <input
+                                                class="w-full px-3 py-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                                                placeholder="0000" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 -mx-2 flex items-end">
+                                        <div class="px-2 w-1/4">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full p-3 text-right">
+                                <fw-button>Aplicar Pago</fw-button>
+                            </div>
+
+                        </div>
+                        <div>
+                        </div>
                     </div>
                 </div>
-                <!-- <div class="flex flex-col justify-end space-2 w-full">
-                    <h2 class="text-2xl mb-4"> Use Template </h2>
-                    <button class="py-2 px-4 bg-red-100 text-red-500 font-medium rounded-md mb-4">Daily Stand-up</button>
-                    <button class="py-2 px-4 bg-red-100 text-red-500 font-medium rounded-md mb-4">Weekly Sync</button>
-                    <button class="py-2 px-4 bg-red-100 text-red-500 font-medium rounded-md mb-4">Monthly Review</button>
-                    <button class="py-2 px-4 bg-red-100 text-red-500 font-medium rounded-md mb-4">Quarterly Planning</button>
-                </div> -->
-                
             </div>
+        </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-200">
-                            <th class="border-y border-gray-100 bg-gray-50/50 p-2">Job Title</th>
-                            <th class="border-y border-gray-100 bg-gray-50/50 p-2">Hourly Rate</th>
-                            <th class="border-y border-gray-100 bg-gray-50/50 p-2">Attendees</th>
-                            <th class="border-y border-gray-100 bg-gray-50/50 p-2">Total Cost</th>
-                            <th class="border-y border-gray-100 bg-gray-50/50 p-2">Action</th>
+    </modulo-caja-layout>
+
+    <fw-modal :show="modal" v-on:close="modal = false">
+        <template #header>
+            Buscar Creditos
+        </template>
+
+        <template #body>
+            <div class="px-5">
+                <div class="relative flex py-4">
+                    <fw-search-bar v-model="txtSearch" v-on:keyup.enter="onSearch" class="w-full" placeholder="Buscar..." />
+                    <fw-button class="ml-3" type="button">Buscar</fw-button>
+                </div>
+                <div class="overflow-x-auto mt-5 pb-4">
+
+                    <spinner-bars :show="loading" />
+
+                    <table v-if="!loading" class="table-auto w-full">
+                        <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+                            <tr>
+                                <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-left">ID</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-left">CLIENTE</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-left">DUI</div>
+                                </th>
+
+                            <th class="p-2 whitespace-nowrap">
+                                <div class="font-semibold text-center">Acciones</div>
+                            </th>
                         </tr>
                     </thead>
-                    <tbody id="attendees-list">
-                        <!-- Initial attendees -->
-                        <tr>
-                            <td class="border border-gray-300 px-4 py-2">
-                                <select   class="p-2 rounded border bg-white">
-                                    <option value="Developer">Developer</option>
-                                    <option value="DevOps">DevOps</option>
-                                    <option value="QA">QA</option>
-                                    <option value="Designer">Designer</option>
-                                    <option value="Marketer">Marketer</option>
-                                    <option value="Product Manager">Product Manager</option>
-                                    <option value="Head of department">Head of department</option>
-                                    <option value="VP">VP</option>
-                                    <option value="C-Level executive">C-Level executive</option>
-                                </select>
+
+                    <tbody class="text-sm divide-y divide-gray-100">
+
+                        <tr v-for="(c, index) in creditos">
+                            <td class="p-2 whitespace-nowrap">
+                                {{ c.SOLI_ID }}
                             </td>
-                            <td class="border border-gray-300 px-4 py-2">
-                                <input type="number"  class="p-2 rounded border hourly-rate" value="75">
+                            <td class="p-2 whitespace-nowrap">
+                                <div class="flex flex-col justify-center">
+                                    <div class="font-medium text-gray-800">{{ c.CLIENTE.NOMBRE }}</div>
+                                    <div class="text-left">DUI: {{ c.CLIENTE.DUI }}</div>
+                                </div>
                             </td>
-                            <td class="border border-gray-300 px-4 py-2">
-                                <input type="number"   value="1" class="p-2 rounded border attendees-count">
+
+                            <td class="p-2 whitespace-nowrap">
+                                <div class="text-left font-medium text-green-500">${{ c.MONTO }}</div>
                             </td>
-                            <td class="border border-gray-300 px-4 py-2">
-                                <input type="number" readonly disabled class="p-2 rounded border total-cost">
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2">
-                                <button   class="p-2 text-red-600 ">
-                                    <svg class="w-6 h-6 " stroke="currentColor" fill="none"  xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
-                                    <path d="M 10 2 L 9 3 L 4 3 L 4 5 L 5 5 L 5 20 C 5 20.522222 5.1913289 21.05461 5.5683594 21.431641 C 5.9453899 21.808671 6.4777778 22 7 22 L 17 22 C 17.522222 22 18.05461 21.808671 18.431641 21.431641 C 18.808671 21.05461 19 20.522222 19 20 L 19 5 L 20 5 L 20 3 L 15 3 L 14 2 L 10 2 z M 7 5 L 17 5 L 17 20 L 7 20 L 7 5 z M 9 7 L 9 18 L 11 18 L 11 7 L 9 7 z M 13 7 L 13 18 L 15 18 L 15 7 L 13 7 z"></path>
-                                    </svg>
-                                </button>
-                                
+                            <td class="p-2 whitespace-nowrap text-center">
+
+                                <el-tooltip class="box-item" effect="dark" content="Precione Para Seleccionar"
+                                    placement="left">
+                                    <el-icon size="17" v-on:click="seleccionCredito(c)">
+                                        <FolderOpened />
+                                    </el-icon>
+                                </el-tooltip>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="flex w-2/3 justify-center mx-auto mt-8">
-                <div>
-                    <button   class="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 px-4 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none flex items-center gap-3 mt-4" type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" stroke-width="2" class="h-4 w-4"><path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"></path></svg> 
-                        Add Attendee
-                    </button>
-                </div>
-                <div class="flex w-full justify-end">
-                    <div class="col-span-9 sm:col-span-6 md:col-span-3">
-                        <div class="flex flex-row bg-white shadow-sm rounded p-4">
-                            <div class="flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-red-100 text-red-500">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <div class="flex flex-col flex-grow ml-4">
-                                <div class="text-sm text-gray-500">Cost per Meeting</div>
-                                <div class="font-bold text-lg">$<span id="meeting-total">0.00</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-span-12 sm:col-span-6 md:col-span-3">
-                        <div class="flex flex-row bg-white shadow-sm rounded p-4">
-                            <div class="flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-red-100 text-red-500">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <div class="flex flex-col flex-grow ml-4">
-                                <div class="text-sm text-gray-500">Yearly cost</div>
-                                <div class="font-bold text-lg">$<span id="yearly-cost-result">0.00</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div> 
-            <div class="w-full pt-5 px-4 mb-8 mx-auto text-center ">
-                <div class="text-sm text-gray-700 py-1">
-                    Made with <a href="https://chat.openai.com/g/g-8gGyAPc6i-material-tailwind-gpt" class="text-gray-6 hover:text-gray-800 font-bold" target="_blank">MT GPT</a> based on <a href="https://www.material-tailwind.com" class="text-gray-500 hover:text-gray-800 font-bold" target="_blank"> Material Tailwind Framework</a>.
-                </div>
-            </div>
         </div>
-    </modulo-caja-layout> 
-</template>
+    </template>
+</fw-modal></template>
