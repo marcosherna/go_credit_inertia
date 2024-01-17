@@ -1,8 +1,8 @@
 <script setup>  
-import { FwBadge } from '../../../Components/flowbite';
-import { Link } from '@inertiajs/vue3'; 
-import CDropDown from './CDropDownProcesar.vue';
+import { FwBadge } from '@Components/flowbite'
+import { Link } from '@inertiajs/vue3';  
 import { solicitudService } from '../../../Services';
+import CDropDown from '@/Pages/Creditos/partials/CDropDownProcesar.vue';
 
 const props = defineProps({
     items: {
@@ -18,8 +18,7 @@ const props = defineProps({
 </script> 
 
 
-<template>
-    
+<template> 
     <div class="flex flex-col mt-6">
         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">

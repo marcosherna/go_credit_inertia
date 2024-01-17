@@ -4,7 +4,7 @@ import {
     FwTable, FwBadge, FwButton, FwModal,
     FwInput, FwTextArea, FwSelect, FwRadioCheckbox,
     FwSearchBar, FwButtonDropdown
-} from '../../Components/flowbite/index';
+} from '@Components/flowbite'
 import controller from './partials/ClienteController.js';
 import { useForm, router, Link, usePage } from '@inertiajs/vue3';
 import { defineProps, ref, onMounted } from 'vue';

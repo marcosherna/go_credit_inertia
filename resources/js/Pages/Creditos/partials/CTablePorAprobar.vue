@@ -1,6 +1,6 @@
 <script setup>
 import { solicitudService as solicitudServices } from './../../../Services/index.js';
-import { FwBadge, FwModal, FwButton } from '../../../Components/flowbite';
+import { FwBadge, FwModal, FwButton } from '@Components/flowbite'
 import { Link, router, usePage } from '@inertiajs/vue3';
 import CDropDown from './CDropDown.vue';
 import { ref, onMounted } from 'vue';

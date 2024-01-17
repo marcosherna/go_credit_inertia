@@ -79,8 +79,7 @@ const handlerAnimation = async () => {
                 </div>
 
                 <div class="md:col-span-1">
-                    <fw-input label="Cantidad Recibida" placeholder="" />
-
+                    <fw-input label="Cantidad Recibida" placeholder="" />  
                 </div>
 
                 <div class="md:col-span-2">

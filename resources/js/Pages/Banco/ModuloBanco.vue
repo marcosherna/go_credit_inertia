@@ -8,7 +8,7 @@ import {
     SearchBar, Table,
     ButtomToggleModal, PlusIcon,
     FwSkeleton, FwSearchBar
-} from '../../Components/flowbite/index.js';
+} from '@Components/flowbite'
 
 import { CPagination } from '@Components/Customs';
 

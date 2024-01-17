@@ -4,7 +4,8 @@ import CTablePorAprobar from './partials/CTablePorAprobar.vue';
 import CSearchBar from './partials/CSearchBar.vue';
 
 import { ref } from 'vue';
-import { FwModal, FwInput, FwSelect, FwButton, FwTextArea, FwRadioCheckbox } from '../../Components/flowbite';
+import { FwModal, FwInput, FwSelect, FwButton,
+     FwTextArea, FwRadioCheckbox } from '@Components/flowbite'
 
 import { ElNotification, ElLoading, ElMessage } from 'element-plus'
 import { useForm, usePage } from '@inertiajs/vue3';

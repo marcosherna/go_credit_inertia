@@ -4,7 +4,7 @@ import referencias from './Referencias.vue';
 import garantias from './Garantias.vue';
 import { Delete } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
-import { FwButton } from '../../../Components/flowbite';
+import { FwButton } from '@Components/flowbite'
  
 const lstReferencias = ref([]);
 const lstGarantias = ref([]);

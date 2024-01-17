@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { referenciasService } from '../../../Services/index.js';
 import { ElLoading, ElMessage } from 'element-plus';
-import { FwInput, FwSelect, FwTextArea, FwButton } from '../../../Components/flowbite/index.js';
+import { FwInput, FwSelect, FwTextArea, FwButton } from '@Components/flowbite'
 import { useForm } from '@inertiajs/vue3';
 
 defineProps({

@@ -2,7 +2,8 @@
 import { defineProps, ref } from 'vue';
 import ModuloContableLayout from './Partials/ModuloContableLayout.vue';
 import {FwButton, PlusIcon, FwTable, 
-    FwCheckbox, FwModal, FwInput, FwSelect, FwRadioCheckbox } from '../../Components/flowbite/index.js';
+    FwCheckbox, FwModal, FwInput, 
+    FwSelect, FwRadioCheckbox } from '@Components/flowbite'
 import { useForm } from '@inertiajs/vue3';
 import controller from './Partials/CuentaSucursal.js';
 

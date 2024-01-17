@@ -1,5 +1,5 @@
 <script setup> 
-import { FwModal, FwSearchBar } from '../../Components/flowbite';
+import { FwModal, FwSearchBar } from '@Components/flowbite'
 import { ref, onMounted} from 'vue';
 import { solicitudService as solicitudServices } from '../../Services/index.js'
 import { ElMessage } from 'element-plus'; 

@@ -1,6 +1,6 @@
 <script setup>
 import ModuloContableLayout from './Partials/ModuloContableLayout.vue';
-import {FwButton, PlusIcon, FwTable, FwCheckbox} from '../../Components/flowbite/index.js';
+import {FwButton, PlusIcon, FwTable, FwCheckbox} from '@Components/flowbite'
 
 defineProps({
     cuentasSucursales: Array

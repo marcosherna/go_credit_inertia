@@ -3,7 +3,7 @@ import NavigationLayout from '@/Layouts/NavigationLayout.vue';
 import {
     FwBadge, FwModal, FwSkeleton, FwInput, FwSelect,
     FwTextArea, FwAlert
-} from '../../Components/flowbite';
+} from '@Components/flowbite'
 import { defineProps, ref, onMounted } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { SpinnerBars } from '../../Components/spinners/index'
